@@ -1,0 +1,848 @@
+[
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CitySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "City",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CityUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CityResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CitySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "City",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CitySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "City/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CityUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CityResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CitySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "City/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CitySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "City/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CityResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.GenderResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.GenderSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.GenderUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.GenderUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "Gender",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.GenderUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.GenderResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.GenderResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.GenderSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "Gender",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.GenderResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.GenderResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.GenderSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.GenderUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.GenderUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "Gender/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.GenderUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.GenderResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.GenderResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.GenderSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.GenderUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.GenderUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "Gender/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.GenderResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.GenderSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "Gender/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.GenderResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.RoleController",
+    "Method": "Get",
+    "RelativePath": "Role",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.RoleResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.RoleResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.RoleSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.RoleUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.RoleUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "Role",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.RoleUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.RoleResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.RoleController",
+    "Method": "GetById",
+    "RelativePath": "Role/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.RoleResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.RoleResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.RoleSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.RoleUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.RoleUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "Role/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.RoleUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.RoleResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.RoleResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.RoleSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.RoleUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.RoleUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "Role/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.ServiceResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ServiceSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ServiceUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ServiceUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "Service",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.ServiceUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ServiceResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.ServiceResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ServiceSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "Service",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.ServiceResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.ServiceResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ServiceSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ServiceUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ServiceUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "Service/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.ServiceUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ServiceResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.ServiceResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ServiceSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ServiceUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ServiceUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "Service/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.ServiceResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ServiceSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "Service/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ServiceResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ServiceController",
+    "Method": "Complete",
+    "RelativePath": "Service/{id}/complete",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ServiceResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.UsersController",
+    "Method": "Get",
+    "RelativePath": "Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "GenderId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "CityId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.UserResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.UsersController",
+    "Method": "Create",
+    "RelativePath": "Users",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.UserUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.UserResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.UsersController",
+    "Method": "GetById",
+    "RelativePath": "Users/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.UserResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.UsersController",
+    "Method": "Update",
+    "RelativePath": "Users/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.UserUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.UserResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.UsersController",
+    "Method": "Delete",
+    "RelativePath": "Users/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
