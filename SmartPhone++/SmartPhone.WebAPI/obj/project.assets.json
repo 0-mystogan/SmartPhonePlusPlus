@@ -6515,11 +6515,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
       "projectName": "SmartPhone.WebAPI",
-      "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
+      "projectPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
       "packagesPath": "C:\\Users\\Yasir\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.WebAPI\\obj\\",
+      "outputPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6534,17 +6534,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj": {
-              "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj"
+            "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj": {
+              "projectPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj"
             },
-            "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj": {
-              "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj"
+            "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj": {
+              "projectPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj"
             }
           }
         }

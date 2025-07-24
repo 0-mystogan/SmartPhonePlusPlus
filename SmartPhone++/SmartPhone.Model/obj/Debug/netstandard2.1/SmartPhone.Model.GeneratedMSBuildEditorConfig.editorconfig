@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = SmartPhone.Model
-build_property.ProjectDir = c:\Users\Yasir\Desktop\rs2\SmartPhone++\SmartPhone.Model\
+build_property.ProjectDir = C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false
