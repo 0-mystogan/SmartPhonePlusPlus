@@ -16,11 +16,8 @@ namespace SmartPhone.Services.Services
     : BaseService<T, TSearch, TEntity>, ICRUDService<T, TSearch, TInsert, TUpdate>
     where T : class where TSearch : BaseSearchObject where TEntity : class, new() where TInsert : class where TUpdate : class
     {
-        protected readonly SmartPhoneDbContext _context;
-
         public BaseCRUDService(SmartPhoneDbContext context, IMapper mapper) : base(context, mapper)
         {
-            _context = context;
         }
 
 

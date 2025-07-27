@@ -359,7 +359,6 @@ C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Deb
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPho.33D2E80E.Up2Date
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.dll
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\refint\SmartPhone.WebAPI.dll
@@ -367,3 +366,4 @@ C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Deb
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.pdb
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.genruntimeconfig.cache
 C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\ref\SmartPhone.WebAPI.dll
+C:\Users\Yasir\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

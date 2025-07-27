@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       title: 'SmartPhone',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFFFF9800), // Vibrant orange
-          primary: Color(0xFFFF6F00), // Deep orange
+          seedColor: Color(0xFFB39DDB), // light purple
+          primary: Color(0xFF512DA8), // dark purple
         ),
         useMaterial3: true,
       ),
@@ -56,102 +56,119 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/smartphone_background.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxHeight: 400, maxWidth: 400),
-            child: Card(
-              color: Color.fromARGB(255, 236, 236, 236),
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      "assets/images/smartphone_logo.png",
-                      height: 150,
-                      width: 150,
-                    ),
-                    const SizedBox(height: 30),
-                    TextField(
-                      controller: usernameController,
-                      decoration: customTextFieldDecoration(
-                        "Username",
-                        prefixIcon: Icons.account_circle_sharp,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: customTextFieldDecoration(
-                        "Password",
-                        prefixIcon: Icons.password,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        AuthProvider.username = usernameController.text;
-                        AuthProvider.password = passwordController.text;
-
-                        try {
-                          print(
-                            "Username: ${AuthProvider.username}, Password: ${AuthProvider.password}",
-                          );
-                          var cityProvider = CityProvider();
-                          var cities = await cityProvider.get();
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CityListScreen(),
-                            ),
-                          );
-                        } on Exception catch (e) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text("Login failed"),
-                              content: Text(
-                                e.toString().replaceFirst('Exception: ', ''),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                        ), // Button padding
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            10.0,
-                          ), // Rounded corners
+      body: Stack(
+        children: [
+          // Main content
+          Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F5F5), // solid light gray
+            ),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                height: double.infinity,
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Card(
+                  color: Color.fromARGB(255, 236, 236, 236),
+                  child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/smartphone_logo.png",
+                          height: 150,
+                          width: 150,
                         ),
-                        minimumSize: Size(double.infinity, 30),
-                      ),
-                      child: Text("Login"),
+                        const SizedBox(height: 30),
+                        TextField(
+                          controller: usernameController,
+                          decoration: customTextFieldDecoration(
+                            "Username",
+                            prefixIcon: Icons.account_circle_sharp,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: customTextFieldDecoration(
+                            "Password",
+                            prefixIcon: Icons.password,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () async {
+                            AuthProvider.username = usernameController.text;
+                            AuthProvider.password = passwordController.text;
+
+                            try {
+                              print(
+                                "Username:  {AuthProvider.username}, Password:  {AuthProvider.password}",
+                              );
+                              var cityProvider = CityProvider();
+                              var cities = await cityProvider.get();
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CityListScreen(),
+                                ),
+                              );
+                            } on Exception catch (e) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("Login failed"),
+                                  content: Text(
+                                    e.toString().replaceFirst('Exception: ', ''),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("OK"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } catch (e) {
+                              print(e);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 15.0,
+                            ), // Button padding
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                10.0,
+                              ), // Rounded corners
+                            ),
+                            minimumSize: Size(double.infinity, 30),
+                          ),
+                          child: Text("Login"),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          // Footer (centered at the bottom)
+          Positioned(
+            bottom: 16,
+            left: 0,
+            right: 0,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                '© 2025 SmartPhone++',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

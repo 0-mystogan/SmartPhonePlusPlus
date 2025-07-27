@@ -14,7 +14,7 @@ InputDecoration customTextFieldDecoration(
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10.0),
-      borderSide: BorderSide(color: Color(0xFFFF6F00)),
+      borderSide: BorderSide(color: Color(0xFF512DA8)),
     ),
     prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
   );
