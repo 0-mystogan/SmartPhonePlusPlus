@@ -36,14 +36,6 @@ namespace SmartPhone.Services.Database
         [Range(0, double.MaxValue)]
         public decimal TotalAmount { get; set; }
         
-        [Required]
-        [MaxLength(3)]
-        public string CurrencyCode { get; set; } = string.Empty; // USD, EUR, BAM, etc.
-        
-        [Required]
-        [MaxLength(5)]
-        public string CurrencySymbol { get; set; } = string.Empty; // $, €, KM
-        
         [MaxLength(50)]
         public string Status { get; set; } = "Pending"; // Pending, Processing, Shipped, Delivered, Cancelled
         
@@ -123,12 +115,9 @@ namespace SmartPhone.Services.Database
         
         // Foreign keys
         public int UserId { get; set; }
-        public int? CouponId { get; set; }
         
         // Navigation properties
         public User User { get; set; } = null!;
-        public Coupon? Coupon { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        public ICollection<OrderStatusHistory> OrderStatusHistory { get; set; } = new List<OrderStatusHistory>();
     }
 } 

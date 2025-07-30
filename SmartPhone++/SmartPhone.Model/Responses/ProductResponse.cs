@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SmartPhone.Model.Responses
 {
@@ -24,7 +25,6 @@ namespace SmartPhone.Model.Responses
         public string CategoryName { get; set; } = string.Empty;
         public decimal? CurrentPrice { get; set; }
         public decimal? OriginalPrice { get; set; }
-        public double? AverageRating { get; set; }
-        public int ReviewCount { get; set; }
+        public List<ProductImageResponse> ProductImages { get; set; } = new List<ProductImageResponse>();
     }
 } 

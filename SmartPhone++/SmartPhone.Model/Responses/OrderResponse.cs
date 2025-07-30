@@ -14,8 +14,6 @@ namespace SmartPhone.Model.Responses
         public decimal ShippingAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal TotalAmount { get; set; }
-        public string CurrencyCode { get; set; } = string.Empty;
-        public string CurrencySymbol { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string? Notes { get; set; }
         public string? TrackingNumber { get; set; }
@@ -41,9 +39,7 @@ namespace SmartPhone.Model.Responses
         public string? BillingEmail { get; set; }
         
         public int UserId { get; set; }
-        public int? CouponId { get; set; }
         public string UserName { get; set; } = string.Empty;
-        public string? CouponCode { get; set; }
         public int ItemCount { get; set; }
     }
 } 

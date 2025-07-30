@@ -23,14 +23,6 @@ namespace SmartPhone.Services.Database
         [Range(0, double.MaxValue)]
         public decimal TotalPrice { get; set; }
         
-        [Required]
-        [MaxLength(3)]
-        public string CurrencyCode { get; set; } = string.Empty; // USD, EUR, BAM, etc.
-        
-        [Required]
-        [MaxLength(5)]
-        public string CurrencySymbol { get; set; } = string.Empty; // $, €, KM
-        
         [MaxLength(200)]
         public string? ProductName { get; set; } // Snapshot of product name at time of order
         

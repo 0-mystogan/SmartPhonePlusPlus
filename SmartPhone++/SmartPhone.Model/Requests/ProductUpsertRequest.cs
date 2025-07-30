@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace SmartPhone.Model.Requests
 {
@@ -10,6 +11,13 @@ namespace SmartPhone.Model.Requests
         
         [MaxLength(1000)]
         public string? Description { get; set; }
+        
+        [Required]
+        [Range(0, double.MaxValue)]
+        public decimal Price { get; set; }
+        
+        [Range(0, double.MaxValue)]
+        public decimal? DiscountedPrice { get; set; }
         
         [Required]
         [Range(0, int.MaxValue)]
@@ -38,5 +46,7 @@ namespace SmartPhone.Model.Requests
         
         [Required]
         public int CategoryId { get; set; }
+        
+        public List<ProductImageUpsertRequest> ProductImages { get; set; } = new List<ProductImageUpsertRequest>();
     }
 } 

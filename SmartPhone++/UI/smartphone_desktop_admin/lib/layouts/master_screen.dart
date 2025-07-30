@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/city_list_screen.dart';
 import '../screens/user_list_screen.dart';
 import '../screens/admin_list_screen.dart';
+import '../screens/product_list_screen.dart';
 import '../screens/service_list_screen.dart';
 import 'package:smartphone_desktop_admin/main.dart';
 
@@ -66,6 +67,16 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => CityListScreen()),
+                );
+              },
+            ),
+            
+            ListTile(
+              title: Text('Products'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProductListScreen()),
                 );
               },
             ),

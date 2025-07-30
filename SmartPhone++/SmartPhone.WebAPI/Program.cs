@@ -9,6 +9,9 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SmartPhone.Model.Responses;
+using SmartPhone.Model.Requests;
+using SmartPhone.WebAPI.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,6 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IGenderService, GenderService>();
 builder.Services.AddTransient<ICityService, CityService>();
 builder.Services.AddTransient<IServiceService, ServiceService>();
-builder.Services.AddTransient<ICurrencyService, CurrencyService>();
 
 // Parts Management Services
 builder.Services.AddTransient<IPartCategoryService, PartCategoryService>();
@@ -26,6 +28,10 @@ builder.Services.AddTransient<IPartService, PartService>();
 builder.Services.AddTransient<IPhoneModelService, PhoneModelService>();
 builder.Services.AddTransient<IPartCompatibilityService, PartCompatibilityService>();
 builder.Services.AddTransient<IServicePartService, ServicePartService>();
+
+// eCommerce Services
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 //builder.Services.AddTransient<IChatService, ChatService>();
 
 // State Machine
@@ -100,10 +106,7 @@ using (var scope = app.Services.CreateScope())
 
     if (pendingMigrations)
     {
-
         dataContext.Database.Migrate();
-
-
     }
 }
 

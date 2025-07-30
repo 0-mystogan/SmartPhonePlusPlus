@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/user.dart';
 import 'package:smartphone_desktop_admin/model/search_result.dart';
+import 'package:smartphone_desktop_admin/model/role_response.dart';
 import 'package:smartphone_desktop_admin/providers/user_provider.dart';
+import 'package:smartphone_desktop_admin/providers/role_provider.dart';
 import 'package:smartphone_desktop_admin/screens/user_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,14 +21,14 @@ class UserListScreen extends StatefulWidget {
 
 class _UserListScreenState extends State<UserListScreen> {
   late UserProvider userProvider;
+  late RoleProvider roleProvider;
   TextEditingController nameController = TextEditingController();
   SearchResult<User>? users;
+  List<RoleResponse> roles = [];
   int _currentPage = 0;
   int _pageSize = 7;
   final List<int> _pageSizeOptions = [5, 7, 10, 20, 50];
-
-  // Set the roleId for 'User' role. Update this value to match your DB.
-  static const int userRoleId = 2; // <-- Set correct roleId for 'User'
+  int? selectedRoleId; // For role filtering
 
   Future<void> _performSearch({int? page, int? pageSize}) async {
     final int pageToFetch = page ?? _currentPage;
@@ -36,7 +38,8 @@ class _UserListScreenState extends State<UserListScreen> {
       "pageSize": pageSizeToUse,
       "includeTotalCount": true,
       "fts": nameController.text,
-      "roleId": userRoleId,
+      // Add role filter if selected
+      if (selectedRoleId != null) "roleId": selectedRoleId,
     };
     var users = await userProvider.get(filter: filter);
     setState(() {
@@ -46,11 +49,28 @@ class _UserListScreenState extends State<UserListScreen> {
     });
   }
 
+  Future<void> _loadRoles() async {
+    try {
+      var rolesResult = await roleProvider.get(filter: {
+        "page": 0,
+        "pageSize": 100,
+        "includeTotalCount": true,
+      });
+      setState(() {
+        roles = rolesResult.items ?? [];
+      });
+    } catch (e) {
+      // Error loading roles
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       userProvider = context.read<UserProvider>();
+      roleProvider = context.read<RoleProvider>();
+      await _loadRoles();
       await _performSearch(page: 0);
     });
   }
@@ -237,9 +257,48 @@ class _UserListScreenState extends State<UserListScreen> {
                     ),
                   ),
                   SizedBox(width: 10),
+                  // Role filter dropdown
+                  Container(
+                    width: 200,
+                    child: DropdownButtonFormField<int>(
+                      decoration: customTextFieldDecoration(
+                        "Filter by Role",
+                        prefixIcon: Icons.filter_list,
+                      ),
+                      value: selectedRoleId,
+                      items: [
+                        DropdownMenuItem<int>(
+                          value: null,
+                          child: Text("All Roles"),
+                        ),
+                        ...roles.map((role) => DropdownMenuItem<int>(
+                          value: role.id,
+                          child: Text(role.name),
+                        )),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedRoleId = value;
+                        });
+                        _performSearch(page: 0);
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: _performSearch,
                     child: Text("Search"),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserDetailsScreen()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(foregroundColor: Colors.lightBlue),
+                    child: Text("Add User"),
                   ),
                 ],
               ),

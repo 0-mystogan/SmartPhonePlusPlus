@@ -1,4 +1,4 @@
-using SmartPhone.Model.SearchObjects;
+using System;
 
 namespace SmartPhone.Model.SearchObjects
 {
@@ -6,8 +6,9 @@ namespace SmartPhone.Model.SearchObjects
     {
         public int? OrderId { get; set; }
         public int? ProductId { get; set; }
-        public decimal? MinTotalPrice { get; set; }
-        public decimal? MaxTotalPrice { get; set; }
-        public string? CurrencyCode { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? MaxPrice { get; set; }
+        public int? MinQuantity { get; set; }
+        public int? MaxQuantity { get; set; }
     }
 } 

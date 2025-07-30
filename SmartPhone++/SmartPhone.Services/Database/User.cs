@@ -56,9 +56,6 @@ namespace SmartPhone.Services.Database
         // eCommerce navigation properties
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Cart> Carts { get; set; } = new List<Cart>();
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
-        public ICollection<OrderStatusHistory> OrderStatusUpdates { get; set; } = new List<OrderStatusHistory>();
         
         // Service navigation properties
         public ICollection<Service> CustomerServices { get; set; } = new List<Service>();

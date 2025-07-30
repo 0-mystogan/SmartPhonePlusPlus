@@ -13,6 +13,5 @@ namespace SmartPhone.Services.Interfaces
         Task<bool> UpdateStockQuantityAsync(int productId, int quantity);
         Task<bool> CheckProductAvailabilityAsync(int productId, int requiredQuantity);
         Task<IEnumerable<ProductResponse>> GetProductsByBrandAsync(string brand);
-        Task<decimal?> GetProductPriceAsync(int productId, int currencyId);
     }
 } 

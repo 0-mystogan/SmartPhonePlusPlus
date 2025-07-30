@@ -17,6 +17,13 @@ namespace SmartPhone.Services.Database
         public string? Description { get; set; }
         
         [Required]
+        [Range(0, double.MaxValue)]
+        public decimal Price { get; set; }
+        
+        [Range(0, double.MaxValue)]
+        public decimal? DiscountedPrice { get; set; }
+        
+        [Required]
         [Range(0, int.MaxValue)]
         public int StockQuantity { get; set; }
         
@@ -51,9 +58,7 @@ namespace SmartPhone.Services.Database
         // Navigation properties
         public Category Category { get; set; } = null!;
         public ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
-        public ICollection<ProductPrice> ProductPrices { get; set; } = new List<ProductPrice>();
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 } 

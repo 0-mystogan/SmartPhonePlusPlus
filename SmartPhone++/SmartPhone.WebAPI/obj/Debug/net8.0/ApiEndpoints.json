@@ -1,5 +1,267 @@
 [
   {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "Category",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CategoryUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CategoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "Category",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ParentCategoryId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "Category/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CategoryUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CategoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "Category/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "Category/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CategoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.CategoryController",
+    "Method": "GetProductCountByCategory",
+    "RelativePath": "Category/{id}/product-count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.CategoryController",
+    "Method": "GetActiveCategories",
+    "RelativePath": "Category/active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.CategoryController",
+    "Method": "GetRootCategories",
+    "RelativePath": "Category/root",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.CategoryController",
+    "Method": "GetSubCategories",
+    "RelativePath": "Category/subcategories/{parentCategoryId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "parentCategoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CityResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CitySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CityUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "Create",
     "RelativePath": "City",
@@ -310,6 +572,659 @@
     "ReturnTypes": [
       {
         "Type": "SmartPhone.Model.Responses.GenderResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.PartCategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.PartCategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.PartCategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.PartCategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "PartCategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.PartCategoryUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PartCategoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.PartCategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.PartCategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "PartCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ParentCategoryId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.PartCategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.PartCategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.PartCategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.PartCategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.PartCategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "PartCategory/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.PartCategoryUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PartCategoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.PartCategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.PartCategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.PartCategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.PartCategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "PartCategory/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.PartCategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.PartCategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "PartCategory/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PartCategoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ProductSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ProductUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ProductUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "Product",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.ProductUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ProductResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ProductSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "Product",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Brand",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SKU",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsFeatured",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MinPrice",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MaxPrice",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "InStock",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MinRating",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ProductSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ProductUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ProductUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "Product/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.ProductUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ProductResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ProductSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ProductUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.ProductUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "Product/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.ProductSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "Product/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ProductResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "CheckAvailability",
+    "RelativePath": "Product/{id}/availability",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "requiredQuantity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "GetProductImages",
+    "RelativePath": "Product/{id}/images",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.ProductImageResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "AddProductImage",
+    "RelativePath": "Product/{id}/images",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.ProductImageUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ProductImageResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "UpdateProductImage",
+    "RelativePath": "Product/{id}/images/{imageId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "imageId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.ProductImageUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.ProductImageResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "DeleteProductImage",
+    "RelativePath": "Product/{id}/images/{imageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "imageId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "UpdateStockQuantity",
+    "RelativePath": "Product/{id}/stock",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "GetActiveProducts",
+    "RelativePath": "Product/active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "GetProductsByBrand",
+    "RelativePath": "Product/brand/{brand}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "brand",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "GetProductsByCategory",
+    "RelativePath": "Product/category/{categoryId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "GetFeaturedProducts",
+    "RelativePath": "Product/featured",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductController",
+    "Method": "GetLowStockProducts",
+    "RelativePath": "Product/low-stock",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

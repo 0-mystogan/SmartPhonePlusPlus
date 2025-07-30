@@ -300,220 +300,6 @@ namespace SmartPhone.Services.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartPhone.Services.Database.Coupon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CurrentUses")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("DiscountType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("MaximumDiscountAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("MaximumUses")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("MinimumOrderAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ValidTo")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.ToTable("Coupons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Code = "WELCOME10",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrentUses = 0,
-                            Description = "10% off for new customers",
-                            DiscountAmount = 10m,
-                            DiscountType = "Percentage",
-                            IsActive = true,
-                            MaximumDiscountAmount = 100m,
-                            MaximumUses = 1000,
-                            MinimumOrderAmount = 50m,
-                            Name = "Welcome Discount",
-                            ValidFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ValidTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Code = "SAVE20",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrentUses = 0,
-                            Description = "20% off on all products",
-                            DiscountAmount = 20m,
-                            DiscountType = "Percentage",
-                            IsActive = true,
-                            MaximumDiscountAmount = 200m,
-                            MaximumUses = 500,
-                            MinimumOrderAmount = 100m,
-                            Name = "20% Off Sale",
-                            ValidFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ValidTo = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                        });
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.Currency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DecimalPlaces")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("SymbolPosition")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("IsDefault");
-
-                    b.ToTable("Currencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Code = "USD",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DecimalPlaces = 2,
-                            IsActive = true,
-                            IsDefault = true,
-                            Name = "US Dollar",
-                            Symbol = "$",
-                            SymbolPosition = "Before"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Code = "EUR",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DecimalPlaces = 2,
-                            IsActive = true,
-                            IsDefault = false,
-                            Name = "Euro",
-                            Symbol = "€",
-                            SymbolPosition = "Before"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Code = "BAM",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DecimalPlaces = 2,
-                            IsActive = true,
-                            IsDefault = false,
-                            Name = "Bosnia and Herzegovina Convertible Mark",
-                            Symbol = "KM",
-                            SymbolPosition = "After"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Code = "GBP",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DecimalPlaces = 2,
-                            IsActive = true,
-                            IsDefault = false,
-                            Name = "British Pound",
-                            Symbol = "£",
-                            SymbolPosition = "Before"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Code = "CHF",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DecimalPlaces = 2,
-                            IsActive = true,
-                            IsDefault = false,
-                            Name = "Swiss Franc",
-                            Symbol = "CHF",
-                            SymbolPosition = "Before"
-                        });
-                });
-
             modelBuilder.Entity("SmartPhone.Services.Database.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -592,19 +378,6 @@ namespace SmartPhone.Services.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CurrencyCode")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("CurrencySymbol")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime?>("DeliveredDate")
                         .HasColumnType("datetime2");
@@ -692,8 +465,6 @@ namespace SmartPhone.Services.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CouponId");
-
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
@@ -712,16 +483,6 @@ namespace SmartPhone.Services.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("CurrencyCode")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("CurrencySymbol")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
 
                     b.Property<decimal?>("DiscountAmount")
                         .HasColumnType("decimal(18,2)");
@@ -756,41 +517,6 @@ namespace SmartPhone.Services.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.OrderStatusHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("UpdatedByUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("UpdatedByUserId");
-
-                    b.ToTable("OrderStatusHistory");
                 });
 
             modelBuilder.Entity("SmartPhone.Services.Database.Part", b =>
@@ -1403,6 +1129,9 @@ namespace SmartPhone.Services.Migrations
                     b.Property<string>("Dimensions")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("DiscountedPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1419,6 +1148,9 @@ namespace SmartPhone.Services.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SKU")
                         .HasColumnType("nvarchar(450)");
@@ -1456,10 +1188,12 @@ namespace SmartPhone.Services.Migrations
                             Color = "Natural Titanium",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Latest iPhone with A17 Pro chip",
+                            DiscountedPrice = 899.99m,
                             IsActive = true,
                             IsFeatured = true,
                             Model = "iPhone 15 Pro",
                             Name = "iPhone 15 Pro",
+                            Price = 999.99m,
                             SKU = "IPH15PRO-128",
                             StockQuantity = 50
                         },
@@ -1471,10 +1205,12 @@ namespace SmartPhone.Services.Migrations
                             Color = "Titanium Black",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Premium Android smartphone with S Pen",
+                            DiscountedPrice = 1099.99m,
                             IsActive = true,
                             IsFeatured = true,
                             Model = "Galaxy S24 Ultra",
                             Name = "Samsung Galaxy S24 Ultra",
+                            Price = 1199.99m,
                             SKU = "SAMS24ULT-256",
                             StockQuantity = 30
                         },
@@ -1486,10 +1222,12 @@ namespace SmartPhone.Services.Migrations
                             Color = "Space Gray",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Powerful tablet for work and creativity",
+                            DiscountedPrice = 549.99m,
                             IsActive = true,
                             IsFeatured = false,
                             Model = "iPad Air",
                             Name = "iPad Air 5th Generation",
+                            Price = 599.99m,
                             SKU = "IPADAIR5-64",
                             StockQuantity = 25
                         },
@@ -1501,10 +1239,12 @@ namespace SmartPhone.Services.Migrations
                             Color = "Silver",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Ultra-thin laptop with M2 chip",
+                            DiscountedPrice = 999.99m,
                             IsActive = true,
                             IsFeatured = true,
                             Model = "MacBook Air",
                             Name = "MacBook Air M2",
+                            Price = 1099.99m,
                             SKU = "MBAIRM2-256",
                             StockQuantity = 20
                         },
@@ -1516,10 +1256,12 @@ namespace SmartPhone.Services.Migrations
                             Color = "Clear",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Description = "Premium protective case for iPhone 15 Pro",
+                            DiscountedPrice = 39.99m,
                             IsActive = true,
                             IsFeatured = false,
                             Model = "Premium Case",
                             Name = "iPhone 15 Pro Case",
+                            Price = 49.99m,
                             SKU = "CASE-IPH15PRO",
                             StockQuantity = 100
                         });
@@ -1558,236 +1300,6 @@ namespace SmartPhone.Services.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.ProductPrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("DiscountedPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ValidFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ValidTo")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("ProductId", "CurrencyId", "IsActive")
-                        .IsUnique()
-                        .HasFilter("[IsActive] = 1");
-
-                    b.ToTable("ProductPrices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 1,
-                            IsActive = true,
-                            Price = 999.99m,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 2,
-                            IsActive = true,
-                            Price = 899.99m,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 3,
-                            IsActive = true,
-                            Price = 1750.00m,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 1,
-                            IsActive = true,
-                            Price = 1199.99m,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 2,
-                            IsActive = true,
-                            Price = 1099.99m,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 3,
-                            IsActive = true,
-                            Price = 2100.00m,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 1,
-                            IsActive = true,
-                            Price = 599.99m,
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 2,
-                            IsActive = true,
-                            Price = 549.99m,
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 3,
-                            IsActive = true,
-                            Price = 1050.00m,
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 1,
-                            IsActive = true,
-                            Price = 1099.99m,
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 2,
-                            IsActive = true,
-                            Price = 999.99m,
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 3,
-                            IsActive = true,
-                            Price = 1925.00m,
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 1,
-                            IsActive = true,
-                            Price = 49.99m,
-                            ProductId = 5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 2,
-                            IsActive = true,
-                            Price = 44.99m,
-                            ProductId = 5
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            CurrencyId = 3,
-                            IsActive = true,
-                            Price = 87.50m,
-                            ProductId = 5
-                        });
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("ApprovedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("SmartPhone.Services.Database.Role", b =>
@@ -2140,56 +1652,6 @@ namespace SmartPhone.Services.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartPhone.Services.Database.Wishlist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Wishlists");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.WishlistItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("WishlistId");
-
-                    b.ToTable("WishlistItems");
-                });
-
             modelBuilder.Entity("SmartPhone.Services.Database.Cart", b =>
                 {
                     b.HasOne("SmartPhone.Services.Database.User", "User")
@@ -2232,18 +1694,11 @@ namespace SmartPhone.Services.Migrations
 
             modelBuilder.Entity("SmartPhone.Services.Database.Order", b =>
                 {
-                    b.HasOne("SmartPhone.Services.Database.Coupon", "Coupon")
-                        .WithMany("Orders")
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("SmartPhone.Services.Database.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Coupon");
 
                     b.Navigation("User");
                 });
@@ -2265,24 +1720,6 @@ namespace SmartPhone.Services.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.OrderStatusHistory", b =>
-                {
-                    b.HasOne("SmartPhone.Services.Database.Order", "Order")
-                        .WithMany("OrderStatusHistory")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartPhone.Services.Database.User", "UpdatedByUser")
-                        .WithMany("OrderStatusUpdates")
-                        .HasForeignKey("UpdatedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Order");
-
-                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("SmartPhone.Services.Database.Part", b =>
@@ -2345,51 +1782,6 @@ namespace SmartPhone.Services.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.ProductPrice", b =>
-                {
-                    b.HasOne("SmartPhone.Services.Database.Currency", "Currency")
-                        .WithMany("ProductPrices")
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SmartPhone.Services.Database.Product", "Product")
-                        .WithMany("ProductPrices")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.Review", b =>
-                {
-                    b.HasOne("SmartPhone.Services.Database.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("SmartPhone.Services.Database.Product", "Product")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartPhone.Services.Database.User", "User")
-                        .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SmartPhone.Services.Database.Service", b =>
@@ -2474,36 +1866,6 @@ namespace SmartPhone.Services.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SmartPhone.Services.Database.Wishlist", b =>
-                {
-                    b.HasOne("SmartPhone.Services.Database.User", "User")
-                        .WithMany("Wishlists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.WishlistItem", b =>
-                {
-                    b.HasOne("SmartPhone.Services.Database.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartPhone.Services.Database.Wishlist", "Wishlist")
-                        .WithMany("WishlistItems")
-                        .HasForeignKey("WishlistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Wishlist");
-                });
-
             modelBuilder.Entity("SmartPhone.Services.Database.Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -2516,21 +1878,9 @@ namespace SmartPhone.Services.Migrations
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("SmartPhone.Services.Database.Coupon", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.Currency", b =>
-                {
-                    b.Navigation("ProductPrices");
-                });
-
             modelBuilder.Entity("SmartPhone.Services.Database.Order", b =>
                 {
                     b.Navigation("OrderItems");
-
-                    b.Navigation("OrderStatusHistory");
                 });
 
             modelBuilder.Entity("SmartPhone.Services.Database.Part", b =>
@@ -2561,10 +1911,6 @@ namespace SmartPhone.Services.Migrations
                     b.Navigation("OrderItems");
 
                     b.Navigation("ProductImages");
-
-                    b.Navigation("ProductPrices");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("SmartPhone.Services.Database.Role", b =>
@@ -2583,22 +1929,11 @@ namespace SmartPhone.Services.Migrations
 
                     b.Navigation("CustomerServices");
 
-                    b.Navigation("OrderStatusUpdates");
-
                     b.Navigation("Orders");
-
-                    b.Navigation("Reviews");
 
                     b.Navigation("TechnicianServices");
 
                     b.Navigation("UserRoles");
-
-                    b.Navigation("Wishlists");
-                });
-
-            modelBuilder.Entity("SmartPhone.Services.Database.Wishlist", b =>
-                {
-                    b.Navigation("WishlistItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -25,14 +25,6 @@ namespace SmartPhone.Model.Requests
         [Range(0, double.MaxValue)]
         public decimal TotalAmount { get; set; }
         
-        [Required]
-        [MaxLength(3)]
-        public string CurrencyCode { get; set; } = string.Empty;
-        
-        [Required]
-        [MaxLength(5)]
-        public string CurrencySymbol { get; set; } = string.Empty;
-        
         [MaxLength(50)]
         public string Status { get; set; } = "Pending";
         
@@ -112,7 +104,5 @@ namespace SmartPhone.Model.Requests
         
         [Required]
         public int UserId { get; set; }
-        
-        public int? CouponId { get; set; }
     }
 } 

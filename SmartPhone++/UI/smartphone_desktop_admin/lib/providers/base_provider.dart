@@ -39,7 +39,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var result = SearchResult<T>();
 
       result.totalCount = data['totalCount'];
-      result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
+      result.items = data["items"] != null 
+          ? List<T>.from(data["items"].map((e) => fromJson(e)))
+          : <T>[];
 
       return result;
     } else {
@@ -106,7 +108,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       throw new Exception("Please check your credentials and try again.");
     } else {
-      print(response.body);
       throw new Exception("Something went wrong, please try again later!");
     }
   }

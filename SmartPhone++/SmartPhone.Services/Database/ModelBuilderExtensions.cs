@@ -121,17 +121,6 @@ namespace SmartPhone.Services.Database
                 new City { Id = 20, Name = "Gradačac" }
             );
 
-
-
-            // Seed Currencies
-            modelBuilder.Entity<Currency>().HasData(
-                new Currency { Id = 1, Code = "USD", Name = "US Dollar", Symbol = "$", SymbolPosition = "Before", DecimalPlaces = 2, IsActive = true, IsDefault = true, CreatedAt = fixedDate },
-                new Currency { Id = 2, Code = "EUR", Name = "Euro", Symbol = "€", SymbolPosition = "Before", DecimalPlaces = 2, IsActive = true, IsDefault = false, CreatedAt = fixedDate },
-                new Currency { Id = 3, Code = "BAM", Name = "Bosnia and Herzegovina Convertible Mark", Symbol = "KM", SymbolPosition = "After", DecimalPlaces = 2, IsActive = true, IsDefault = false, CreatedAt = fixedDate },
-                new Currency { Id = 4, Code = "GBP", Name = "British Pound", Symbol = "£", SymbolPosition = "Before", DecimalPlaces = 2, IsActive = true, IsDefault = false, CreatedAt = fixedDate },
-                new Currency { Id = 5, Code = "CHF", Name = "Swiss Franc", Symbol = "CHF", SymbolPosition = "Before", DecimalPlaces = 2, IsActive = true, IsDefault = false, CreatedAt = fixedDate }
-            );
-
             // Seed eCommerce Categories
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Smartphones", Description = "Latest smartphones and mobile devices", IsActive = true, CreatedAt = fixedDate },
@@ -149,6 +138,8 @@ namespace SmartPhone.Services.Database
                     Id = 1, 
                     Name = "iPhone 15 Pro", 
                     Description = "Latest iPhone with A17 Pro chip", 
+                    Price = 999.99m,
+                    DiscountedPrice = 899.99m,
                     StockQuantity = 50, 
                     SKU = "IPH15PRO-128", 
                     Brand = "Apple", 
@@ -164,6 +155,8 @@ namespace SmartPhone.Services.Database
                     Id = 2, 
                     Name = "Samsung Galaxy S24 Ultra", 
                     Description = "Premium Android smartphone with S Pen", 
+                    Price = 1199.99m,
+                    DiscountedPrice = 1099.99m,
                     StockQuantity = 30, 
                     SKU = "SAMS24ULT-256", 
                     Brand = "Samsung", 
@@ -179,6 +172,8 @@ namespace SmartPhone.Services.Database
                     Id = 3, 
                     Name = "iPad Air 5th Generation", 
                     Description = "Powerful tablet for work and creativity", 
+                    Price = 599.99m,
+                    DiscountedPrice = 549.99m,
                     StockQuantity = 25, 
                     SKU = "IPADAIR5-64", 
                     Brand = "Apple", 
@@ -194,6 +189,8 @@ namespace SmartPhone.Services.Database
                     Id = 4, 
                     Name = "MacBook Air M2", 
                     Description = "Ultra-thin laptop with M2 chip", 
+                    Price = 1099.99m,
+                    DiscountedPrice = 999.99m,
                     StockQuantity = 20, 
                     SKU = "MBAIRM2-256", 
                     Brand = "Apple", 
@@ -209,6 +206,8 @@ namespace SmartPhone.Services.Database
                     Id = 5, 
                     Name = "iPhone 15 Pro Case", 
                     Description = "Premium protective case for iPhone 15 Pro", 
+                    Price = 49.99m,
+                    DiscountedPrice = 39.99m,
                     StockQuantity = 100, 
                     SKU = "CASE-IPH15PRO", 
                     Brand = "SmartPhone++", 
@@ -217,70 +216,6 @@ namespace SmartPhone.Services.Database
                     CategoryId = 5, 
                     IsActive = true, 
                     IsFeatured = false, 
-                    CreatedAt = fixedDate 
-                }
-            );
-
-            // Seed Product Prices (Multi-currency)
-            modelBuilder.Entity<ProductPrice>().HasData(
-                // iPhone 15 Pro prices
-                new ProductPrice { Id = 1, ProductId = 1, CurrencyId = 1, Price = 999.99m, IsActive = true, CreatedAt = fixedDate }, // USD
-                new ProductPrice { Id = 2, ProductId = 1, CurrencyId = 2, Price = 899.99m, IsActive = true, CreatedAt = fixedDate }, // EUR
-                new ProductPrice { Id = 3, ProductId = 1, CurrencyId = 3, Price = 1750.00m, IsActive = true, CreatedAt = fixedDate }, // BAM
-                
-                // Samsung Galaxy S24 Ultra prices
-                new ProductPrice { Id = 4, ProductId = 2, CurrencyId = 1, Price = 1199.99m, IsActive = true, CreatedAt = fixedDate }, // USD
-                new ProductPrice { Id = 5, ProductId = 2, CurrencyId = 2, Price = 1099.99m, IsActive = true, CreatedAt = fixedDate }, // EUR
-                new ProductPrice { Id = 6, ProductId = 2, CurrencyId = 3, Price = 2100.00m, IsActive = true, CreatedAt = fixedDate }, // BAM
-                
-                // iPad Air prices
-                new ProductPrice { Id = 7, ProductId = 3, CurrencyId = 1, Price = 599.99m, IsActive = true, CreatedAt = fixedDate }, // USD
-                new ProductPrice { Id = 8, ProductId = 3, CurrencyId = 2, Price = 549.99m, IsActive = true, CreatedAt = fixedDate }, // EUR
-                new ProductPrice { Id = 9, ProductId = 3, CurrencyId = 3, Price = 1050.00m, IsActive = true, CreatedAt = fixedDate }, // BAM
-                
-                // MacBook Air M2 prices
-                new ProductPrice { Id = 10, ProductId = 4, CurrencyId = 1, Price = 1099.99m, IsActive = true, CreatedAt = fixedDate }, // USD
-                new ProductPrice { Id = 11, ProductId = 4, CurrencyId = 2, Price = 999.99m, IsActive = true, CreatedAt = fixedDate }, // EUR
-                new ProductPrice { Id = 12, ProductId = 4, CurrencyId = 3, Price = 1925.00m, IsActive = true, CreatedAt = fixedDate }, // BAM
-                
-                // iPhone 15 Pro Case prices
-                new ProductPrice { Id = 13, ProductId = 5, CurrencyId = 1, Price = 49.99m, IsActive = true, CreatedAt = fixedDate }, // USD
-                new ProductPrice { Id = 14, ProductId = 5, CurrencyId = 2, Price = 44.99m, IsActive = true, CreatedAt = fixedDate }, // EUR
-                new ProductPrice { Id = 15, ProductId = 5, CurrencyId = 3, Price = 87.50m, IsActive = true, CreatedAt = fixedDate } // BAM
-            );
-
-            // Seed eCommerce Coupons
-            modelBuilder.Entity<Coupon>().HasData(
-                new Coupon 
-                { 
-                    Id = 1, 
-                    Code = "WELCOME10", 
-                    Name = "Welcome Discount", 
-                    Description = "10% off for new customers", 
-                    DiscountAmount = 10, 
-                    DiscountType = "Percentage", 
-                    MaximumDiscountAmount = 100, 
-                    MinimumOrderAmount = 50, 
-                    ValidFrom = fixedDate, 
-                    ValidTo = fixedDate.AddYears(1), 
-                    MaximumUses = 1000, 
-                    IsActive = true, 
-                    CreatedAt = fixedDate 
-                },
-                new Coupon 
-                { 
-                    Id = 2, 
-                    Code = "SAVE20", 
-                    Name = "20% Off Sale", 
-                    Description = "20% off on all products", 
-                    DiscountAmount = 20, 
-                    DiscountType = "Percentage", 
-                    MaximumDiscountAmount = 200, 
-                    MinimumOrderAmount = 100, 
-                    ValidFrom = fixedDate, 
-                    ValidTo = fixedDate.AddMonths(3), 
-                    MaximumUses = 500, 
-                    IsActive = true, 
                     CreatedAt = fixedDate 
                 }
             );

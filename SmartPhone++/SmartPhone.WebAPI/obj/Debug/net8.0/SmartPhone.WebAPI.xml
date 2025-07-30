@@ -4,5 +4,15 @@
         <name>SmartPhone.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:SmartPhone.WebAPI.Mapping.MappingConfig">
+            <summary>
+            Centralized mapping configuration for Mapster
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Mapping.MappingConfig.ConfigureMappings">
+            <summary>
+            Configures all Mapster mappings for the application
+            </summary>
+        </member>
     </members>
 </doc>

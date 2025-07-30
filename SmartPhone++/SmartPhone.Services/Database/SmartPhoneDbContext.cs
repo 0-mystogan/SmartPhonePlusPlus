@@ -19,17 +19,10 @@ namespace SmartPhone.Services.Database
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<Currency> Currencies { get; set; }
-        public DbSet<ProductPrice> ProductPrices { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<OrderStatusHistory> OrderStatusHistory { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Coupon> Coupons { get; set; }
-        public DbSet<Wishlist> Wishlists { get; set; }
-        public DbSet<WishlistItem> WishlistItems { get; set; }
         
         // Parts Management entities
         public DbSet<PartCategory> PartCategories { get; set; }
@@ -127,33 +120,6 @@ namespace SmartPhone.Services.Database
             modelBuilder.Entity<Product>()
                 .HasIndex(p => p.Name);
 
-            // Currency configurations
-            modelBuilder.Entity<Currency>()
-                .HasIndex(c => c.Code)
-                .IsUnique();
-
-            modelBuilder.Entity<Currency>()
-                .HasIndex(c => c.IsDefault);
-
-            // ProductPrice configurations
-            modelBuilder.Entity<ProductPrice>()
-                .HasOne(pp => pp.Product)
-                .WithMany(p => p.ProductPrices)
-                .HasForeignKey(pp => pp.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<ProductPrice>()
-                .HasOne(pp => pp.Currency)
-                .WithMany(c => c.ProductPrices)
-                .HasForeignKey(pp => pp.CurrencyId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Ensure only one active price per product per currency
-            modelBuilder.Entity<ProductPrice>()
-                .HasIndex(pp => new { pp.ProductId, pp.CurrencyId, pp.IsActive })
-                .IsUnique()
-                .HasFilter("[IsActive] = 1");
-
             // ProductImage configurations
             modelBuilder.Entity<ProductImage>()
                 .HasOne(pi => pi.Product)
@@ -167,12 +133,6 @@ namespace SmartPhone.Services.Database
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.Coupon)
-                .WithMany(c => c.Orders)
-                .HasForeignKey(o => o.CouponId)
-                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Order>()
                 .HasIndex(o => o.OrderNumber)
@@ -190,19 +150,6 @@ namespace SmartPhone.Services.Database
                 .WithMany(p => p.OrderItems)
                 .HasForeignKey(oi => oi.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            // OrderStatusHistory configurations
-            modelBuilder.Entity<OrderStatusHistory>()
-                .HasOne(osh => osh.Order)
-                .WithMany(o => o.OrderStatusHistory)
-                .HasForeignKey(osh => osh.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<OrderStatusHistory>()
-                .HasOne(osh => osh.UpdatedByUser)
-                .WithMany(u => u.OrderStatusUpdates)
-                .HasForeignKey(osh => osh.UpdatedByUserId)
-                .OnDelete(DeleteBehavior.SetNull);
 
             // Cart configurations
             modelBuilder.Entity<Cart>()
@@ -222,50 +169,6 @@ namespace SmartPhone.Services.Database
                 .HasOne(ci => ci.Product)
                 .WithMany(p => p.CartItems)
                 .HasForeignKey(ci => ci.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Review configurations
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Reviews)
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Product)
-                .WithMany(p => p.Reviews)
-                .HasForeignKey(r => r.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Order)
-                .WithMany()
-                .HasForeignKey(r => r.OrderId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            // Coupon configurations
-            modelBuilder.Entity<Coupon>()
-                .HasIndex(c => c.Code)
-                .IsUnique();
-
-            // Wishlist configurations
-            modelBuilder.Entity<Wishlist>()
-                .HasOne(w => w.User)
-                .WithMany(u => u.Wishlists)
-                .HasForeignKey(w => w.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // WishlistItem configurations
-            modelBuilder.Entity<WishlistItem>()
-                .HasOne(wi => wi.Wishlist)
-                .WithMany(w => w.WishlistItems)
-                .HasForeignKey(wi => wi.WishlistId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<WishlistItem>()
-                .HasOne(wi => wi.Product)
-                .WithMany()
-                .HasForeignKey(wi => wi.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Configure Parts Management entities

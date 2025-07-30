@@ -2,6 +2,9 @@ import 'package:smartphone_desktop_admin/providers/auth_provider.dart';
 import 'package:smartphone_desktop_admin/providers/city_provider.dart';
 import 'package:smartphone_desktop_admin/providers/service_provider.dart';
 import 'package:smartphone_desktop_admin/providers/user_provider.dart';
+import 'package:smartphone_desktop_admin/providers/role_provider.dart';
+import 'package:smartphone_desktop_admin/providers/product_provider.dart';
+import 'package:smartphone_desktop_admin/providers/category_provider.dart';
 import 'package:smartphone_desktop_admin/screens/city_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +22,15 @@ void main() {
         ),
         ChangeNotifierProvider<ServiceProvider>(
           create: (context) => ServiceProvider(),
+        ),
+        ChangeNotifierProvider<RoleProvider>(
+          create: (context) => RoleProvider(),
+        ),
+        ChangeNotifierProvider<ProductProvider>(
+          create: (context) => ProductProvider(),
+        ),
+        ChangeNotifierProvider<CategoryProvider>(
+          create: (context) => CategoryProvider(),
         ),
       ],
       child: const MyApp(),
