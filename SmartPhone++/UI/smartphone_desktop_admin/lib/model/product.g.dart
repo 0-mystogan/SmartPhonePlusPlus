@@ -29,6 +29,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
           : DateTime.parse(json['updatedAt'].toString()),
       categoryId: json['categoryId'] as int? ?? 0,
       categoryName: json['categoryName'] != null && json['categoryName'].toString().isNotEmpty ? json['categoryName'].toString() : null,
+      productImages: (json['productImages'] as List<dynamic>?)
+          ?.map((e) => ProductImage.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
@@ -52,4 +55,5 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'categoryId': instance.categoryId,
       'categoryName': instance.categoryName,
+      'productImages': instance.productImages?.map((e) => e.toJson()).toList(),
     }; 

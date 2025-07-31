@@ -5,6 +5,7 @@ using SmartPhone.Model.Responses;
 using SmartPhone.Model.Requests;
 using SmartPhone.Model.SearchObjects;
 using MapsterMapper;
+using System;
 using System.Linq;
 
 namespace SmartPhone.Services.Services
@@ -108,7 +109,9 @@ namespace SmartPhone.Services.Services
                 .Select(pi => new ProductImageResponse
                 {
                     Id = pi.Id,
-                    ImageUrl = pi.ImageUrl,
+                    ImageData = pi.ImageData,
+                    FileName = pi.FileName,
+                    ContentType = pi.ContentType,
                     AltText = pi.AltText,
                     IsPrimary = pi.IsPrimary,
                     DisplayOrder = pi.DisplayOrder,
@@ -214,6 +217,16 @@ namespace SmartPhone.Services.Services
 
         public override async Task<ProductResponse> CreateAsync(ProductUpsertRequest request)
         {
+            // Validate required fields for creation
+            if (string.IsNullOrEmpty(request.Name))
+                throw new ArgumentException("Name is required for product creation");
+            if (!request.Price.HasValue || request.Price.Value <= 0)
+                throw new ArgumentException("Price is required and must be greater than 0 for product creation");
+            if (!request.StockQuantity.HasValue || request.StockQuantity.Value < 0)
+                throw new ArgumentException("StockQuantity is required and must be non-negative for product creation");
+            if (!request.CategoryId.HasValue || request.CategoryId.Value <= 0)
+                throw new ArgumentException("CategoryId is required for product creation");
+
             var entity = new Product();
             MapInsertToEntity(entity, request);
             _context.Products.Add(entity);
@@ -222,14 +235,74 @@ namespace SmartPhone.Services.Services
 
             await _context.SaveChangesAsync();
 
-            // Create product images if provided
+            // Create product images if provided (simple approach)
+            if (request.Images != null && request.Images.Any())
+            {
+                for (int i = 0; i < request.Images.Count; i++)
+                {
+                    var base64Image = request.Images[i];
+                    if (!string.IsNullOrEmpty(base64Image))
+                    {
+                        try
+                        {
+                            byte[] imageData = Convert.FromBase64String(base64Image);
+                            Console.WriteLine($"Processing simple image {i + 1}: {imageData.Length} bytes");
+                            
+                            var productImage = new ProductImage
+                            {
+                                ImageData = imageData,
+                                FileName = $"product_image_{i + 1}.jpg",
+                                ContentType = "image/jpeg",
+                                AltText = $"Product image {i + 1}",
+                                IsPrimary = i == 0, // First image is primary
+                                DisplayOrder = i + 1,
+                                ProductId = entity.Id,
+                                CreatedAt = DateTime.UtcNow
+                            };
+                            
+                            _context.ProductImages.Add(productImage);
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine($"Error converting base64 string to bytes: {ex.Message}");
+                            continue; // Skip this image if conversion fails
+                        }
+                    }
+                }
+                
+                await _context.SaveChangesAsync();
+            }
+            
+            // Handle complex ProductImages approach for backward compatibility
             if (request.ProductImages != null && request.ProductImages.Any())
             {
                 foreach (var imageRequest in request.ProductImages)
                 {
+                    // Handle base64 string conversion if ImageData is empty but ImageDataString is provided
+                    byte[] imageData = imageRequest.ImageData;
+                    Console.WriteLine($"Processing complex image in CreateAsync: {imageRequest.FileName}");
+                    Console.WriteLine($"ImageData length: {imageData.Length}");
+                    Console.WriteLine($"ImageDataString provided: {!string.IsNullOrEmpty(imageRequest.ImageDataString)}");
+                    
+                    if (imageData.Length == 0 && !string.IsNullOrEmpty(imageRequest.ImageDataString))
+                    {
+                        try
+                        {
+                            imageData = Convert.FromBase64String(imageRequest.ImageDataString);
+                            Console.WriteLine($"Successfully converted base64 to bytes. Length: {imageData.Length}");
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine($"Error converting base64 string to bytes: {ex.Message}");
+                            continue; // Skip this image if conversion fails
+                        }
+                    }
+                    
                     var productImage = new ProductImage
                     {
-                        ImageUrl = imageRequest.ImageUrl,
+                        ImageData = imageData,
+                        FileName = imageRequest.FileName,
+                        ContentType = imageRequest.ContentType,
                         AltText = imageRequest.AltText,
                         IsPrimary = imageRequest.IsPrimary,
                         DisplayOrder = imageRequest.DisplayOrder,
@@ -248,29 +321,131 @@ namespace SmartPhone.Services.Services
 
         public override async Task<ProductResponse?> UpdateAsync(int id, ProductUpsertRequest request)
         {
-            var entity = await _context.Products
-                .Include(p => p.ProductImages)
-                .FirstOrDefaultAsync(p => p.Id == id);
-                
-            if (entity == null)
-                return null;
+            try
+            {
+                var entity = await _context.Products
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefaultAsync(p => p.Id == id);
+                    
+                if (entity == null)
+                    return null;
 
             await BeforeUpdate(entity, request);
 
-            MapUpdateToEntity(entity, request);
+            // Handle partial updates - only update fields that are provided
+            if (!string.IsNullOrEmpty(request.Name))
+                entity.Name = request.Name;
+            if (request.Description != null)
+                entity.Description = request.Description;
+            if (request.Price.HasValue && request.Price.Value > 0)
+                entity.Price = request.Price.Value;
+            if (request.DiscountedPrice.HasValue)
+                entity.DiscountedPrice = request.DiscountedPrice.Value;
+            if (request.StockQuantity.HasValue && request.StockQuantity.Value >= 0)
+                entity.StockQuantity = request.StockQuantity.Value;
+            if (request.MinimumStockLevel.HasValue)
+                entity.MinimumStockLevel = request.MinimumStockLevel.Value;
+            if (!string.IsNullOrEmpty(request.SKU))
+                entity.SKU = request.SKU;
+            if (!string.IsNullOrEmpty(request.Brand))
+                entity.Brand = request.Brand;
+            if (!string.IsNullOrEmpty(request.Model))
+                entity.Model = request.Model;
+            if (!string.IsNullOrEmpty(request.Color))
+                entity.Color = request.Color;
+            if (!string.IsNullOrEmpty(request.Size))
+                entity.Size = request.Size;
+            if (!string.IsNullOrEmpty(request.Weight))
+                entity.Weight = request.Weight;
+            if (!string.IsNullOrEmpty(request.Dimensions))
+                entity.Dimensions = request.Dimensions;
+            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
+                entity.CategoryId = request.CategoryId.Value;
+            
+            // Update boolean fields
+            entity.IsActive = request.IsActive;
+            entity.IsFeatured = request.IsFeatured;
+            
+            // Set UpdatedAt timestamp
+            entity.UpdatedAt = DateTime.UtcNow;
 
-            // Handle product images update
-            if (request.ProductImages != null && request.ProductImages.Any())
+            // Handle product images update (simple approach)
+            if (request.Images != null && request.Images.Any())
             {
                 // Remove existing images
                 _context.ProductImages.RemoveRange(entity.ProductImages);
                 
                 // Add new images
+                for (int i = 0; i < request.Images.Count; i++)
+                {
+                    var base64Image = request.Images[i];
+                    if (!string.IsNullOrEmpty(base64Image))
+                    {
+                        try
+                        {
+                            byte[] imageData = Convert.FromBase64String(base64Image);
+                            Console.WriteLine($"Processing simple image {i + 1} in UpdateAsync: {imageData.Length} bytes");
+                            
+                            var productImage = new ProductImage
+                            {
+                                ImageData = imageData,
+                                FileName = $"product_image_{i + 1}.jpg",
+                                ContentType = "image/jpeg",
+                                AltText = $"Product image {i + 1}",
+                                IsPrimary = i == 0, // First image is primary
+                                DisplayOrder = i + 1,
+                                ProductId = entity.Id,
+                                CreatedAt = DateTime.UtcNow
+                            };
+                            
+                            _context.ProductImages.Add(productImage);
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine($"Error converting base64 string to bytes: {ex.Message}");
+                            continue; // Skip this image if conversion fails
+                        }
+                    }
+                }
+            }
+            
+            // Handle complex ProductImages approach for backward compatibility
+            if (request.ProductImages != null && request.ProductImages.Any())
+            {
+                // Remove existing images (if not already removed by simple approach)
+                if (request.Images == null || !request.Images.Any())
+                {
+                    _context.ProductImages.RemoveRange(entity.ProductImages);
+                }
+                
+                // Add new images
                 foreach (var imageRequest in request.ProductImages)
                 {
+                    // Handle base64 string conversion if ImageData is empty but ImageDataString is provided
+                    byte[] imageData = imageRequest.ImageData;
+                    Console.WriteLine($"Processing complex image in UpdateAsync: {imageRequest.FileName}");
+                    Console.WriteLine($"ImageData length: {imageData.Length}");
+                    Console.WriteLine($"ImageDataString provided: {!string.IsNullOrEmpty(imageRequest.ImageDataString)}");
+                    
+                    if (imageData.Length == 0 && !string.IsNullOrEmpty(imageRequest.ImageDataString))
+                    {
+                        try
+                        {
+                            imageData = Convert.FromBase64String(imageRequest.ImageDataString);
+                            Console.WriteLine($"Successfully converted base64 to bytes. Length: {imageData.Length}");
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine($"Error converting base64 string to bytes: {ex.Message}");
+                            continue; // Skip this image if conversion fails
+                        }
+                    }
+                    
                     var productImage = new ProductImage
                     {
-                        ImageUrl = imageRequest.ImageUrl,
+                        ImageData = imageData,
+                        FileName = imageRequest.FileName,
+                        ContentType = imageRequest.ContentType,
                         AltText = imageRequest.AltText,
                         IsPrimary = imageRequest.IsPrimary,
                         DisplayOrder = imageRequest.DisplayOrder,
@@ -284,6 +459,20 @@ namespace SmartPhone.Services.Services
 
             await _context.SaveChangesAsync();
             return await GetByIdAsync(entity.Id);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                Console.WriteLine($"Error in ProductService.UpdateAsync: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        protected override void MapUpdateToEntity(Product entity, ProductUpsertRequest request)
+        {
+            // Don't use Mapster for updates - we handle it manually in UpdateAsync
+            // This prevents Mapster from trying to map null values to required fields
         }
     }
 } 

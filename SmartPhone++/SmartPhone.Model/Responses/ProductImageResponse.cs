@@ -5,7 +5,9 @@ namespace SmartPhone.Model.Responses
     public class ProductImageResponse
     {
         public int Id { get; set; }
-        public string ImageUrl { get; set; } = string.Empty;
+        public byte[] ImageData { get; set; } = new byte[0];
+        public string? FileName { get; set; }
+        public string? ContentType { get; set; }
         public string? AltText { get; set; }
         public bool IsPrimary { get; set; }
         public int DisplayOrder { get; set; }

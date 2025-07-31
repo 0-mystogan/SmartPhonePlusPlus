@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:smartphone_desktop_admin/model/product_image.dart';
 
 part 'product.g.dart';
 
@@ -44,6 +45,8 @@ class Product {
   final int categoryId;
   @JsonKey(name: 'categoryName')
   final String? categoryName; // For display purposes
+  @JsonKey(name: 'productImages')
+  final List<ProductImage>? productImages;
 
   Product({
     this.id = 0,
@@ -66,6 +69,7 @@ class Product {
     this.updatedAt,
     this.categoryId = 0,
     this.categoryName,
+    this.productImages,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);

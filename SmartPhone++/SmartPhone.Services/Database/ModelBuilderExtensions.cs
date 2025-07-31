@@ -183,39 +183,57 @@ namespace SmartPhone.Services.Database
                     IsActive = true, 
                     IsFeatured = false, 
                     CreatedAt = fixedDate 
-                },
-                new Product 
+                }
+            );
+
+            // Seed Product Images
+            modelBuilder.Entity<ProductImage>().HasData(
+                new ProductImage 
                 { 
-                    Id = 4, 
-                    Name = "MacBook Air M2", 
-                    Description = "Ultra-thin laptop with M2 chip", 
-                    Price = 1099.99m,
-                    DiscountedPrice = 999.99m,
-                    StockQuantity = 20, 
-                    SKU = "MBAIRM2-256", 
-                    Brand = "Apple", 
-                    Model = "MacBook Air", 
-                    Color = "Silver", 
-                    CategoryId = 3, 
-                    IsActive = true, 
-                    IsFeatured = true, 
+                    Id = 1, 
+                    ProductId = 1, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "iphone15pro.jpg") ?? new byte[0],
+                    FileName = "iphone15pro.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "iPhone 15 Pro",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
                     CreatedAt = fixedDate 
                 },
-                new Product 
+                new ProductImage 
                 { 
-                    Id = 5, 
-                    Name = "iPhone 15 Pro Case", 
-                    Description = "Premium protective case for iPhone 15 Pro", 
-                    Price = 49.99m,
-                    DiscountedPrice = 39.99m,
-                    StockQuantity = 100, 
-                    SKU = "CASE-IPH15PRO", 
-                    Brand = "SmartPhone++", 
-                    Model = "Premium Case", 
-                    Color = "Clear", 
-                    CategoryId = 5, 
-                    IsActive = true, 
-                    IsFeatured = false, 
+                    Id = 2, 
+                    ProductId = 2, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-s24-ultra.jpg") ?? new byte[0],
+                    FileName = "samsung-s24-ultra.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy S24 Ultra",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 3, 
+                    ProductId = 2, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-s24-ultra-2.jpg") ?? new byte[0],
+                    FileName = "samsung-s24-ultra-2.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy S24 Ultra - Back View",
+                    IsPrimary = false,
+                    DisplayOrder = 2,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 4, 
+                    ProductId = 3, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "ipad-air.jpg") ?? new byte[0],
+                    FileName = "ipad-air.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "iPad Air 5th Generation",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
                     CreatedAt = fixedDate 
                 }
             );

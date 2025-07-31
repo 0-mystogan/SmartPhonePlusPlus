@@ -41,7 +41,10 @@ namespace SmartPhone.WebAPI.Mapping
 
             TypeAdapterConfig<ProductUpsertRequest, Product>
                 .NewConfig()
-                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow);
+
+
         }
 
         private static void ConfigureProductImageMappings()

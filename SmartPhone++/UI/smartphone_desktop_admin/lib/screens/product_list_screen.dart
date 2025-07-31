@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/product.dart';
+import 'package:smartphone_desktop_admin/model/product_image.dart';
 import 'package:smartphone_desktop_admin/model/search_result.dart';
 import 'package:smartphone_desktop_admin/providers/product_provider.dart';
 import 'package:smartphone_desktop_admin/screens/product_details_screen.dart';
@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
 import 'package:smartphone_desktop_admin/utils/custom_data_table.dart';
 import 'package:smartphone_desktop_admin/utils/custom_pagination.dart';
+import 'dart:typed_data';
+import 'dart:convert';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -35,6 +37,23 @@ class _ProductListScreenState extends State<ProductListScreen> {
       "fts": searchController.text, // Search by name and description
     };
     var products = await productProvider.get(filter: filter);
+    
+    // Debug: Print the raw response
+    print('API Response - Total Count: ${products?.totalCount}');
+    print('API Response - Items Count: ${products?.items?.length ?? 0}');
+    if (products?.items != null) {
+      for (int i = 0; i < products!.items!.length; i++) {
+        var product = products.items![i];
+        print('Product $i: ${product.name}');
+        print('  - ProductImages: ${product.productImages?.length ?? 0}');
+        if (product.productImages != null) {
+          for (int j = 0; j < product.productImages!.length; j++) {
+            print('    Image $j: ${product.productImages![j].imageData?.length ?? 0} chars (Primary: ${product.productImages![j].isPrimary})');
+          }
+        }
+      }
+    }
+    
     setState(() {
       this.products = products;
       _currentPage = pageToFetch;
@@ -51,14 +70,155 @@ class _ProductListScreenState extends State<ProductListScreen> {
     });
   }
 
-  Widget _buildImageCell(String? imageBase64) {
-    if (imageBase64 == null || imageBase64.isEmpty) {
+  Future<void> _showDeleteConfirmation(Product product) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.orange),
+              SizedBox(width: 8),
+              Text('Confirm Delete'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Are you sure you want to delete this product?',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Product: ${product.name}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'This action cannot be undone.',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.red,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteProduct(product);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteProduct(Product product) async {
+    try {
+      setState(() {
+        // Show loading state if needed
+      });
+      
+      await productProvider.delete(product.id);
+      
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Product "${product.name}" deleted successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      
+      // Refresh the list
+      await _performSearch();
+    } catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error deleting product: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Color _getStockColor(int stockQuantity, int? minimumStockLevel) {
+    if (minimumStockLevel == null) {
+      return Colors.black; // Default color if no minimum stock level is set
+    }
+    
+    if (stockQuantity > minimumStockLevel) {
+      return Colors.lightGreen; // Stock is above minimum - light green
+    } else if (stockQuantity == minimumStockLevel) {
+      return Colors.orange; // Stock equals minimum - orange
+    } else {
+      return Colors.red; // Stock below minimum - red
+    }
+  }
+
+  Widget _buildImageCell(Product product) {
+    // Debug: Print product info
+    print('Product: ${product.name}');
+    print('ProductImages: ${product.productImages?.length ?? 0}');
+    if (product.productImages != null) {
+      for (int i = 0; i < product.productImages!.length; i++) {
+        print('  Image $i: ${product.productImages![i].imageData?.length ?? 0} chars (Primary: ${product.productImages![i].isPrimary})');
+      }
+    }
+    
+    // Get the primary image or first image from the product
+    ProductImage? primaryImage;
+    
+    if (product.productImages != null && product.productImages!.isNotEmpty) {
+      // Try to find primary image first
+      try {
+        primaryImage = product.productImages!.firstWhere(
+          (image) => image.isPrimary,
+        );
+      } catch (e) {
+        // If no primary image found, use the first image
+        primaryImage = product.productImages!.first;
+      }
+    }
+    
+    if (primaryImage == null || primaryImage.imageData == null || primaryImage.imageData!.isEmpty) {
       return Icon(Icons.image, size: 32, color: Colors.grey);
     }
+    
     try {
-      final bytes = base64Decode(imageBase64);
-      return Image.memory(bytes, width: 40, height: 40, fit: BoxFit.cover);
+      // Convert base64 string to image
+      final bytes = base64Decode(primaryImage.imageData!);
+      return Image.memory(
+        bytes,
+        width: 40,
+        height: 40,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          print('Error loading image from memory: $error');
+          return Icon(Icons.image, size: 32, color: Colors.grey);
+        },
+      );
     } catch (e) {
+      print('Error converting image data: $e');
       return Icon(Icons.image, size: 32, color: Colors.grey);
     }
   }
@@ -130,6 +290,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
+            DataColumn(
+              label: Text(
+                "Actions",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
           ],
           rows: isEmpty
               ? []
@@ -137,7 +303,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     .map(
                       (e) => DataRow(
                         cells: [
-                          DataCell(_buildImageCell(null)), // TODO: Add product images
+                          DataCell(_buildImageCell(e)),
                           DataCell(
                             Text(
                               e.name,
@@ -161,7 +327,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               e.stockQuantity.toString(),
                               style: TextStyle(
                                 fontSize: 15,
-                                color: e.stockQuantity <= (e.minimumStockLevel ?? 0) ? Colors.red : null,
+                                fontWeight: e.stockQuantity < (e.minimumStockLevel ?? 0) ? FontWeight.bold : FontWeight.normal,
+                                color: _getStockColor(e.stockQuantity, e.minimumStockLevel),
                               ),
                             ),
                           ),
@@ -192,15 +359,29 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           DataCell(
                             IconButton(
                               icon: Icon(Icons.info_outline),
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         ProductDetailsScreen(product: e),
                                   ),
                                 );
+                                // Refresh the list when returning from product details
+                                await _performSearch();
                               },
+                            ),
+                          ),
+                          DataCell(
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _showDeleteConfirmation(e),
+                                  tooltip: 'Delete Product',
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -262,11 +443,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ProductDetailsScreen()),
                       );
+                      // Refresh the list when returning from add product
+                      await _performSearch();
                     },
                     style: ElevatedButton.styleFrom(foregroundColor: Colors.lightBlue),
                     child: Text("Add Product"),

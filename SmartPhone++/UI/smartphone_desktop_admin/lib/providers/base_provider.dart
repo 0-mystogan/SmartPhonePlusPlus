@@ -98,6 +98,51 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  // Custom methods for handling specific endpoints
+  Future<Map<String, dynamic>> post(String subEndpoint, dynamic request) async {
+    var url = "$baseUrl$endpoint/$subEndpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode(request);
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
+  Future<Map<String, dynamic>> put(String subEndpoint, dynamic request) async {
+    var url = "$baseUrl$endpoint/$subEndpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode(request);
+    var response = await http.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
+  Future<void> deleteCustom(String subEndpoint) async {
+    var url = "$baseUrl$endpoint/$subEndpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.delete(uri, headers: headers);
+
+    if (!isValidResponse(response)) {
+      throw new Exception("Unknown error");
+    }
+  }
+
   T fromJson(data) {
     throw Exception("Method not implemented");
   }

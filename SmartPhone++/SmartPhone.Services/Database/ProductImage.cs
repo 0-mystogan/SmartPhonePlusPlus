@@ -9,7 +9,13 @@ namespace SmartPhone.Services.Database
         public int Id { get; set; }
         
         [Required]
-        public string ImageUrl { get; set; } = string.Empty;
+        public byte[] ImageData { get; set; } = new byte[0];
+        
+        [MaxLength(50)]
+        public string? FileName { get; set; }
+        
+        [MaxLength(20)]
+        public string? ContentType { get; set; }
         
         [MaxLength(200)]
         public string? AltText { get; set; }

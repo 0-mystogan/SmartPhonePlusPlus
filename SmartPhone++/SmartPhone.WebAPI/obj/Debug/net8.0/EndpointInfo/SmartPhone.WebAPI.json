@@ -3184,7 +3184,16 @@
             "type": "integer",
             "format": "int32"
           },
-          "imageUrl": {
+          "imageData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "contentType": {
             "type": "string",
             "nullable": true
           },
@@ -3216,14 +3225,28 @@
       },
       "ProductImageUpsertRequest": {
         "required": [
-          "imageUrl",
+          "imageData",
           "productId"
         ],
         "type": "object",
         "properties": {
-          "imageUrl": {
-            "minLength": 1,
-            "type": "string"
+          "imageData": {
+            "type": "string",
+            "format": "byte"
+          },
+          "imageDataString": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileName": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "contentType": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
           },
           "altText": {
             "maxLength": 200,
@@ -3358,18 +3381,12 @@
         "additionalProperties": false
       },
       "ProductUpsertRequest": {
-        "required": [
-          "categoryId",
-          "name",
-          "price",
-          "stockQuantity"
-        ],
         "type": "object",
         "properties": {
           "name": {
             "maxLength": 200,
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "description": {
             "maxLength": 1000,
@@ -3379,7 +3396,8 @@
           "price": {
             "minimum": 0,
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "discountedPrice": {
             "minimum": 0,
@@ -3391,7 +3409,8 @@
             "maximum": 2147483647,
             "minimum": 0,
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "minimumStockLevel": {
             "maximum": 2147483647,
@@ -3436,7 +3455,8 @@
           },
           "categoryId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "productImages": {
             "type": "array",

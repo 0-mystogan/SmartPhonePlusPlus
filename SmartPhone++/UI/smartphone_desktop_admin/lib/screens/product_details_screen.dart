@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/product.dart';
@@ -45,7 +47,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   
   // Image upload
   List<File> selectedImages = [];
-  List<ProductImage> existingImages = [];
+  List<ProductImage> existingImages = []; // Load existing images from database
   
   bool _isActive = true;
   bool _isFeatured = false;
@@ -104,8 +106,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         );
       }
       
+      // Load existing product images
+      if (widget.product!.productImages != null && widget.product!.productImages!.isNotEmpty) {
+        existingImages = List.from(widget.product!.productImages!);
+      }
+      
       _isActive = widget.product!.isActive;
       _isFeatured = widget.product!.isFeatured;
+    }
+  }
+
+  // Calculate discounted price (10% off)
+  void _calculateDiscountedPrice() {
+    if (_priceController.text.isNotEmpty) {
+      try {
+        double price = double.parse(_priceController.text);
+        double discountedPrice = price * 0.9; // 10% off
+        _discountedPriceController.text = discountedPrice.toStringAsFixed(2);
+      } catch (e) {
+        // If price is not a valid number, clear discounted price
+        _discountedPriceController.clear();
+      }
+    } else {
+      _discountedPriceController.clear();
     }
   }
 
@@ -173,6 +196,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         return;
       }
 
+      // Convert selected images to base64 strings (like user image upload)
+      List<String> imageBase64List = [];
+      for (File imageFile in selectedImages) {
+        try {
+          List<int> imageBytes = await imageFile.readAsBytes();
+          String base64Image = base64Encode(imageBytes);
+          imageBase64List.add(base64Image);
+          print('Converted image: ${imageFile.path.split('/').last} to base64');
+        } catch (e) {
+          print('Error converting image to base64: $e');
+        }
+      }
+
+      // For updates, we need to handle existing images differently
+      // The backend will replace all images, so we need to include remaining existing images
+      if (widget.product != null && existingImages.isNotEmpty) {
+        // Add remaining existing images to the list (they are already base64 strings)
+        for (ProductImage existingImage in existingImages) {
+          if (existingImage.imageData != null && existingImage.imageData!.isNotEmpty) {
+            // existingImage.imageData is already a base64 string, no need to encode again
+            imageBase64List.add(existingImage.imageData!);
+            print('Including existing image: ${existingImage.fileName}');
+          }
+        }
+      }
+
+      // Prepare product request (with images included)
       final request = {
         'Name': _nameController.text,
         'Description': _descriptionController.text.isEmpty ? null : _descriptionController.text,
@@ -190,17 +240,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         'CategoryId': selectedCategory!.id,
         'IsActive': _isActive,
         'IsFeatured': _isFeatured,
+        'Images': imageBase64List, // Add images directly to request (like user's 'picture')
       };
 
       if (widget.product != null) {
-        // Update existing product
+        // Update existing product (with images included)
         await productProvider.update(widget.product!.id, request);
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Product updated successfully')),
         );
       } else {
-        // Create new product
-        await productProvider.insert(request);
+        // Create new product (with images included)
+        final newProduct = await productProvider.insert(request);
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Product created successfully')),
         );
@@ -217,6 +270,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       });
     }
   }
+
+  // Removed complex image handling methods - now using simple approach like user image upload
 
   @override
   Widget build(BuildContext context) {
@@ -261,6 +316,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 controller: _priceController,
                                 decoration: customTextFieldDecoration("Price"),
                                 keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  _calculateDiscountedPrice();
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter price';
@@ -284,10 +342,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: TextFormField(
-                                controller: _discountedPriceController,
-                                decoration: customTextFieldDecoration("Discounted Price (Optional)"),
-                                keyboardType: TextInputType.number,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextFormField(
+                                    controller: _discountedPriceController,
+                                    decoration: customTextFieldDecoration("Discounted Price (Auto: 10% off)"),
+                                    keyboardType: TextInputType.number,
+                                    readOnly: true, // Make it read-only since it's auto-calculated
+                                    style: TextStyle(color: Colors.grey[600]),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Automatically calculated as 10% off the original price",
+                                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(width: 20),
@@ -411,10 +481,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10),
-                        ElevatedButton.icon(
-                          onPressed: _pickImages,
-                          icon: Icon(Icons.upload),
-                          label: Text("Select Images"),
+                        Row(
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: _pickImages,
+                              icon: Icon(Icons.upload),
+                              label: Text("Select Images"),
+                            ),
+                            SizedBox(width: 10),
+                            if (selectedImages.isNotEmpty || existingImages.isNotEmpty)
+                              Text(
+                                "${existingImages.length + selectedImages.length} image(s) total",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                          ],
                         ),
                         SizedBox(height: 10),
                         if (selectedImages.isNotEmpty || existingImages.isNotEmpty)
@@ -423,7 +503,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [
-                                // Existing images
+                                // Existing images from database
                                 ...existingImages.asMap().entries.map((entry) {
                                   int index = entry.key;
                                   ProductImage image = entry.value;
@@ -431,26 +511,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     margin: EdgeInsets.only(right: 10),
                                     child: Stack(
                                       children: [
-                                        Image.network(
-                                          image.imageUrl,
-                                          width: 150,
-                                          height: 150,
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return Container(
-                                              width: 150,
-                                              height: 150,
-                                              color: Colors.grey[300],
-                                              child: Icon(Icons.image, size: 50),
-                                            );
-                                          },
-                                        ),
+                                        image.imageData != null && image.imageData!.isNotEmpty
+                                            ? Image.memory(
+                                                base64Decode(image.imageData!),
+                                                width: 150,
+                                                height: 150,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error, stackTrace) {
+                                                  print('Error loading image from memory: $error');
+                                                  return Container(
+                                                    width: 150,
+                                                    height: 150,
+                                                    color: Colors.grey[300],
+                                                    child: Icon(Icons.image, size: 50),
+                                                  );
+                                                },
+                                              )
+                                            : Container(
+                                                width: 150,
+                                                height: 150,
+                                                color: Colors.grey[300],
+                                                child: Icon(Icons.image, size: 50),
+                                              ),
                                         Positioned(
                                           top: 5,
                                           right: 5,
                                           child: IconButton(
                                             icon: Icon(Icons.close, color: Colors.red),
                                             onPressed: () => _removeExistingImage(index),
+                                          ),
+                                        ),
+                                        // Show "Existing" badge
+                                        Positioned(
+                                          top: 5,
+                                          left: 5,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue.withOpacity(0.8),
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              'Existing',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -477,6 +585,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           child: IconButton(
                                             icon: Icon(Icons.close, color: Colors.red),
                                             onPressed: () => _removeImage(index),
+                                          ),
+                                        ),
+                                        // Show "New" badge
+                                        Positioned(
+                                          top: 5,
+                                          left: 5,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green.withOpacity(0.8),
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              'New',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],

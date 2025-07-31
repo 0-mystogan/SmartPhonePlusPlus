@@ -8,7 +8,9 @@ part of 'product_image.dart';
 
 ProductImage _$ProductImageFromJson(Map<String, dynamic> json) => ProductImage(
       id: json['id'] as int? ?? 0,
-      imageUrl: json['imageUrl'] as String? ?? '',
+      imageData: json['imageData'] as String?,
+      fileName: json['fileName'] as String?,
+      contentType: json['contentType'] as String?,
       altText: json['altText'] as String?,
       isPrimary: json['isPrimary'] as bool? ?? false,
       displayOrder: json['displayOrder'] as int? ?? 0,
@@ -18,7 +20,9 @@ ProductImage _$ProductImageFromJson(Map<String, dynamic> json) => ProductImage(
 
 Map<String, dynamic> _$ProductImageToJson(ProductImage instance) => <String, dynamic>{
       'id': instance.id,
-      'imageUrl': instance.imageUrl,
+      'imageData': instance.imageData,
+      'fileName': instance.fileName,
+      'contentType': instance.contentType,
       'altText': instance.altText,
       'isPrimary': instance.isPrimary,
       'displayOrder': instance.displayOrder,

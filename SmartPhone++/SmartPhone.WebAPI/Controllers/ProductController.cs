@@ -73,6 +73,8 @@ namespace SmartPhone.WebAPI.Controllers
             return Ok(isAvailable);
         }
 
+
+
         [HttpGet("{id}/images")]
         public async Task<ActionResult<IEnumerable<ProductImageResponse>>> GetProductImages(int id)
         {
@@ -103,7 +105,8 @@ namespace SmartPhone.WebAPI.Controllers
             if (updatedProduct == null)
                 return NotFound();
 
-            var newImage = updatedProduct.ProductImages.FirstOrDefault(pi => pi.ImageUrl == request.ImageUrl);
+            var newImage = updatedProduct.ProductImages.FirstOrDefault(pi => 
+                pi.FileName == request.FileName);
             return CreatedAtAction(nameof(GetProductImages), new { id }, newImage);
         }
 
@@ -152,7 +155,9 @@ namespace SmartPhone.WebAPI.Controllers
                 .Where(pi => pi.Id != imageId)
                 .Select(pi => new ProductImageUpsertRequest
                 {
-                    ImageUrl = pi.ImageUrl,
+                    ImageData = pi.ImageData,
+                    FileName = pi.FileName,
+                    ContentType = pi.ContentType,
                     AltText = pi.AltText,
                     IsPrimary = pi.IsPrimary,
                     DisplayOrder = pi.DisplayOrder,

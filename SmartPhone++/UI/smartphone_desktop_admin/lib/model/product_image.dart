@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_image.g.dart';
@@ -5,7 +6,9 @@ part 'product_image.g.dart';
 @JsonSerializable()
 class ProductImage {
   final int id;
-  final String imageUrl;
+  final String? imageData; // Base64 string from backend
+  final String? fileName;
+  final String? contentType;
   final String? altText;
   final bool isPrimary;
   final int displayOrder;
@@ -14,7 +17,9 @@ class ProductImage {
 
   ProductImage({
     this.id = 0,
-    this.imageUrl = '',
+    this.imageData,
+    this.fileName,
+    this.contentType,
     this.altText,
     this.isPrimary = false,
     this.displayOrder = 0,
