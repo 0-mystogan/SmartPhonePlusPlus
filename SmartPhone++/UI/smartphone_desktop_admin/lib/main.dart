@@ -5,7 +5,8 @@ import 'package:smartphone_desktop_admin/providers/user_provider.dart';
 import 'package:smartphone_desktop_admin/providers/role_provider.dart';
 import 'package:smartphone_desktop_admin/providers/product_provider.dart';
 import 'package:smartphone_desktop_admin/providers/category_provider.dart';
-import 'package:smartphone_desktop_admin/screens/city_list_screen.dart';
+import 'package:smartphone_desktop_admin/providers/part_category_provider.dart';
+import 'package:smartphone_desktop_admin/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
@@ -31,6 +32,9 @@ void main() {
         ),
         ChangeNotifierProvider<CategoryProvider>(
           create: (context) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider<PartCategoryProvider>(
+          create: (context) => PartCategoryProvider(),
         ),
       ],
       child: const MyApp(),
@@ -124,7 +128,7 @@ class LoginPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CityListScreen(),
+                                  builder: (context) => DashboardScreen(),
                                 ),
                               );
                             } on Exception catch (e) {

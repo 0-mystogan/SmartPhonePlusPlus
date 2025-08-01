@@ -1,32 +1,32 @@
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
-import 'package:smartphone_desktop_admin/model/city.dart';
+import 'package:smartphone_desktop_admin/model/part_category.dart';
 import 'package:smartphone_desktop_admin/model/search_result.dart';
-import 'package:smartphone_desktop_admin/providers/city_provider.dart';
-import 'package:smartphone_desktop_admin/screens/city_details_screen.dart';
+import 'package:smartphone_desktop_admin/providers/part_category_provider.dart';
+import 'package:smartphone_desktop_admin/screens/part_category_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
 import 'package:smartphone_desktop_admin/utils/custom_data_table.dart';
 import 'package:smartphone_desktop_admin/utils/custom_pagination.dart';
 
-class CityListScreen extends StatefulWidget {
-  const CityListScreen({super.key});
+class PartCategoryListScreen extends StatefulWidget {
+  const PartCategoryListScreen({super.key});
 
   @override
-  State<CityListScreen> createState() => _CityListScreenState();
+  State<PartCategoryListScreen> createState() => _PartCategoryListScreenState();
 }
 
-class _CityListScreenState extends State<CityListScreen> {
-  late CityProvider cityProvider;
+class _PartCategoryListScreenState extends State<PartCategoryListScreen> {
+  late PartCategoryProvider partCategoryProvider;
 
   TextEditingController nameController = TextEditingController();
 
-  SearchResult<City>? cities;
+  SearchResult<PartCategory>? partCategories;
   int _currentPage = 0;
   int _pageSize = 7;
   final List<int> _pageSizeOptions = [5, 7, 10, 20, 50];
 
-  // Search for cities with ENTER key, not only when button is clicked
+  // Search for part categories with ENTER key, not only when button is clicked
   Future<void> _performSearch({int? page, int? pageSize}) async {
     final int pageToFetch = page ?? _currentPage;
     final int pageSizeToUse = pageSize ?? _pageSize;
@@ -37,10 +37,10 @@ class _CityListScreenState extends State<CityListScreen> {
       "includeTotalCount": true, // Ensure backend returns total count
     };
     debugPrint(filter.toString());
-    var cities = await cityProvider.get(filter: filter);
-    debugPrint(cities.items?.firstOrNull?.name);
+    var partCategories = await partCategoryProvider.get(filter: filter);
+    debugPrint(partCategories.items?.firstOrNull?.name);
     setState(() {
-      this.cities = cities;
+      this.partCategories = partCategories;
       _currentPage = pageToFetch;
       _pageSize = pageSizeToUse;
     });
@@ -51,7 +51,7 @@ class _CityListScreenState extends State<CityListScreen> {
     super.initState();
     // Delay to ensure context is available for Provider
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      cityProvider = context.read<CityProvider>();
+      partCategoryProvider = context.read<PartCategoryProvider>();
       await _performSearch(page: 0);
     });
   }
@@ -64,7 +64,7 @@ class _CityListScreenState extends State<CityListScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-      title: "Cities",
+      title: "Part Categories",
       child: Center(
         child: Column(children: [_buildSearch(), _buildResultView()]),
       ),
@@ -93,14 +93,14 @@ class _CityListScreenState extends State<CityListScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CityDetailsScreen()),
+                MaterialPageRoute(builder: (context) => PartCategoryDetailsScreen()),
               );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.purple,
               foregroundColor: Colors.white,
             ),
-            child: Text("Add City"),
+            child: Text("Add Part Category"),
           ),
         ],
       ),
@@ -109,15 +109,15 @@ class _CityListScreenState extends State<CityListScreen> {
 
   Widget _buildResultView() {
     final isEmpty =
-        cities == null || cities!.items == null || cities!.items!.isEmpty;
-    final int totalCount = cities?.totalCount ?? 0;
+        partCategories == null || partCategories!.items == null || partCategories!.items!.isEmpty;
+    final int totalCount = partCategories?.totalCount ?? 0;
     final int totalPages = (totalCount / _pageSize).ceil();
     final bool isFirstPage = _currentPage == 0;
     final bool isLastPage = _currentPage >= totalPages - 1 || totalPages == 0;
     return Column(
       children: [
         CustomDataTableCard(
-          width: 600,
+          width: 900,
           height: 450,
           columns: [
             DataColumn(
@@ -126,17 +126,35 @@ class _CityListScreenState extends State<CityListScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
+            DataColumn(
+              label: Text(
+                "Description",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                "Parent Category",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                "Status",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
           ],
           rows: isEmpty
               ? []
-              : cities!.items!
+              : partCategories!.items!
                     .map(
                       (e) => DataRow(
                         onSelectChanged: (value) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CityDetailsScreen(city: e),
+                              builder: (context) => PartCategoryDetailsScreen(partCategory: e),
                             ),
                           );
                         },
@@ -144,13 +162,42 @@ class _CityListScreenState extends State<CityListScreen> {
                           DataCell(
                             Text(e.name, style: TextStyle(fontSize: 15)),
                           ),
+                          DataCell(
+                            Text(
+                              e.description ?? 'No description',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              e.parentCategoryName ?? 'Root Category',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          DataCell(
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: e.isActive ? Colors.green[100] : Colors.red[100],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                e.isActive ? 'Active' : 'Inactive',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: e.isActive ? Colors.green[800] : Colors.red[800],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )
                     .toList(),
-          emptyIcon: Icons.location_city,
-          emptyText: "No cities found.",
-          emptySubtext: "Try adjusting your search or add a new city.",
+          emptyIcon: Icons.category,
+          emptyText: "No part categories found.",
+          emptySubtext: "Try adjusting your search or add a new part category.",
         ),
         SizedBox(height: 10),
         CustomPagination(
@@ -174,4 +221,4 @@ class _CityListScreenState extends State<CityListScreen> {
       ],
     );
   }
-}
+} 

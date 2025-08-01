@@ -290,16 +290,19 @@ class _UserListScreenState extends State<UserListScreen> {
                     child: Text("Search"),
                   ),
                   SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UserDetailsScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(foregroundColor: Colors.lightBlue),
-                    child: Text("Add User"),
-                  ),
+                            ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserDetailsScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.purple,
+              foregroundColor: Colors.white,
+            ),
+            child: Text("Add User"),
+          ),
                 ],
               ),
             ),

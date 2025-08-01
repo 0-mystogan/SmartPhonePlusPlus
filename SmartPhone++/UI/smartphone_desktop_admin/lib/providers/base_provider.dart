@@ -143,6 +143,27 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  Future<dynamic> getCustom(String subEndpoint, {Map<String, dynamic>? queryParameters}) async {
+    var url = "$baseUrl$endpoint/$subEndpoint";
+    
+    if (queryParameters != null) {
+      var queryString = getQueryString(queryParameters);
+      url = "$url?$queryString";
+    }
+    
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
   T fromJson(data) {
     throw Exception("Method not implemented");
   }
