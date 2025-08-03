@@ -1,4 +1,4 @@
-import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
+import 'package:smartphone_desktop_admin/layouts/master_screen_technician.dart';
 import 'package:smartphone_desktop_admin/model/service.dart';
 import 'package:flutter/material.dart';
 

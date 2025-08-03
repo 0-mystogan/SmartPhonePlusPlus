@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../screens/dashboard_screen.dart';
 import '../screens/city_list_screen.dart';
 import '../screens/user_list_screen.dart';
@@ -7,6 +8,7 @@ import '../screens/service_list_screen.dart';
 import '../screens/category_list_screen.dart';
 import '../screens/part_category_list_screen.dart';
 import 'package:smartphone_desktop_admin/main.dart';
+import 'package:smartphone_desktop_admin/providers/auth_provider.dart';
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({
@@ -122,6 +124,8 @@ class _MasterScreenState extends State<MasterScreen> {
               title: Text('Logout'),
               leading: Icon(Icons.logout, color: Colors.red),
               onTap: () {
+                // Clear authentication state
+                Provider.of<AuthProvider>(context, listen: false).logout();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),

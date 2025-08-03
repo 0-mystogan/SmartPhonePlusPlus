@@ -6,7 +6,11 @@ import 'package:smartphone_desktop_admin/providers/role_provider.dart';
 import 'package:smartphone_desktop_admin/providers/product_provider.dart';
 import 'package:smartphone_desktop_admin/providers/category_provider.dart';
 import 'package:smartphone_desktop_admin/providers/part_category_provider.dart';
+import 'package:smartphone_desktop_admin/providers/part_provider.dart';
+import 'package:smartphone_desktop_admin/providers/phone_model_provider.dart';
 import 'package:smartphone_desktop_admin/screens/dashboard_screen.dart';
+import 'package:smartphone_desktop_admin/screens/dashboard_screen_technician.dart';
+import 'package:smartphone_desktop_admin/screens/dashboard_screen_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
@@ -15,6 +19,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<AuthProvider>(
+          create: (context) => AuthProvider(),
+        ),
         ChangeNotifierProvider<CityProvider>(
           create: (context) => CityProvider(),
         ),
@@ -35,6 +42,12 @@ void main() {
         ),
         ChangeNotifierProvider<PartCategoryProvider>(
           create: (context) => PartCategoryProvider(),
+        ),
+        ChangeNotifierProvider<PartProvider>(
+          create: (context) => PartProvider(),
+        ),
+        ChangeNotifierProvider<PhoneModelProvider>(
+          create: (context) => PhoneModelProvider(),
         ),
       ],
       child: const MyApp(),
@@ -113,56 +126,72 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () async {
-                            AuthProvider.username = usernameController.text;
-                            AuthProvider.password = passwordController.text;
+                        Consumer<AuthProvider>(
+                          builder: (context, authProvider, child) {
+                            return ElevatedButton(
+                              onPressed: authProvider.isLoading
+                                  ? null
+                                  : () async {
+                                      final success = await authProvider.authenticate(
+                                        usernameController.text,
+                                        passwordController.text,
+                                      );
 
-                            try {
-                              print(
-                                "Username:  {AuthProvider.username}, Password:  {AuthProvider.password}",
-                              );
-                              var cityProvider = CityProvider();
-                              var cities = await cityProvider.get();
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DashboardScreen(),
-                                ),
-                              );
-                            } on Exception catch (e) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text("Login failed"),
-                                  content: Text(
-                                    e.toString().replaceFirst('Exception: ', ''),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text("OK"),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } catch (e) {
-                              print(e);
-                            }
+                                      if (success) {
+                                        // Route based on user role
+                                        if (authProvider.isTechnician) {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DashboardScreenTechnician(),
+                                            ),
+                                          );
+                                        } else if (authProvider.isAdministrator) {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DashboardScreenAdmin(),
+                                            ),
+                                          );
+                                        } else {
+                                          // Default to technician dashboard for now
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DashboardScreenTechnician(),
+                                            ),
+                                          );
+                                        }
+                                      } else {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text("Login failed"),
+                                            content: Text(
+                                              authProvider.error ?? "Authentication failed",
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(context),
+                                                child: Text("OK"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
+                              child: authProvider.isLoading
+                                  ? SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      ),
+                                    )
+                                  : Text("Login"),
+                            );
                           },
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 15.0,
-                            ), // Button padding
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                10.0,
-                              ), // Rounded corners
-                            ),
-                            minimumSize: Size(double.infinity, 30),
-                          ),
-                          child: Text("Login"),
                         ),
                       ],
                     ),

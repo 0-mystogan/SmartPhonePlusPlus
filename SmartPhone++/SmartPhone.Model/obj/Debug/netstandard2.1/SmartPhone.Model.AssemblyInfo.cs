@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartPhone.Model")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0cdd6246cf86537a39aeb284b8ad64bd1fcf7c9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f8b21d9d1829db892efc849e8806576d1d5861b")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartPhone.Model")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartPhone.Model")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

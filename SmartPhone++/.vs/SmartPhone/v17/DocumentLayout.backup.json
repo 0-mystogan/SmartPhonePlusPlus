@@ -1,50 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\",
+  "WorkspaceRootPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{426FDBE6-9CD8-4614-8032-E488B77FC88D}|SmartPhone.Model\\SmartPhone.Model.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.model\\requests\\productimageupsertrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{426FDBE6-9CD8-4614-8032-E488B77FC88D}|SmartPhone.Model\\SmartPhone.Model.csproj|solutionrelative:smartphone.model\\requests\\productimageupsertrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{426FDBE6-9CD8-4614-8032-E488B77FC88D}|SmartPhone.Model\\SmartPhone.Model.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.model\\requests\\productupsertrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{426FDBE6-9CD8-4614-8032-E488B77FC88D}|SmartPhone.Model\\SmartPhone.Model.csproj|solutionrelative:smartphone.model\\requests\\productupsertrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\modelbuilderextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\modelbuilderextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\helpers\\imageconversion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\helpers\\imageconversion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\partcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\partcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,142 +14,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ProductImageUpsertRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ProductImageUpsertRequest.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Model\\Requests\\ProductImageUpsertRequest.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ProductImageUpsertRequest.cs",
-              "RelativeToolTip": "SmartPhone.Model\\Requests\\ProductImageUpsertRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-31T19:11:06.838Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ProductUpsertRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ProductUpsertRequest.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Model\\Requests\\ProductUpsertRequest.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ProductUpsertRequest.cs",
-              "RelativeToolTip": "SmartPhone.Model\\Requests\\ProductUpsertRequest.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-31T19:10:43.495Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ImageConversion.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Helpers\\ImageConversion.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Helpers\\ImageConversion.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Helpers\\ImageConversion.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Helpers\\ImageConversion.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-31T05:07:10.41Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ProductController.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\ProductController.cs",
-              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\ProductController.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\ProductController.cs",
-              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\ProductController.cs",
-              "ViewState": "AgIAAJMAAAAAAAAAAAAmwKAAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-31T05:03:55.103Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ProductService.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\ProductService.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Services\\ProductService.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\ProductService.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Services\\ProductService.cs",
-              "ViewState": "AgIAACYBAAAAAAAAAADwvy4BAABMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T20:31:21.604Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Program.cs",
-              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Program.cs",
-              "RelativeToolTip": "SmartPhone.WebAPI\\Program.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAAADEAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T19:44:29.216Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CategoryController.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\CategoryController.cs",
-              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\CategoryController.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\CategoryController.cs",
-              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\CategoryController.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Title": "PartController.cs",
+              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartController.cs",
+              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\PartController.cs",
+              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartController.cs",
+              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\PartController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T19:35:50.065Z",
+              "WhenOpened": "2025-08-03T15:56:37.332Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Category.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\Category.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\Category.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\Category.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Database\\Category.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAgwBUAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T19:27:16.562Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-29T03:38:34.999Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\User.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\User.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\User.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Database\\User.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-29T03:30:23.603Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ModelBuilderExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "ViewState": "AgIAALcAAAAAAAAAAAAAAMIAAABeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-29T03:20:31.017Z"
             }
           ]
         }

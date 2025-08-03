@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4Rny0/8wD+s=",
+  "dgSpecHash": "xvc821WNBU0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj",
+  "projectFilePath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yasir\\.nuget\\packages\\easynetq\\7.8.0\\easynetq.7.8.0.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.0\\microsoft.entityframeworkcore.7.0.0.nupkg.sha512",

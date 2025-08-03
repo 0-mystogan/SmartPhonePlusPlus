@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JAskrw8sPUE=",
+  "dgSpecHash": "MWWAE4pq5dU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj",
+  "projectFilePath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yasir\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512"
   ],

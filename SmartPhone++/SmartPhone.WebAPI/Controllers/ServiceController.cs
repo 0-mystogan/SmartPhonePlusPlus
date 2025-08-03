@@ -1,14 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartPhone.Model.Requests;
 using SmartPhone.Model.Responses;
 using SmartPhone.Model.SearchObjects;
 using SmartPhone.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace SmartPhone.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "Technician,Administrator")]
     public class ServiceController : BaseCRUDController<ServiceResponse, ServiceSearchObject, ServiceUpsertRequest, ServiceUpsertRequest>
     {
         private readonly IServiceService _serviceService;

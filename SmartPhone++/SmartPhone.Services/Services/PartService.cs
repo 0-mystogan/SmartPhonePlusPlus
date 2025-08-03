@@ -92,7 +92,9 @@ namespace SmartPhone.Services.Services
 
         public async Task<bool> UpdateStockQuantityAsync(int partId, int quantity)
         {
-            var part = await _context.Parts.FindAsync(partId);
+            var part = await _context.Parts
+                .Include(p => p.PartCategory)
+                .FirstOrDefaultAsync(p => p.Id == partId);
             if (part == null) return false;
 
             part.StockQuantity = quantity;
@@ -104,15 +106,78 @@ namespace SmartPhone.Services.Services
 
         public async Task<bool> CheckPartAvailabilityAsync(int partId, int requiredQuantity)
         {
-            var part = await _context.Parts.FindAsync(partId);
+            var part = await _context.Parts
+                .Include(p => p.PartCategory)
+                .FirstOrDefaultAsync(p => p.Id == partId);
             return part != null && part.IsActive && part.StockQuantity >= requiredQuantity;
+        }
+
+        public override async Task<PartResponse?> UpdateAsync(int id, PartUpsertRequest request)
+        {
+            var entity = await _context.Parts
+                .Include(p => p.PartCategory)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            
+            if (entity == null)
+                return null;
+
+            await BeforeUpdate(entity, request);
+
+            MapUpdateToEntity(entity, request);
+
+            await _context.SaveChangesAsync();
+            return MapToResponse(entity);
+        }
+
+        public override async Task<PartResponse?> GetByIdAsync(int id)
+        {
+            var entity = await _context.Parts
+                .Include(p => p.PartCategory)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            
+            if (entity == null)
+                return null;
+
+            return MapToResponse(entity);
+        }
+
+        public override async Task<PagedResult<PartResponse>> GetAsync(PartSearchObject search)
+        {
+            var query = _context.Parts.AsQueryable();
+            query = ApplyFilter(query, search);
+
+            // Always include PartCategory for mapping
+            query = query.Include(p => p.PartCategory);
+
+            int? totalCount = null;
+            if (search.IncludeTotalCount)
+            {
+                totalCount = await query.CountAsync();
+            }
+
+            if (!search.RetrieveAll)
+            {
+                if (search.Page.HasValue)
+                {
+                    query = query.Skip(search.Page.Value * search.PageSize.Value);
+                }
+                if (search.PageSize.HasValue)
+                {
+                    query = query.Take(search.PageSize.Value);
+                }
+            }
+
+            var list = await query.ToListAsync();
+            return new PagedResult<PartResponse>
+            {
+                Items = list.Select(MapToResponse).ToList(),
+                TotalCount = totalCount
+            };
         }
 
         protected override PartResponse MapToResponse(Part entity)
         {
-            var response = _mapper.Map<PartResponse>(entity);
-            response.PartCategoryName = entity.PartCategory?.Name ?? string.Empty;
-            return response;
+            return _mapper.Map<PartResponse>(entity);
         }
     }
 } 

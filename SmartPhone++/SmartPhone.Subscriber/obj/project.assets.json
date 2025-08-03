@@ -1984,11 +1984,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj",
+      "projectUniqueName": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj",
       "projectName": "SmartPhone.Subscriber",
-      "projectPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj",
+      "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj",
       "packagesPath": "C:\\Users\\Yasir\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\obj\\",
+      "outputPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Subscriber\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2010,8 +2010,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj": {
-              "projectPath": "C:\\Users\\Yasir\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj"
+            "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj": {
+              "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj"
             }
           }
         }

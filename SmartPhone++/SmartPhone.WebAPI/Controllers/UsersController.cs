@@ -2,6 +2,8 @@ using SmartPhone.Model.Requests;
 using SmartPhone.Model.Responses;
 using SmartPhone.Model.SearchObjects;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using SmartPhone.Services.Interfaces;
 
@@ -62,6 +64,21 @@ namespace SmartPhone.WebAPI.Controllers
                 return NotFound();
 
             return NoContent();
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<ActionResult<UserResponse>> GetCurrentUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
+                return Unauthorized();
+
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            return user;
         }
     }
 }

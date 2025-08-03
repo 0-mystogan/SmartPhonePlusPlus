@@ -2,6 +2,7 @@ using Mapster;
 using SmartPhone.Model.Responses;
 using SmartPhone.Model.Requests;
 using SmartPhone.Services.Database;
+using SmartPhone.Model.Requests;
 
 namespace SmartPhone.WebAPI.Mapping
 {
@@ -18,6 +19,7 @@ namespace SmartPhone.WebAPI.Mapping
             ConfigureCategoryMappings();
             ConfigureProductMappings();
             ConfigureProductImageMappings();
+            ConfigurePartMappings();
         }
 
         private static void ConfigureCategoryMappings()
@@ -56,6 +58,18 @@ namespace SmartPhone.WebAPI.Mapping
             TypeAdapterConfig<ProductImageUpsertRequest, ProductImage>
                 .NewConfig()
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
+        }
+
+        private static void ConfigurePartMappings()
+        {
+            TypeAdapterConfig<Part, PartResponse>
+                .NewConfig()
+                .Map(dest => dest.PartCategoryName, src => src.PartCategory != null ? src.PartCategory.Name : string.Empty);
+
+            TypeAdapterConfig<PartUpsertRequest, Part>
+                .NewConfig()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow);
         }
     }
 } 
