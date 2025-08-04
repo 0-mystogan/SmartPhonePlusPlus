@@ -3164,5 +3164,25 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.UsersController",
+    "Method": "GetCurrentUser",
+    "RelativePath": "Users/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.UserResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

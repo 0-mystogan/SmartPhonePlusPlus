@@ -2,7 +2,6 @@ using Mapster;
 using SmartPhone.Model.Responses;
 using SmartPhone.Model.Requests;
 using SmartPhone.Services.Database;
-using SmartPhone.Model.Requests;
 
 namespace SmartPhone.WebAPI.Mapping
 {
@@ -20,6 +19,7 @@ namespace SmartPhone.WebAPI.Mapping
             ConfigureProductMappings();
             ConfigureProductImageMappings();
             ConfigurePartMappings();
+            ConfigureServiceMappings();
         }
 
         private static void ConfigureCategoryMappings()
@@ -43,8 +43,7 @@ namespace SmartPhone.WebAPI.Mapping
 
             TypeAdapterConfig<ProductUpsertRequest, Product>
                 .NewConfig()
-                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
-                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow);
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
 
 
         }
@@ -68,8 +67,18 @@ namespace SmartPhone.WebAPI.Mapping
 
             TypeAdapterConfig<PartUpsertRequest, Part>
                 .NewConfig()
-                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
-                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow);
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
+        }
+
+        private static void ConfigureServiceMappings()
+        {
+            TypeAdapterConfig<Service, ServiceResponse>
+                .NewConfig()
+                .Map(dest => dest.ServiceFee, src => (double)src.ServiceFee);
+
+            TypeAdapterConfig<ServiceUpsertRequest, Service>
+                .NewConfig()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
         }
     }
 } 

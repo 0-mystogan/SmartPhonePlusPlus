@@ -16,6 +16,6 @@ InputDecoration customTextFieldDecoration(
       borderRadius: BorderRadius.circular(10.0),
       borderSide: BorderSide(color: Color(0xFF512DA8)),
     ),
-    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+    prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Color(0xFF512DA8)) : null,
   );
 }

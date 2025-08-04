@@ -1,4 +1,4 @@
-import 'package:smartphone_desktop_admin/layouts/master_screen_technician.dart';
+import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/service.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +26,21 @@ class ServiceDetailsScreen extends StatelessWidget {
               value,
               style: TextStyle(fontSize: 17),
               overflow: TextOverflow.ellipsis,
-              maxLines: 2,
+              maxLines: 3,
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildInfoRowWithNull(String label, String? value, {IconData? icon}) {
+    return _buildInfoRow(label, value ?? 'Not specified', icon: icon);
+  }
+
+  String _formatDateTime(DateTime? dateTime) {
+    if (dateTime == null) return 'Not specified';
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -42,7 +51,7 @@ class ServiceDetailsScreen extends StatelessWidget {
       child: Center(
         child: SingleChildScrollView(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 500),
+            constraints: BoxConstraints(maxWidth: 600),
             child: Card(
               elevation: 10,
               shape: RoundedRectangleBorder(
@@ -77,10 +86,72 @@ class ServiceDetailsScreen extends StatelessWidget {
                       service.name,
                       icon: Icons.miscellaneous_services,
                     ),
+                    _buildInfoRowWithNull(
+                      "Description",
+                      service.description,
+                      icon: Icons.description,
+                    ),
+                    _buildInfoRow(
+                      "Service Fee",
+                      "\$${service.serviceFee.toStringAsFixed(2)}",
+                      icon: Icons.attach_money,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Estimated Duration",
+                      service.estimatedDuration != null 
+                          ? "${service.estimatedDuration} hours"
+                          : null,
+                      icon: Icons.schedule,
+                    ),
                     _buildInfoRow(
                       "Status",
                       service.status,
                       icon: Icons.info_outline,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Customer Notes",
+                      service.customerNotes,
+                      icon: Icons.note,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Technician Notes",
+                      service.technicianNotes,
+                      icon: Icons.engineering,
+                    ),
+                    _buildInfoRow(
+                      "Created At",
+                      _formatDateTime(service.createdAt),
+                      icon: Icons.create,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Updated At",
+                      service.updatedAt != null ? _formatDateTime(service.updatedAt) : null,
+                      icon: Icons.update,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Started At",
+                      service.startedAt != null ? _formatDateTime(service.startedAt) : null,
+                      icon: Icons.play_arrow,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Completed At",
+                      service.completedAt != null ? _formatDateTime(service.completedAt) : null,
+                      icon: Icons.check_circle,
+                    ),
+                    _buildInfoRow(
+                      "Customer ID",
+                      service.userId.toString(),
+                      icon: Icons.person,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Technician ID",
+                      service.technicianId?.toString(),
+                      icon: Icons.engineering,
+                    ),
+                    _buildInfoRowWithNull(
+                      "Phone Model ID",
+                      service.phoneModelId?.toString(),
+                      icon: Icons.phone_android,
                     ),
                   ],
                 ),

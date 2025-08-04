@@ -5269,6 +5269,35 @@
           }
         }
       }
+    },
+    "/Users/me": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6487,7 +6516,73 @@
             "type": "string",
             "nullable": true
           },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "estimatedDuration": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "technicianNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "technicianId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "phoneModelId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "technicianName": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneModelName": {
             "type": "string",
             "nullable": true
           }
@@ -6515,19 +6610,75 @@
       "ServiceUpsertRequest": {
         "required": [
           "name",
-          "status"
+          "serviceFee",
+          "userId"
         ],
         "type": "object",
         "properties": {
           "name": {
-            "maxLength": 100,
+            "maxLength": 200,
             "minLength": 1,
             "type": "string"
           },
+          "description": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "serviceFee": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "estimatedDuration": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "status": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "customerNotes": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "technicianNotes": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "technicianId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "phoneModelId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

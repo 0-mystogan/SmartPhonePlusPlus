@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 import '../screens/dashboard_screen.dart';
 import '../screens/city_list_screen.dart';
 import '../screens/user_list_screen.dart';
@@ -46,6 +47,87 @@ class _MasterScreenState extends State<MasterScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
+            // User Profile Section
+            Consumer<AuthProvider>(
+              builder: (context, authProvider, child) {
+                final user = authProvider.currentUser;
+                return UserAccountsDrawerHeader(
+                  accountName: Text(
+                    user != null ? '${user.firstName} ${user.lastName}' : 'User',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  accountEmail: Text(
+                    user != null ? user.email : 'user@example.com',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                    ),
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: user?.picture != null && user!.picture!.isNotEmpty
+                        ? ClipOval(
+                            child: Image.memory(
+                              base64Decode(user!.picture!),
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Icon(
+                            Icons.person,
+                            size: 40,
+                            color: Colors.grey[600],
+                          ),
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF512DA8),
+                        Color(0xFF673AB7),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+            // Role Display
+            Consumer<AuthProvider>(
+              builder: (context, authProvider, child) {
+                String roleText = 'User';
+                if (authProvider.isTechnician) {
+                  roleText = 'Technician';
+                } else if (authProvider.isAdministrator) {
+                  roleText = 'Administrator';
+                }
+                
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Icon(Icons.work, color: Colors.blue, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Role: $roleText',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            Divider(height: 1),
+            SizedBox(height: 8),
             ListTile(
               title: Text('Dashboard'),
               leading: Icon(Icons.dashboard, color: Colors.blue),

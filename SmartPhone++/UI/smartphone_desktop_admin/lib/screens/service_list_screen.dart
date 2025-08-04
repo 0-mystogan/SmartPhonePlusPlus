@@ -188,23 +188,6 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                     onPressed: _performSearch,
                     child: Text("Search"),
                   ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add service creation functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Service creation not implemented yet'),
-                          backgroundColor: Colors.orange,
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: Text("Add Service"),
-                  ),
                 ],
               ),
             ),

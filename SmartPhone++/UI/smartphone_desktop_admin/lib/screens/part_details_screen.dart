@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartphone_desktop_admin/layouts/master_screen_technician.dart';
 import 'package:smartphone_desktop_admin/model/part.dart';
+import 'package:smartphone_desktop_admin/providers/part_provider.dart';
+import 'package:provider/provider.dart';
 
 class PartDetailsScreen extends StatefulWidget {
   final Part? part;
@@ -12,6 +14,8 @@ class PartDetailsScreen extends StatefulWidget {
 }
 
 class _PartDetailsScreenState extends State<PartDetailsScreen> {
+  late PartProvider partProvider;
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -34,6 +38,9 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      partProvider = context.read<PartProvider>();
+    });
     if (widget.part != null) {
       _nameController.text = widget.part!.name;
       _descriptionController.text = widget.part!.description ?? '';
@@ -52,6 +59,16 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
       _isOEM = widget.part!.isOEM;
       _isCompatible = widget.part!.isCompatible;
       _selectedCategoryId = widget.part!.partCategoryId;
+    } else {
+      // For new parts, generate preview SKU and Part Number
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _skuController.text = _generateSKU();
+            _partNumberController.text = _generatePartNumber();
+          });
+        }
+      });
     }
   }
 
@@ -71,6 +88,101 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
     _conditionController.dispose();
     _gradeController.dispose();
     super.dispose();
+  }
+
+  String _generateSKU() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final random = (timestamp % 10000).toString().padLeft(4, '0');
+    final brandPrefix = _brandController.text.isNotEmpty 
+        ? _brandController.text.substring(0, 1).toUpperCase() 
+        : 'P';
+    final namePrefix = _nameController.text.isNotEmpty 
+        ? _nameController.text.substring(0, 1).toUpperCase() 
+        : 'A';
+    
+    return '${brandPrefix}${namePrefix}${random}';
+  }
+
+  String _generatePartNumber() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final random = (timestamp % 999999).toString().padLeft(6, '0');
+    final brandPrefix = _brandController.text.isNotEmpty 
+        ? _brandController.text.substring(0, 2).toUpperCase() 
+        : 'PT';
+    final namePrefix = _nameController.text.isNotEmpty 
+        ? _nameController.text.substring(0, 2).toUpperCase() 
+        : 'AR';
+    
+    return '${brandPrefix}-${namePrefix}-${random}';
+  }
+
+  Future<void> _savePart() async {
+    if (!_formKey.currentState!.validate()) return;
+    
+    setState(() => _isLoading = true);
+    
+    try {
+      // Generate SKU and Part Number automatically for new parts or if they are empty
+      String sku = _skuController.text;
+      String partNumber = _partNumberController.text;
+      
+      if (widget.part == null || sku.isEmpty) {
+        sku = _generateSKU();
+      }
+      
+      if (widget.part == null || partNumber.isEmpty) {
+        partNumber = _generatePartNumber();
+      }
+      
+      final partData = {
+        'id': widget.part?.id ?? 0,
+        'name': _nameController.text,
+        'description': _descriptionController.text.isEmpty ? null : _descriptionController.text,
+        'price': double.parse(_priceController.text),
+        'costPrice': _costPriceController.text.isEmpty ? null : double.tryParse(_costPriceController.text),
+        'stockQuantity': int.parse(_stockQuantityController.text),
+        'minimumStockLevel': _minimumStockLevelController.text.isEmpty ? null : int.tryParse(_minimumStockLevelController.text),
+        'sku': sku,
+        'partNumber': partNumber,
+        'brand': _brandController.text.isEmpty ? null : _brandController.text,
+        'model': _modelController.text.isEmpty ? null : _modelController.text,
+        'color': _colorController.text.isEmpty ? null : _colorController.text,
+        'condition': _conditionController.text.isEmpty ? null : _conditionController.text,
+        'grade': _gradeController.text.isEmpty ? null : _gradeController.text,
+        'isActive': _isActive,
+        'isOEM': _isOEM,
+        'isCompatible': _isCompatible,
+        'partCategoryId': _selectedCategoryId,
+        'partCategoryName': widget.part?.partCategoryName ?? '',
+        'createdAt': widget.part?.createdAt?.toIso8601String() ?? DateTime.now().toIso8601String(),
+        'updatedAt': DateTime.now().toIso8601String(),
+      };
+      
+      if (widget.part == null) {
+        // New part
+        await partProvider.insert(partData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Part created successfully')),
+        );
+      } else {
+        // Update existing part
+        await partProvider.update(widget.part!.id, partData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Part updated successfully')),
+        );
+      }
+      
+      Navigator.pop(context, true);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error saving part: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -193,29 +305,39 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                         ],
                       ),
                       SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _skuController,
-                              decoration: InputDecoration(
-                                labelText: 'SKU',
-                                border: OutlineInputBorder(),
+                                             Row(
+                         children: [
+                           Expanded(
+                             child: TextFormField(
+                               controller: _skuController,
+                               decoration: InputDecoration(
+                                 labelText: 'SKU (Auto-generated)',
+                                 border: OutlineInputBorder(),
+                                 filled: true,
+                                 fillColor: Colors.grey[100],
+                                 suffixIcon: Icon(Icons.auto_awesome, color: Colors.blue),
+                               ),
+                               readOnly: true,
+                               enabled: false,
+                             ),
+                           ),
+                           SizedBox(width: 16),
+                                                       Expanded(
+                              child: TextFormField(
+                                controller: _partNumberController,
+                                decoration: InputDecoration(
+                                  labelText: 'Part Number (Auto-generated)',
+                                  border: OutlineInputBorder(),
+                                  filled: true,
+                                  fillColor: Colors.grey[100],
+                                  suffixIcon: Icon(Icons.auto_awesome, color: Colors.blue),
+                                ),
+                                readOnly: true,
+                                enabled: false,
                               ),
                             ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _partNumberController,
-                              decoration: InputDecoration(
-                                labelText: 'Part Number',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                         ],
+                       ),
                       SizedBox(height: 16),
                       Row(
                         children: [
@@ -311,20 +433,17 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // TODO: Implement save logic
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Part saved successfully'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text('Save'),
+                      onPressed: _isLoading ? null : _savePart,
+                      child: _isLoading 
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text('Save'),
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF512DA8),
+                        foregroundColor: Colors.white,
                         padding: EdgeInsets.symmetric(vertical: 16),
                       ),
                     ),
@@ -332,7 +451,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                   SizedBox(width: 16),
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: _isLoading ? null : () => Navigator.pop(context),
                       child: Text('Cancel'),
                       style: OutlinedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16),

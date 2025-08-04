@@ -335,6 +335,7 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                         id: 0,
                         name: '',
                         status: 'Pending',
+                        createdAt: DateTime.now(),
                       );
                       Navigator.push(
                         context,

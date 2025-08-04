@@ -25,10 +25,32 @@ namespace SmartPhone.Services.Services
             return query;
         }
 
-        protected override Task BeforeInsert(Service entity, ServiceUpsertRequest request)
+        protected override Service MapInsertToEntity(Service entity, ServiceUpsertRequest request)
         {
+            _mapper.Map(request, entity);
+            
+            // Set additional properties after mapping
             entity.Status = "Pending";
-            return Task.CompletedTask;
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = DateTime.UtcNow;
+            
+            // Convert double to decimal for database storage
+            entity.ServiceFee = (decimal)request.ServiceFee;
+            entity.EstimatedDuration = request.EstimatedDuration.HasValue ? (decimal)request.EstimatedDuration.Value : null;
+            
+            return entity;
+        }
+
+        protected override void MapUpdateToEntity(Service entity, ServiceUpsertRequest request)
+        {
+            _mapper.Map(request, entity);
+            
+            // Set additional properties after mapping
+            entity.UpdatedAt = DateTime.UtcNow;
+            
+            // Convert double to decimal for database storage
+            entity.ServiceFee = (decimal)request.ServiceFee;
+            entity.EstimatedDuration = request.EstimatedDuration.HasValue ? (decimal)request.EstimatedDuration.Value : null;
         }
 
         public async Task<ServiceResponse> CompleteAsync(int id)

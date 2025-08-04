@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartphone_desktop_admin/layouts/master_screen_technician.dart';
 import 'package:smartphone_desktop_admin/model/phone_model.dart';
+import 'package:smartphone_desktop_admin/providers/phone_model_provider.dart';
+import 'package:provider/provider.dart';
 
 class PhoneModelDetailsScreen extends StatefulWidget {
   final PhoneModel? phoneModel;
@@ -12,6 +14,7 @@ class PhoneModelDetailsScreen extends StatefulWidget {
 }
 
 class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
+  late PhoneModelProvider phoneModelProvider;
   final _formKey = GlobalKey<FormState>();
   final _brandController = TextEditingController();
   final _modelController = TextEditingController();
@@ -22,10 +25,15 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
   final _ramController = TextEditingController();
   final _networkController = TextEditingController();
   bool _isActive = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      phoneModelProvider = context.read<PhoneModelProvider>();
+    });
+    
     if (widget.phoneModel != null) {
       _brandController.text = widget.phoneModel!.brand;
       _modelController.text = widget.phoneModel!.model;
@@ -36,6 +44,52 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
       _ramController.text = widget.phoneModel!.ram ?? '';
       _networkController.text = widget.phoneModel!.network ?? '';
       _isActive = widget.phoneModel!.isActive;
+    }
+  }
+
+  Future<void> _savePhoneModel() async {
+    if (!_formKey.currentState!.validate()) return;
+    
+    setState(() => _isLoading = true);
+    
+    try {
+      final phoneModel = PhoneModel(
+        id: widget.phoneModel?.id ?? 0,
+        brand: _brandController.text,
+        model: _modelController.text,
+        series: _seriesController.text.isEmpty ? null : _seriesController.text,
+        year: _yearController.text.isEmpty ? null : _yearController.text,
+        color: _colorController.text.isEmpty ? null : _colorController.text,
+        storage: _storageController.text.isEmpty ? null : _storageController.text,
+        ram: _ramController.text.isEmpty ? null : _ramController.text,
+        network: _networkController.text.isEmpty ? null : _networkController.text,
+        imageUrl: widget.phoneModel?.imageUrl,
+        isActive: _isActive,
+        createdAt: widget.phoneModel?.createdAt ?? DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+      
+      if (widget.phoneModel == null) {
+        // New phone model
+        await phoneModelProvider.insert(phoneModel.toJson());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Phone model created successfully')),
+        );
+      } else {
+        // Update existing phone model
+        await phoneModelProvider.update(phoneModel.id, phoneModel.toJson());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Phone model updated successfully')),
+        );
+      }
+      
+      Navigator.pop(context, true);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving phone model: $e')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -201,26 +255,19 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // TODO: Implement save logic
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Phone model saved successfully'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text('Save'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                                        Expanded(
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _savePhoneModel,
+                          child: _isLoading
+                              ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                              : Text('Save'),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            backgroundColor: Color(0xFF512DA8),
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
                   SizedBox(width: 16),
                   Expanded(
                     child: OutlinedButton(

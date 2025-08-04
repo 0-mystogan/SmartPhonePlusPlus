@@ -2,6 +2,7 @@ import 'package:smartphone_desktop_admin/layouts/master_screen_technician.dart';
 import 'package:smartphone_desktop_admin/model/part.dart';
 import 'package:smartphone_desktop_admin/model/search_result.dart';
 import 'package:smartphone_desktop_admin/providers/part_provider.dart';
+import 'package:smartphone_desktop_admin/screens/part_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
@@ -48,6 +49,52 @@ class _PartListScreenState extends State<PartListScreen> {
       partProvider = context.read<PartProvider>();
       await _performSearch(page: 0);
     });
+  }
+
+  Future<void> _showDeleteConfirmation(Part part) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete "${part.name}"? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deletePart(part);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deletePart(Part part) async {
+    try {
+      await partProvider.delete(part.id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Part deleted successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      _performSearch(); // Refresh the list
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error deleting part: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildResultView() {
@@ -146,26 +193,21 @@ class _PartListScreenState extends State<PartListScreen> {
                                 IconButton(
                                   icon: Icon(Icons.edit, color: Colors.blue),
                                   onPressed: () {
-                                    // TODO: Implement edit functionality
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Edit functionality not implemented yet'),
-                                        backgroundColor: Colors.orange,
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PartDetailsScreen(part: e),
                                       ),
-                                    );
+                                    ).then((result) {
+                                      if (result == true) {
+                                        _performSearch();
+                                      }
+                                    });
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.info_outline, color: Colors.green),
-                                  onPressed: () {
-                                    // TODO: Implement details functionality
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Details functionality not implemented yet'),
-                                        backgroundColor: Colors.orange,
-                                      ),
-                                    );
-                                  },
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _showDeleteConfirmation(e),
                                 ),
                               ],
                             ),
@@ -230,13 +272,16 @@ class _PartListScreenState extends State<PartListScreen> {
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Add part creation functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Part creation not implemented yet'),
-                          backgroundColor: Colors.orange,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PartDetailsScreen(),
                         ),
-                      );
+                      ).then((result) {
+                        if (result == true) {
+                          _performSearch();
+                        }
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,

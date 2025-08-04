@@ -2,6 +2,7 @@ import 'package:smartphone_desktop_admin/layouts/master_screen_technician.dart';
 import 'package:smartphone_desktop_admin/model/phone_model.dart';
 import 'package:smartphone_desktop_admin/model/search_result.dart';
 import 'package:smartphone_desktop_admin/providers/phone_model_provider.dart';
+import 'package:smartphone_desktop_admin/screens/phone_model_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
@@ -48,6 +49,52 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
       phoneModelProvider = context.read<PhoneModelProvider>();
       await _performSearch(page: 0);
     });
+  }
+
+  Future<void> _showDeleteConfirmation(PhoneModel phoneModel) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete "${phoneModel.brand} ${phoneModel.model}"? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deletePhoneModel(phoneModel);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deletePhoneModel(PhoneModel phoneModel) async {
+    try {
+      await phoneModelProvider.delete(phoneModel.id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Phone model deleted successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      _performSearch(); // Refresh the list
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error deleting phone model: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildResultView() {
@@ -137,37 +184,32 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
                               ),
                             ),
                           ),
-                          DataCell(
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.blue),
-                                  onPressed: () {
-                                    // TODO: Implement edit functionality
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Edit functionality not implemented yet'),
-                                        backgroundColor: Colors.orange,
-                                      ),
-                                    );
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.info_outline, color: Colors.green),
-                                  onPressed: () {
-                                    // TODO: Implement details functionality
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Details functionality not implemented yet'),
-                                        backgroundColor: Colors.orange,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                                                     DataCell(
+                             Row(
+                               mainAxisSize: MainAxisSize.min,
+                               children: [
+                                 IconButton(
+                                   icon: Icon(Icons.edit, color: Colors.blue),
+                                   onPressed: () {
+                                     Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                         builder: (context) => PhoneModelDetailsScreen(phoneModel: e),
+                                       ),
+                                     ).then((result) {
+                                       if (result == true) {
+                                         _performSearch();
+                                       }
+                                     });
+                                   },
+                                 ),
+                                 IconButton(
+                                   icon: Icon(Icons.delete, color: Colors.red),
+                                   onPressed: () => _showDeleteConfirmation(e),
+                                 ),
+                               ],
+                             ),
+                           ),
                         ],
                       ),
                     )
@@ -228,13 +270,16 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Add phone model creation functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Phone model creation not implemented yet'),
-                          backgroundColor: Colors.orange,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PhoneModelDetailsScreen(),
                         ),
-                      );
+                      ).then((result) {
+                        if (result == true) {
+                          _performSearch();
+                        }
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,

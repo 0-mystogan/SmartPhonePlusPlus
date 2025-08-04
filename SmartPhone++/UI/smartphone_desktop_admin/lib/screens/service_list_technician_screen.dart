@@ -3,6 +3,7 @@ import 'package:smartphone_desktop_admin/model/service.dart';
 import 'package:smartphone_desktop_admin/model/search_result.dart';
 import 'package:smartphone_desktop_admin/providers/service_provider.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_screen.dart';
+import 'package:smartphone_desktop_admin/screens/service_details_technician_screen.dart' as technician;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
@@ -49,6 +50,52 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
       serviceProvider = context.read<ServiceProvider>();
       await _performSearch(page: 0);
     });
+  }
+
+  Future<void> _showDeleteConfirmation(Service service) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete "${service.name}"? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteService(service);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteService(Service service) async {
+    try {
+      await serviceProvider.delete(service.id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Service deleted successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      _performSearch(); // Refresh the list
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error deleting service: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildResultView() {
@@ -148,18 +195,41 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
   }
 
   Widget _buildActionsCell(Service service) {
-    if (service.status == 'Pending') {
-      return IconButton(
-        icon: Icon(Icons.check, color: Colors.green),
-        tooltip: 'Complete',
-        onPressed: () async {
-          await serviceProvider.complete(service.id);
-          await _performSearch();
-        },
-      );
-    } else {
-      return SizedBox.shrink();
-    }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: Icon(Icons.edit, color: Colors.blue),
+          tooltip: 'Edit',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => technician.ServiceDetailsScreen(service: service),
+              ),
+            ).then((result) {
+              if (result == true) {
+                _performSearch(); // Refresh the list
+              }
+            });
+          },
+        ),
+        if (service.status == 'Pending')
+          IconButton(
+            icon: Icon(Icons.check, color: Colors.green),
+            tooltip: 'Complete',
+            onPressed: () async {
+              await serviceProvider.complete(service.id);
+              await _performSearch();
+            },
+          ),
+        IconButton(
+          icon: Icon(Icons.delete, color: Colors.red),
+          tooltip: 'Delete',
+          onPressed: () => _showDeleteConfirmation(service),
+        ),
+      ],
+    );
   }
 
   @override
@@ -191,13 +261,23 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Add service creation functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Service creation not implemented yet'),
-                          backgroundColor: Colors.orange,
-                        ),
+                      // Create a default service for new service creation
+                      final defaultService = Service(
+                        id: 0,
+                        name: '',
+                        status: 'Pending',
+                        createdAt: DateTime.now(),
                       );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => technician.ServiceDetailsScreen(service: defaultService),
+                        ),
+                      ).then((result) {
+                        if (result == true) {
+                          _performSearch(); // Refresh the list
+                        }
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,
