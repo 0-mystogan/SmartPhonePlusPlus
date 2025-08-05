@@ -50,6 +50,22 @@ abstract class BaseProvider<T> with ChangeNotifier {
     // print("response: ${response.request} ${response.statusCode}, ${response.body}");
   }
 
+  Future<T?> getById(int id) async {
+    var url = "$baseUrl$endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      if (data == null) return null;
+      return fromJson(data);
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
   Future<T> insert(dynamic request) async {
     var url = "$baseUrl$endpoint";
     var uri = Uri.parse(url);

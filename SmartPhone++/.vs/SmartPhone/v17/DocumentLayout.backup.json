@@ -46,12 +46,11 @@
               "Title": "ServiceResponse.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Responses\\ServiceResponse.cs",
               "RelativeDocumentMoniker": "SmartPhone.Model\\Responses\\ServiceResponse.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Responses\\ServiceResponse.cs*",
-              "RelativeToolTip": "SmartPhone.Model\\Responses\\ServiceResponse.cs*",
+              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Responses\\ServiceResponse.cs",
+              "RelativeToolTip": "SmartPhone.Model\\Responses\\ServiceResponse.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAQwAoAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T04:29:44.961Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-04T04:29:44.961Z"
             },
             {
               "$type": "Document",
@@ -59,12 +58,11 @@
               "Title": "ServiceUpsertRequest.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs",
               "RelativeDocumentMoniker": "SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs",
-              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs*",
-              "RelativeToolTip": "SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs*",
+              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs",
+              "RelativeToolTip": "SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAQwBMAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T04:29:19.095Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-04T04:29:19.095Z"
             },
             {
               "$type": "Document",
@@ -74,7 +72,7 @@
               "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
               "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
               "RelativeToolTip": "SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAwwEwAAABNAAAAAAAAAA==",
+              "ViewState": "AgIAACkAAAAAAAAAAAAwwE4AAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-04T04:21:53.116Z",
               "EditorCaption": ""
@@ -89,8 +87,7 @@
               "RelativeToolTip": "SmartPhone.Services\\Database\\Service.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T04:21:08.585Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-04T04:21:08.585Z"
             },
             {
               "$type": "Document",
@@ -102,8 +99,7 @@
               "RelativeToolTip": "SmartPhone.Services\\Database\\ServicePart.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T03:59:39.332Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-04T03:59:39.332Z"
             },
             {
               "$type": "Document",
@@ -115,8 +111,7 @@
               "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-03T16:20:21.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-03T16:20:21.136Z"
             },
             {
               "$type": "Document",

@@ -109,7 +109,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
       children: [
         CustomDataTableCard(
           width: 700,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -288,7 +288,9 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                 ],
               ),
             ),
-            _buildResultView(),
+            Expanded(
+              child: _buildResultView(),
+            ),
           ],
         ),
       ),

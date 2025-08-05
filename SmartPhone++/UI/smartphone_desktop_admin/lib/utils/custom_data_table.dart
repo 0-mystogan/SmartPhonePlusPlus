@@ -41,36 +41,45 @@ class CustomDataTableCard extends StatelessWidget {
         margin: const EdgeInsets.all(16),
         child: Container(
           width: width,
-          height: height,
+          constraints: BoxConstraints(
+            maxHeight: height,
+            minHeight: 200, // Minimum height to prevent too small tables
+          ),
           padding: padding ?? const EdgeInsets.all(16),
           child: isEmpty
               ? (emptyState ?? _defaultEmptyState())
-              : SizedBox(
-                  height: height - 32, // account for padding
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      showCheckboxColumn: showCheckboxColumn,
-                      columnSpacing: columnSpacing,
-                      headingRowColor: headingRowColor != null
-                          ? WidgetStateProperty.all(headingRowColor)
-                          : WidgetStateProperty.resolveWith<Color?>(
-                              (states) => Colors.blue[50],
-                            ),
-                      dataRowColor: hoverRowColor != null
-                          ? WidgetStateProperty.resolveWith<Color?>(
-                              (states) => states.contains(WidgetState.hovered)
-                                  ? hoverRowColor
-                                  : null,
-                            )
-                          : WidgetStateProperty.resolveWith<Color?>(
-                              (states) => states.contains(WidgetState.hovered)
-                                  ? Colors.blue.withAlpha(20)
-                                  : null,
-                            ),
-                      columns: columns,
-                      rows: rows,
-                    ),
-                  ),
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight - 32,
+                        ),
+                        child: DataTable(
+                          showCheckboxColumn: showCheckboxColumn,
+                          columnSpacing: columnSpacing,
+                          headingRowColor: headingRowColor != null
+                              ? WidgetStateProperty.all(headingRowColor)
+                              : WidgetStateProperty.resolveWith<Color?>(
+                                  (states) => Colors.blue[50],
+                                ),
+                          dataRowColor: hoverRowColor != null
+                              ? WidgetStateProperty.resolveWith<Color?>(
+                                  (states) => states.contains(WidgetState.hovered)
+                                      ? hoverRowColor
+                                      : null,
+                                )
+                              : WidgetStateProperty.resolveWith<Color?>(
+                                  (states) => states.contains(WidgetState.hovered)
+                                      ? Colors.blue.withAlpha(20)
+                                      : null,
+                                ),
+                          columns: columns,
+                          rows: rows,
+                        ),
+                      ),
+                    );
+                  },
                 ),
         ),
       ),

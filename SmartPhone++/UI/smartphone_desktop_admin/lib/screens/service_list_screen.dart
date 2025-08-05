@@ -62,7 +62,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
       children: [
         CustomDataTableCard(
           width: 700,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -167,32 +167,34 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
     return MasterScreen(
       title: "Services",
       child: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: customTextFieldDecoration(
-                        "Service name...",
-                        prefixIcon: Icons.search,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: customTextFieldDecoration(
+                          "Service name...",
+                          prefixIcon: Icons.search,
+                        ),
+                        controller: nameController,
+                        onSubmitted: (value) => _performSearch(),
                       ),
-                      controller: nameController,
-                      onSubmitted: (value) => _performSearch(),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: _performSearch,
-                    child: Text("Search"),
-                  ),
-                ],
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: _performSearch,
+                      child: Text("Search"),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            _buildResultView(),
-          ],
+              _buildResultView(),
+            ],
+          ),
         ),
       ),
     );

@@ -76,5 +76,54 @@ namespace SmartPhone.WebAPI.Controllers
             var result = await _partService.CheckPartAvailabilityAsync(id, requiredQuantity);
             return Ok(result);
         }
+
+        [HttpGet("debug/count")]
+        public async Task<ActionResult<int>> GetPartsCount()
+        {
+            var search = new PartSearchObject { RetrieveAll = true };
+            var result = await _partService.GetAsync(search);
+            return Ok(result.Items.Count);
+        }
+
+        [HttpGet("debug/raw")]
+        public async Task<ActionResult<object>> GetRawParts()
+        {
+            var search = new PartSearchObject { RetrieveAll = true };
+            var result = await _partService.GetAsync(search);
+            return Ok(new { 
+                Count = result.Items.Count,
+                Items = result.Items.Take(3).Select(p => new { 
+                    p.Id, 
+                    p.Name, 
+                    p.PartCategoryId, 
+                    p.PartCategoryName,
+                    p.IsActive,
+                    p.IsOEM,
+                    p.IsCompatible
+                })
+            });
+        }
+
+        [HttpGet("debug/seed")]
+        public async Task<ActionResult<string>> SeedDatabase()
+        {
+            try
+            {
+                // This is a temporary method to check if seeding is needed
+                var search = new PartSearchObject { RetrieveAll = true };
+                var result = await _partService.GetAsync(search);
+                
+                if (result.Items.Count == 0)
+                {
+                    return Ok("Database appears to be empty. Please run migrations and seed data.");
+                }
+                
+                return Ok($"Database has {result.Items.Count} parts. Seeding appears to be working.");
+            }
+            catch (Exception ex)
+            {
+                return Ok($"Error checking database: {ex.Message}");
+            }
+        }
     }
 } 

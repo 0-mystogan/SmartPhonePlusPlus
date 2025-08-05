@@ -141,6 +141,42 @@ namespace SmartPhone.Services.Services
             return MapToResponse(entity);
         }
 
+        protected override IQueryable<Part> ApplyFilter(IQueryable<Part> query, PartSearchObject search)
+        {
+            if (!string.IsNullOrEmpty(search.Name))
+                query = query.Where(p => p.Name.Contains(search.Name));
+            
+            if (!string.IsNullOrEmpty(search.Brand))
+                query = query.Where(p => p.Brand == search.Brand);
+            
+            if (!string.IsNullOrEmpty(search.SKU))
+                query = query.Where(p => p.SKU == search.SKU);
+            
+            if (!string.IsNullOrEmpty(search.PartNumber))
+                query = query.Where(p => p.PartNumber == search.PartNumber);
+            
+            if (search.PartCategoryId.HasValue)
+                query = query.Where(p => p.PartCategoryId == search.PartCategoryId.Value);
+            
+            if (search.IsActive.HasValue)
+                query = query.Where(p => p.IsActive == search.IsActive.Value);
+            
+            if (search.IsOEM.HasValue)
+                query = query.Where(p => p.IsOEM == search.IsOEM.Value);
+            
+            if (search.InStock.HasValue && search.InStock.Value)
+                query = query.Where(p => p.StockQuantity > 0);
+            
+            // Price range filtering
+            if (search.MinPrice.HasValue)
+                query = query.Where(p => p.Price >= search.MinPrice.Value);
+            
+            if (search.MaxPrice.HasValue)
+                query = query.Where(p => p.Price <= search.MaxPrice.Value);
+            
+            return query;
+        }
+
         public override async Task<PagedResult<PartResponse>> GetAsync(PartSearchObject search)
         {
             var query = _context.Parts.AsQueryable();
@@ -168,6 +204,7 @@ namespace SmartPhone.Services.Services
             }
 
             var list = await query.ToListAsync();
+            
             return new PagedResult<PartResponse>
             {
                 Items = list.Select(MapToResponse).ToList(),
@@ -177,6 +214,12 @@ namespace SmartPhone.Services.Services
 
         protected override PartResponse MapToResponse(Part entity)
         {
+            // Ensure PartCategory is loaded
+            if (entity.PartCategory == null)
+            {
+                _context.Entry(entity).Reference(p => p.PartCategory).Load();
+            }
+            
             return _mapper.Map<PartResponse>(entity);
         }
     }

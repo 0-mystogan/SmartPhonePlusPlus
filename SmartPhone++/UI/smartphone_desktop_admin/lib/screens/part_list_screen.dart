@@ -32,7 +32,7 @@ class _PartListScreenState extends State<PartListScreen> {
       "page": pageToFetch,
       "pageSize": pageSizeToUse,
       "includeTotalCount": true,
-      "fts": searchText,
+      "name": searchText,
     };
     var parts = await partProvider.get(filter: filter);
     setState(() {
@@ -108,7 +108,7 @@ class _PartListScreenState extends State<PartListScreen> {
       children: [
         CustomDataTableCard(
           width: 700,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -292,7 +292,9 @@ class _PartListScreenState extends State<PartListScreen> {
                 ],
               ),
             ),
-            _buildResultView(),
+            Expanded(
+              child: _buildResultView(),
+            ),
           ],
         ),
       ),

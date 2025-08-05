@@ -155,112 +155,241 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     );
   }
 
-  Widget _buildDetailsView() {
+  Widget _buildDetailsView(){
     return Center(
       child: Container(
-        constraints: BoxConstraints(maxWidth: 420),
+        constraints: BoxConstraints(maxWidth: 480),
         child: Card(
-          elevation: 6,
+          elevation: 12,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(24),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 32.0,
-              vertical: 32.0,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.grey[100]!,
+                  Colors.grey[200]!,
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomPictureDesign(
-                  base64: widget.user!.picture,
-                  size: 140,
-                  fallbackIcon: Icons.account_circle,
-                ),
-                SizedBox(height: 18),
-                Text(
-                  "${widget.user!.firstName} ${widget.user!.lastName}",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "@${widget.user!.username}",
-                  style: TextStyle(fontSize: 16, color: Colors.blueGrey[700]),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 18),
-                _buildInfoRow("Email", widget.user!.email, icon: Icons.email),
-                _buildInfoRow(
-                  "Phone",
-                  widget.user!.phoneNumber ?? '-',
-                  icon: Icons.phone,
-                ),
-                _buildInfoRow(
-                  "Gender",
-                  widget.user!.genderName,
-                  icon: Icons.person_outline,
-                ),
-                _buildInfoRow(
-                  "City",
-                  widget.user!.cityName,
-                  icon: Icons.location_city,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.verified_user,
-                        size: 20,
-                        color: Colors.orange,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 36.0,
+                vertical: 36.0,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                  // Profile Picture with Purple Border
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.purple[400]!,
+                        width: 4,
                       ),
-                      SizedBox(width: 8),
-                      Text(
-                        "Active:",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.purple.withOpacity(0.3),
+                          blurRadius: 12,
+                          spreadRadius: 2,
                         ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: CustomPictureDesign(
+                        base64: widget.user!.picture,
+                        size: 160,
+                        fallbackIcon: Icons.account_circle,
                       ),
-                      SizedBox(width: 8),
-                      Icon(
-                        widget.user!.isActive ? Icons.check_circle : Icons.cancel,
-                        color: widget.user!.isActive ? Colors.green : Colors.red,
-                        size: 22,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+                  SizedBox(height: 24),
+                  
+                  // Name with Purple Styling
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.purple[100],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "${widget.user!.firstName} ${widget.user!.lastName}",
+                      style: TextStyle(
+                        fontSize: 24, 
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple[800],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  
+                  // Username with Purple Accent
+                  Text(
+                    "@${widget.user!.username}",
+                    style: TextStyle(
+                      fontSize: 18, 
+                      color: Colors.purple[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 24),
+                  
+                  // Info Rows with Purple Theme
+                  _buildInfoRow("Email", widget.user!.email, icon: Icons.email),
+                  _buildInfoRow(
+                    "Phone",
+                    widget.user!.phoneNumber ?? '-',
+                    icon: Icons.phone,
+                  ),
+                  _buildInfoRow(
+                    "Gender",
+                    widget.user!.genderName,
+                    icon: Icons.person_outline,
+                  ),
+                  _buildInfoRow(
+                    "City",
+                    widget.user!.cityName,
+                    icon: Icons.location_city,
+                  ),
+                  
+                  // Active Status with Purple Theme
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: widget.user!.isActive ? Colors.green[50] : Colors.red[50],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: widget.user!.isActive ? Colors.green[300]! : Colors.red[300]!,
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.verified_user,
+                          size: 20,
+                          color: widget.user!.isActive ? Colors.green[600] : Colors.red[600],
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "Status:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: widget.user!.isActive ? Colors.green[700] : Colors.red[700],
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          widget.user!.isActive ? "Active" : "Inactive",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: widget.user!.isActive ? Colors.green[700] : Colors.red[700],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  SizedBox(height: 24),
+                  
+                                     // Action Buttons
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                     children: [
+                       // Back Button
+                       ElevatedButton.icon(
+                         onPressed: () {
+                           // Navigate back to user list
+                           Navigator.of(context).pop();
+                         },
+                         icon: Icon(Icons.arrow_back, color: Colors.white),
+                         label: Text("Back", style: TextStyle(color: Colors.white)),
+                         style: ElevatedButton.styleFrom(
+                           backgroundColor: Colors.grey[600],
+                           foregroundColor: Colors.white,
+                           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                           shape: RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(20),
+                           ),
+                           elevation: 4,
+                         ),
+                       ),
+                       
+                                               // Delete Button
+                        ElevatedButton.icon(
+                          onPressed: () => _showDeleteConfirmation(),
+                          icon: Icon(Icons.delete, color: Colors.white),
+                          label: Text("Delete", style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[600],
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            elevation: 4,
+                          ),
+                        ),
+                     ],
+                   ),
+                   SizedBox(height: 20), // Add extra padding at bottom
+                 ],
+               ),
+             ),
+           ),
+         ),
+       ),
+     ),
     );
-  }
+   }
 
   Widget _buildInfoRow(String label, String value, {IconData? icon}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.purple[200]!,
+          width: 1,
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 20, color: Colors.orange),
-            SizedBox(width: 8),
+            Icon(icon, size: 22, color: Colors.purple[600]),
+            SizedBox(width: 12),
           ],
           Text(
             "$label:",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: TextStyle(
+              fontWeight: FontWeight.bold, 
+              fontSize: 16,
+              color: Colors.purple[700],
+            ),
           ),
-          SizedBox(width: 8),
+          SizedBox(width: 12),
           Flexible(
             child: Text(
               value,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.purple[800],
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -269,23 +398,177 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     );
   }
 
+  void _showDeleteConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.red[600], size: 28),
+              SizedBox(width: 12),
+              Text(
+                'Delete User',
+                style: TextStyle(
+                  color: Colors.red[700],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'Are you sure you want to delete "${widget.user!.firstName} ${widget.user!.lastName}"?\n\nThis action cannot be undone.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteUser();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[600],
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Delete',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteUser() async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.purple[600]!),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Deleting user...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      // Delete the user
+      await userProvider.delete(widget.user!.id);
+
+      // Close loading dialog
+      Navigator.of(context).pop();
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'User "${widget.user!.firstName} ${widget.user!.lastName}" has been deleted successfully.',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green[600],
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+
+      // Navigate back to user list
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const UserListScreen(),
+        ),
+      );
+    } catch (e) {
+      // Close loading dialog
+      Navigator.of(context).pop();
+
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to delete user: ${e.toString().replaceFirst('Exception: ', '')}',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red[600],
+          duration: Duration(seconds: 4),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
   Widget _buildSaveButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton.icon(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.cancel),
-          label: Text("Cancel"),
+          icon: Icon(Icons.cancel, color: Colors.white),
+          label: Text("Cancel", style: TextStyle(color: Colors.white)),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey[300],
-            foregroundColor: Colors.black87,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            backgroundColor: Colors.grey[600],
+            foregroundColor: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 4,
           ),
         ),
-        SizedBox(width: 12),
         ElevatedButton.icon(
           onPressed: () async {
             formKey.currentState?.saveAndValidate();
@@ -332,12 +615,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               }
             }
           },
-          icon: Icon(Icons.save),
-          label: Text("Save"),
+          icon: Icon(Icons.save, color: Colors.white),
+          label: Text("Save", style: TextStyle(color: Colors.white)),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Colors.purple[600],
             foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 4,
           ),
         ),
       ],
@@ -346,265 +633,293 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   Widget _buildForm() {
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.purple[600]!),
+        ),
+      );
     }
 
     return Center(
       child: Container(
         constraints: BoxConstraints(maxWidth: 500),
         child: Card(
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: SingleChildScrollView(
-              child: FormBuilder(
-                key: formKey,
-                initialValue: _initialValue,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'User Information',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.purple[50]!,
+                  Colors.purple[100]!,
+                ],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: SingleChildScrollView(
+                child: FormBuilder(
+                  key: formKey,
+                  initialValue: _initialValue,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.purple[100],
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          'User Information',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                            color: Colors.purple[800],
+                          ),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: FormBuilderTextField(
-                            name: "firstName",
-                            decoration: customTextFieldDecoration(
-                              "First Name",
-                              prefixIcon: Icons.person,
+                      SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FormBuilderTextField(
+                              name: "firstName",
+                              decoration: customTextFieldDecoration(
+                                "First Name",
+                                prefixIcon: Icons.person,
+                              ),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.match(
+                                  RegExp(r'^[A-Za-z\s]+'),
+                                  errorText: 'Only letters and spaces allowed',
+                                ),
+                              ]),
+                              onChanged: (value) {
+                                _autoGenerateCredentials(value);
+                              },
                             ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: FormBuilderTextField(
+                              name: "lastName",
+                              decoration: customTextFieldDecoration(
+                                "Last Name",
+                                prefixIcon: Icons.person,
+                              ),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.match(
+                                  RegExp(r'^[A-Za-z\s]+'),
+                                  errorText: 'Only letters and spaces allowed',
+                                ),
+                              ]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      FormBuilderTextField(
+                        name: "email",
+                        decoration: customTextFieldDecoration(
+                          "Email",
+                          prefixIcon: Icons.email,
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.email(),
+                        ]),
+                      ),
+                      SizedBox(height: 16),
+                      FormBuilderTextField(
+                        name: "username",
+                        decoration: customTextFieldDecoration(
+                          "Username",
+                          prefixIcon: Icons.account_circle,
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.match(
+                            RegExp(r'^[a-zA-Z0-9_]+'),
+                            errorText: 'Only letters, numbers, and underscores allowed',
+                          ),
+                        ]),
+                      ),
+                      SizedBox(height: 16),
+                      FormBuilderTextField(
+                        name: "password",
+                        decoration: customTextFieldDecoration(
+                          "Password",
+                          prefixIcon: Icons.lock,
+                        ),
+                        obscureText: false, // Make password visible
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.minLength(6, errorText: 'Password must be at least 6 characters'),
+                        ]),
+                      ),
+                      SizedBox(height: 16),
+                      // Removed confirmPassword field
+                      FormBuilderTextField(
+                        name: "phoneNumber",
+                        decoration: customTextFieldDecoration(
+                          "Phone Number",
+                          prefixIcon: Icons.phone,
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.match(
+                            RegExp(r'^\+?[0-9\s\-\(\)]+'),
+                            errorText: 'Please enter a valid phone number',
+                          ),
+                        ]),
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FormBuilderDropdown<int>(
+                              name: "genderId",
+                              decoration: customTextFieldDecoration(
+                                "Gender",
+                                prefixIcon: Icons.person_outline,
+                              ),
+                              items: [
+                                DropdownMenuItem(value: 1, child: Text("Male")),
+                                DropdownMenuItem(value: 2, child: Text("Female")),
+                              ],
+                              validator: FormBuilderValidators.required(),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: FormBuilderDropdown<int>(
+                              name: "cityId",
+                              decoration: customTextFieldDecoration(
+                                "City",
+                                prefixIcon: Icons.location_city,
+                              ),
+                              items: cities.map((city) => DropdownMenuItem(value: city.id, child: Text(city.name))).toList(),
+                              validator: FormBuilderValidators.required(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      FormBuilderCheckbox(
+                        name: "isActive",
+                        title: Text("Active"),
+                        initialValue: true,
+                      ),
+                      SizedBox(height: 16),
+                      // Role selection section
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Roles",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          FormBuilderCheckboxGroup<int>(
+                            name: "roleIds",
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            ),
+                            options: roles.map((role) => FormBuilderFieldOption(
+                              value: role.id,
+                              child: Text(role.name),
+                            )).toList(),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
-                              FormBuilderValidators.match(
-                                RegExp(r'^[A-Za-z\s]+'),
-                                errorText: 'Only letters and spaces allowed',
-                              ),
-                            ]),
-                            onChanged: (value) {
-                              _autoGenerateCredentials(value);
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: FormBuilderTextField(
-                            name: "lastName",
-                            decoration: customTextFieldDecoration(
-                              "Last Name",
-                              prefixIcon: Icons.person,
-                            ),
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                              FormBuilderValidators.match(
-                                RegExp(r'^[A-Za-z\s]+'),
-                                errorText: 'Only letters and spaces allowed',
-                              ),
                             ]),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    FormBuilderTextField(
-                      name: "email",
-                      decoration: customTextFieldDecoration(
-                        "Email",
-                        prefixIcon: Icons.email,
+                        ],
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                    ),
-                    SizedBox(height: 16),
-                    FormBuilderTextField(
-                      name: "username",
-                      decoration: customTextFieldDecoration(
-                        "Username",
-                        prefixIcon: Icons.account_circle,
-                      ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.match(
-                          RegExp(r'^[a-zA-Z0-9_]+'),
-                          errorText: 'Only letters, numbers, and underscores allowed',
-                        ),
-                      ]),
-                    ),
-                    SizedBox(height: 16),
-                    FormBuilderTextField(
-                      name: "password",
-                      decoration: customTextFieldDecoration(
-                        "Password",
-                        prefixIcon: Icons.lock,
-                      ),
-                      obscureText: false, // Make password visible
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.minLength(6, errorText: 'Password must be at least 6 characters'),
-                      ]),
-                    ),
-                    SizedBox(height: 16),
-                    // Removed confirmPassword field
-                    FormBuilderTextField(
-                      name: "phoneNumber",
-                      decoration: customTextFieldDecoration(
-                        "Phone Number",
-                        prefixIcon: Icons.phone,
-                      ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.match(
-                          RegExp(r'^\+?[0-9\s\-\(\)]+'),
-                          errorText: 'Please enter a valid phone number',
-                        ),
-                      ]),
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: FormBuilderDropdown<int>(
-                            name: "genderId",
-                            decoration: customTextFieldDecoration(
-                              "Gender",
-                              prefixIcon: Icons.person_outline,
+                      SizedBox(height: 24),
+                      // Picture upload section
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Profile Picture",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            items: [
-                              DropdownMenuItem(value: 1, child: Text("Male")),
-                              DropdownMenuItem(value: 2, child: Text("Female")),
-                            ],
-                            validator: FormBuilderValidators.required(),
                           ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: FormBuilderDropdown<int>(
-                            name: "cityId",
-                            decoration: customTextFieldDecoration(
-                              "City",
-                              prefixIcon: Icons.location_city,
-                            ),
-                            items: cities.map((city) => DropdownMenuItem(value: city.id, child: Text(city.name))).toList(),
-                            validator: FormBuilderValidators.required(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    FormBuilderCheckbox(
-                      name: "isActive",
-                      title: Text("Active"),
-                      initialValue: true,
-                    ),
-                    SizedBox(height: 16),
-                    // Role selection section
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Roles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        FormBuilderCheckboxGroup<int>(
-                          name: "roleIds",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          ),
-                          options: roles.map((role) => FormBuilderFieldOption(
-                            value: role.id,
-                            child: Text(role.name),
-                          )).toList(),
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24),
-                    // Picture upload section
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Profile Picture",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        Row(
-                          children: [
-                            // Picture preview
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: selectedPictureBase64 != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.memory(
-                                        base64Decode(selectedPictureBase64!),
-                                        fit: BoxFit.cover,
+                          SizedBox(height: 12),
+                          Row(
+                            children: [
+                              // Picture preview
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: selectedPictureBase64 != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.memory(
+                                          base64Decode(selectedPictureBase64!),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.account_circle,
+                                        size: 40,
+                                        color: Colors.grey,
                                       ),
-                                    )
-                                  : Icon(
-                                      Icons.account_circle,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
-                            ),
-                            SizedBox(width: 16),
-                            // Upload button
-                            ElevatedButton.icon(
-                              onPressed: _pickImage,
-                              icon: Icon(Icons.upload),
-                              label: Text("Choose Picture"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
                               ),
-                            ),
-                            SizedBox(width: 8),
-                            // Remove button (only show if picture is selected)
-                            if (selectedPictureBase64 != null)
+                              SizedBox(width: 16),
+                              // Upload button
                               ElevatedButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    selectedPictureBase64 = null;
-                                  });
-                                },
-                                icon: Icon(Icons.delete),
-                                label: Text("Remove"),
+                                onPressed: _pickImage,
+                                icon: Icon(Icons.upload),
+                                label: Text("Choose Picture"),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.blue,
                                   foregroundColor: Colors.white,
                                 ),
                               ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 50),
-                    _buildSaveButton(),
-                  ],
+                              SizedBox(width: 8),
+                              // Remove button (only show if picture is selected)
+                              if (selectedPictureBase64 != null)
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedPictureBase64 = null;
+                                    });
+                                  },
+                                  icon: Icon(Icons.delete),
+                                  label: Text("Remove"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 50),
+                      _buildSaveButton(),
+                    ],
+                  ),
                 ),
               ),
             ),

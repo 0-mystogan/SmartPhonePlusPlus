@@ -948,6 +948,56 @@
   },
   {
     "ContainingType": "SmartPhone.WebAPI.Controllers.PartController",
+    "Method": "GetPartsCount",
+    "RelativePath": "Part/debug/count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.PartController",
+    "Method": "GetRawParts",
+    "RelativePath": "Part/debug/raw",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.PartController",
+    "Method": "SeedDatabase",
+    "RelativePath": "Part/debug/seed",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.PartController",
     "Method": "GetLowStockParts",
     "RelativePath": "Part/low-stock",
     "HttpMethod": "GET",

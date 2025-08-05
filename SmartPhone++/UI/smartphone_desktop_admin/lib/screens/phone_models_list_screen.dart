@@ -108,7 +108,7 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
       children: [
         CustomDataTableCard(
           width: 700,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -290,7 +290,9 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
                 ],
               ),
             ),
-            _buildResultView(),
+            Expanded(
+              child: _buildResultView(),
+            ),
           ],
         ),
       ),

@@ -98,7 +98,7 @@ class _UserListScreenState extends State<UserListScreen> {
       children: [
         CustomDataTableCard(
           width: 1300,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -306,7 +306,9 @@ class _UserListScreenState extends State<UserListScreen> {
                 ],
               ),
             ),
-            _buildResultView(),
+            Expanded(
+              child: _buildResultView(),
+            ),
           ],
         ),
       ),

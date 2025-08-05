@@ -37,7 +37,7 @@ class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
       "name": widget.partCategory?.name,
       "description": widget.partCategory?.description,
       "isActive": widget.partCategory?.isActive ?? true,
-      "parentCategoryId": widget.partCategory?.parentCategoryId,
+      "parentCategoryId": widget.partCategory?.parentCategoryId?.toString(),
     };
     print("widget.partCategory");
     print(_initalValue);

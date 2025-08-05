@@ -1,10 +1,82 @@
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/service.dart';
+import 'package:smartphone_desktop_admin/model/user.dart';
+import 'package:smartphone_desktop_admin/model/phone_model.dart';
+import 'package:smartphone_desktop_admin/providers/user_provider.dart';
+import 'package:smartphone_desktop_admin/providers/phone_model_provider.dart';
 import 'package:flutter/material.dart';
 
-class ServiceDetailsScreen extends StatelessWidget {
+class ServiceDetailsScreen extends StatefulWidget {
   final Service service;
   const ServiceDetailsScreen({super.key, required this.service});
+
+  @override
+  State<ServiceDetailsScreen> createState() => _ServiceDetailsScreenState();
+}
+
+class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
+  User? customer;
+  User? technician;
+  PhoneModel? phoneModel;
+  bool isLoading = true;
+  String? errorMessage;
+
+  final UserProvider _userProvider = UserProvider();
+  final PhoneModelProvider _phoneModelProvider = PhoneModelProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRelatedData();
+  }
+
+  Future<void> _loadRelatedData() async {
+    try {
+      setState(() {
+        isLoading = true;
+        errorMessage = null;
+      });
+
+      // Load customer data
+      if (widget.service.userId > 0) {
+        customer = await _userProvider.getById(widget.service.userId);
+      }
+
+      // Load technician data
+      if (widget.service.technicianId != null && widget.service.technicianId! > 0) {
+        technician = await _userProvider.getById(widget.service.technicianId!);
+      }
+
+      // Load phone model data
+      if (widget.service.phoneModelId != null && widget.service.phoneModelId! > 0) {
+        phoneModel = await _phoneModelProvider.getById(widget.service.phoneModelId!);
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = "Failed to load related data: $e";
+      });
+    }
+  }
+
+  String _getCustomerName() {
+    if (customer == null) return "Loading...";
+    return "${customer!.firstName} ${customer!.lastName}";
+  }
+
+  String _getTechnicianName() {
+    if (technician == null) return "Loading...";
+    return "${technician!.firstName} ${technician!.lastName}";
+  }
+
+  String _getPhoneModelName() {
+    if (phoneModel == null) return "Loading...";
+    return "${phoneModel!.brand} ${phoneModel!.model}";
+  }
 
   Widget _buildInfoRow(String label, String value, {IconData? icon}) {
     return Padding(
@@ -13,7 +85,7 @@ class ServiceDetailsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 22, color: Colors.orange),
+            Icon(icon, size: 22, color: Colors.purple),
             SizedBox(width: 10),
           ],
           Text(
@@ -67,90 +139,112 @@ class ServiceDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      service.name,
+                      widget.service.name,
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange[800],
+                        color: Colors.grey[800],
                       ),
                     ),
                     SizedBox(height: 24),
                     Divider(height: 36, thickness: 1.2),
+                    if (errorMessage != null)
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.red[50],
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.red[200]!),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.error, color: Colors.red),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                errorMessage!,
+                                style: TextStyle(color: Colors.red[700]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     _buildInfoRow(
                       "ID",
-                      service.id.toString(),
+                      widget.service.id.toString(),
                       icon: Icons.confirmation_number,
                     ),
                     _buildInfoRow(
                       "Name",
-                      service.name,
+                      widget.service.name,
                       icon: Icons.miscellaneous_services,
                     ),
                     _buildInfoRowWithNull(
                       "Description",
-                      service.description,
+                      widget.service.description,
                       icon: Icons.description,
                     ),
                     _buildInfoRow(
                       "Service Fee",
-                      "\$${service.serviceFee.toStringAsFixed(2)}",
+                      "\$${widget.service.serviceFee.toStringAsFixed(2)}",
                       icon: Icons.attach_money,
                     ),
                     _buildInfoRowWithNull(
                       "Estimated Duration",
-                      service.estimatedDuration != null 
-                          ? "${service.estimatedDuration} hours"
+                      widget.service.estimatedDuration != null 
+                          ? "${widget.service.estimatedDuration} hours"
                           : null,
                       icon: Icons.schedule,
                     ),
                     _buildInfoRow(
                       "Status",
-                      service.status,
+                      widget.service.status,
                       icon: Icons.info_outline,
                     ),
                     _buildInfoRowWithNull(
                       "Customer Notes",
-                      service.customerNotes,
+                      widget.service.customerNotes,
                       icon: Icons.note,
                     ),
                     _buildInfoRowWithNull(
                       "Technician Notes",
-                      service.technicianNotes,
+                      widget.service.technicianNotes,
                       icon: Icons.engineering,
                     ),
                     _buildInfoRow(
                       "Created At",
-                      _formatDateTime(service.createdAt),
+                      _formatDateTime(widget.service.createdAt),
                       icon: Icons.create,
                     ),
                     _buildInfoRowWithNull(
                       "Updated At",
-                      service.updatedAt != null ? _formatDateTime(service.updatedAt) : null,
+                      widget.service.updatedAt != null ? _formatDateTime(widget.service.updatedAt) : null,
                       icon: Icons.update,
                     ),
                     _buildInfoRowWithNull(
                       "Started At",
-                      service.startedAt != null ? _formatDateTime(service.startedAt) : null,
+                      widget.service.startedAt != null ? _formatDateTime(widget.service.startedAt) : null,
                       icon: Icons.play_arrow,
                     ),
                     _buildInfoRowWithNull(
                       "Completed At",
-                      service.completedAt != null ? _formatDateTime(service.completedAt) : null,
+                      widget.service.completedAt != null ? _formatDateTime(widget.service.completedAt) : null,
                       icon: Icons.check_circle,
                     ),
                     _buildInfoRow(
-                      "Customer ID",
-                      service.userId.toString(),
+                      "Customer",
+                      _getCustomerName(),
                       icon: Icons.person,
                     ),
                     _buildInfoRowWithNull(
-                      "Technician ID",
-                      service.technicianId?.toString(),
+                      "Technician",
+                      widget.service.technicianId != null ? _getTechnicianName() : null,
                       icon: Icons.engineering,
                     ),
                     _buildInfoRowWithNull(
-                      "Phone Model ID",
-                      service.phoneModelId?.toString(),
+                      "Phone Model",
+                      widget.service.phoneModelId != null ? _getPhoneModelName() : null,
                       icon: Icons.phone_android,
                     ),
                   ],

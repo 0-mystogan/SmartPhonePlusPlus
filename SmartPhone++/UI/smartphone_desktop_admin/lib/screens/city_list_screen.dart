@@ -66,7 +66,9 @@ class _CityListScreenState extends State<CityListScreen> {
     return MasterScreen(
       title: "Cities",
       child: Center(
-        child: Column(children: [_buildSearch(), _buildResultView()]),
+        child: SingleChildScrollView(
+          child: Column(children: [_buildSearch(), _buildResultView()]),
+        ),
       ),
     );
   }
@@ -118,7 +120,7 @@ class _CityListScreenState extends State<CityListScreen> {
       children: [
         CustomDataTableCard(
           width: 600,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(

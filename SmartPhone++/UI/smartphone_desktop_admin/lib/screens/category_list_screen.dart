@@ -61,12 +61,113 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
     super.didChangeDependencies();
   }
 
+  Future<void> _showDeleteConfirmation(Category category) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.orange[600]),
+              SizedBox(width: 8),
+              Text('Delete Category'),
+            ],
+          ),
+          content: Text(
+            'Are you sure you want to delete "${category.name}"? This action cannot be undone.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteCategory(category);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[600],
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteCategory(Category category) async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.purple[600]!),
+            ),
+          );
+        },
+      );
+
+      // Call delete API
+      bool success = await categoryProvider.delete(category.id!);
+      
+      // Hide loading indicator
+      Navigator.of(context).pop();
+
+      if (success) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Category "${category.name}" deleted successfully'),
+            backgroundColor: Colors.green[600],
+            duration: Duration(seconds: 3),
+          ),
+        );
+        
+        // Refresh the list
+        await _performSearch();
+      } else {
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to delete category. Please try again.'),
+            backgroundColor: Colors.red[600],
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      // Hide loading indicator
+      Navigator.of(context).pop();
+      
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error deleting category: ${e.toString()}'),
+          backgroundColor: Colors.red[600],
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
       title: "Categories",
       child: Center(
-        child: Column(children: [_buildSearch(), _buildResultView()]),
+        child: SingleChildScrollView(
+          child: Column(children: [_buildSearch(), _buildResultView()]),
+        ),
       ),
     );
   }
@@ -118,7 +219,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
       children: [
         CustomDataTableCard(
           width: 800,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -135,6 +236,12 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
             DataColumn(
               label: Text(
                 "Status",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                "Actions",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
@@ -177,6 +284,32 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                          ),
+                          DataCell(
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Edit button (navigate to details)
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CategoryDetailsScreen(category: e),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.edit, color: Colors.blue[600]),
+                                  tooltip: 'Edit Category',
+                                ),
+                                // Delete button
+                                IconButton(
+                                  onPressed: () => _showDeleteConfirmation(e),
+                                  icon: Icon(Icons.delete, color: Colors.red[600]),
+                                  tooltip: 'Delete Category',
+                                ),
+                              ],
                             ),
                           ),
                         ],

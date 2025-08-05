@@ -61,12 +61,151 @@ class _PartCategoryListScreenState extends State<PartCategoryListScreen> {
     super.didChangeDependencies();
   }
 
+  Future<void> _showDeleteConfirmation(PartCategory partCategory) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.orange[600]),
+              SizedBox(width: 8),
+              Text('Delete Part Category'),
+            ],
+          ),
+          content: Text(
+            'Are you sure you want to delete "${partCategory.name}"? This action cannot be undone.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deletePartCategory(partCategory);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[600],
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deletePartCategory(PartCategory partCategory) async {
+    try {
+      // Ensure provider is initialized
+      if (partCategoryProvider == null) {
+        partCategoryProvider = context.read<PartCategoryProvider>();
+      }
+
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.purple[600]!),
+            ),
+          );
+        },
+      );
+
+      // Validate partCategory has an ID
+      if (partCategory.id == null) {
+        throw Exception('Part Category ID is null');
+      }
+
+      // Call delete API
+      bool success = await partCategoryProvider.delete(partCategory.id!);
+      
+      // Hide loading indicator
+      Navigator.of(context).pop();
+
+      if (success) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Part Category "${partCategory.name}" deleted successfully'),
+            backgroundColor: Colors.green[600],
+            duration: Duration(seconds: 3),
+          ),
+        );
+        
+        // Refresh the list
+        await _performSearch();
+      } else {
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to delete part category. This category may have related parts that prevent deletion.'),
+            backgroundColor: Colors.red[600],
+            duration: Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      // Hide loading indicator
+      Navigator.of(context).pop();
+      
+             // Show detailed error message
+       String errorMessage = 'Error deleting part category';
+       if (e.toString().contains('Something went wrong')) {
+         errorMessage = 'Cannot delete part category. This category may have related parts or subcategories that prevent deletion.';
+       } else if (e.toString().contains('not found')) {
+         errorMessage = 'Part category not found. It may have been deleted by another user.';
+       } else if (e.toString().contains('unauthorized') || e.toString().contains('forbidden')) {
+         errorMessage = 'You do not have permission to delete this part category.';
+       } else {
+         errorMessage = 'Error deleting part category: ${e.toString()}';
+       }
+       
+       ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+           content: Text(errorMessage),
+           backgroundColor: Colors.red[600],
+           duration: Duration(seconds: 6),
+           action: SnackBarAction(
+             label: 'Dismiss',
+             textColor: Colors.white,
+             onPressed: () {
+               ScaffoldMessenger.of(context).hideCurrentSnackBar();
+             },
+           ),
+         ),
+       );
+      
+      // Log the error for debugging
+      print('Delete error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
       title: "Part Categories",
       child: Center(
-        child: Column(children: [_buildSearch(), _buildResultView()]),
+        child: SingleChildScrollView(
+          child: Column(children: [_buildSearch(), _buildResultView()]),
+        ),
       ),
     );
   }
@@ -118,7 +257,7 @@ class _PartCategoryListScreenState extends State<PartCategoryListScreen> {
       children: [
         CustomDataTableCard(
           width: 900,
-          height: 450,
+          height: 400,
           columns: [
             DataColumn(
               label: Text(
@@ -134,13 +273,13 @@ class _PartCategoryListScreenState extends State<PartCategoryListScreen> {
             ),
             DataColumn(
               label: Text(
-                "Parent Category",
+                "Status",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
             DataColumn(
               label: Text(
-                "Status",
+                "Actions",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
@@ -169,12 +308,6 @@ class _PartCategoryListScreenState extends State<PartCategoryListScreen> {
                             ),
                           ),
                           DataCell(
-                            Text(
-                              e.parentCategoryName ?? 'Root Category',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          DataCell(
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
@@ -189,6 +322,32 @@ class _PartCategoryListScreenState extends State<PartCategoryListScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                          ),
+                          DataCell(
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Edit button (navigate to details)
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PartCategoryDetailsScreen(partCategory: e),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.edit, color: Colors.blue[600]),
+                                  tooltip: 'Edit Part Category',
+                                ),
+                                // Delete button
+                                IconButton(
+                                  onPressed: () => _showDeleteConfirmation(e),
+                                  icon: Icon(Icons.delete, color: Colors.red[600]),
+                                  tooltip: 'Delete Part Category',
+                                ),
+                              ],
                             ),
                           ),
                         ],
