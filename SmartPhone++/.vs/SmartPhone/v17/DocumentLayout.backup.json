@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\partcompatibilitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\partcompatibilitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\partcategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\partcategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\partcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\partcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\partcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\partcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\mapping\\mappingconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\mapping\\mappingconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,10 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\servicepart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\servicepart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\yasir\\desktop\\rs2\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\partcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\partcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,11 +50,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PartCompatibilityController.cs",
+              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartCompatibilityController.cs",
+              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\PartCompatibilityController.cs",
+              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartCompatibilityController.cs*",
+              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\PartCompatibilityController.cs*",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAA0AAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-07T04:55:52.133Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "PartCategoryController.cs",
+              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartCategoryController.cs",
+              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\PartCategoryController.cs",
+              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartCategoryController.cs",
+              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\PartCategoryController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-07T04:20:42.232Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PartCategory.cs",
+              "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\PartCategory.cs",
+              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\PartCategory.cs",
+              "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\PartCategory.cs",
+              "RelativeToolTip": "SmartPhone.Services\\Database\\PartCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-07T04:20:37.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "ServiceResponse.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Responses\\ServiceResponse.cs",
               "RelativeDocumentMoniker": "SmartPhone.Model\\Responses\\ServiceResponse.cs",
@@ -54,7 +105,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "ServiceUpsertRequest.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs",
               "RelativeDocumentMoniker": "SmartPhone.Model\\Requests\\ServiceUpsertRequest.cs",
@@ -66,20 +117,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "MappingConfig.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
               "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
               "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
               "RelativeToolTip": "SmartPhone.WebAPI\\Mapping\\MappingConfig.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAwwE4AAABNAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAowEwAAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-04T04:21:53.116Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "Service.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\Service.cs",
               "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\Service.cs",
@@ -91,7 +142,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "ServicePart.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\ServicePart.cs",
               "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\ServicePart.cs",
@@ -103,7 +154,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "ServiceController.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
               "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
@@ -115,7 +166,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "PartController.cs",
               "DocumentMoniker": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PartController.cs",
               "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\PartController.cs",
@@ -123,7 +174,8 @@
               "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\PartController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-03T15:56:37.332Z"
+              "WhenOpened": "2025-08-03T15:56:37.332Z",
+              "EditorCaption": ""
             }
           ]
         }

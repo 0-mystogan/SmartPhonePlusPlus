@@ -106,5 +106,23 @@ namespace SmartPhone.Services.Services
             response.PhoneModelName = entity.PhoneModel != null ? $"{entity.PhoneModel.Brand} {entity.PhoneModel.Model}" : string.Empty;
             return response;
         }
+
+        protected override IQueryable<PartCompatibility> ApplyFilter(IQueryable<PartCompatibility> query, PartCompatibilitySearchObject search)
+        {
+            // Include related entities to ensure PartName and PhoneModelName are populated
+            query = query.Include(pc => pc.Part).Include(pc => pc.PhoneModel);
+            
+            // Apply any additional filters if needed
+            if (!string.IsNullOrEmpty(search.FTS))
+            {
+                query = query.Where(pc => 
+                    pc.Part.Name.Contains(search.FTS) || 
+                    pc.PhoneModel.Brand.Contains(search.FTS) || 
+                    pc.PhoneModel.Model.Contains(search.FTS) ||
+                    pc.Notes.Contains(search.FTS));
+            }
+            
+            return query;
+        }
     }
 } 

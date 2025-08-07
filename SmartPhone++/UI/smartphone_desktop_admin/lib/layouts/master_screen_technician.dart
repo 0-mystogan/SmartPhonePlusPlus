@@ -142,7 +142,7 @@ class _MasterScreenState extends State<MasterScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => PartCompatibilityListScreen()),
+                  MaterialPageRoute(builder: (context) => PartsCompatibilityListScreen()),
                 );
               },
             ),

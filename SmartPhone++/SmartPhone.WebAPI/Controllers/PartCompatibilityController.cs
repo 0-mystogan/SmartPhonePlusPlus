@@ -11,7 +11,7 @@ namespace SmartPhone.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Roles = "Technician,Admin")]
+    [Authorize(Roles = "Technician")]
     public class PartCompatibilityController : BaseCRUDController<PartCompatibilityResponse, PartCompatibilitySearchObject, PartCompatibilityUpsertRequest, PartCompatibilityUpsertRequest>
     {
         private readonly IPartCompatibilityService _partCompatibilityService;

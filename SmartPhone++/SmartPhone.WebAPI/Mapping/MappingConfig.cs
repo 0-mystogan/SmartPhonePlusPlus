@@ -63,9 +63,7 @@ namespace SmartPhone.WebAPI.Mapping
         {
             TypeAdapterConfig<Part, PartResponse>
                 .NewConfig()
-                .Map(dest => dest.PartCategoryName, src => src.PartCategory != null ? src.PartCategory.Name : "Uncategorized")
-                .Map(dest => dest.PartCategoryId, src => src.PartCategoryId)
-                .IgnoreNonMapped(true);
+                .Map(dest => dest.PartCategoryName, src => src.PartCategory != null ? src.PartCategory.Name : "Uncategorized");
 
             TypeAdapterConfig<PartUpsertRequest, Part>
                 .NewConfig()

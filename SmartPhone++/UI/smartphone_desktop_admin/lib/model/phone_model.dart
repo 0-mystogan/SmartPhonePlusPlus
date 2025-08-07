@@ -34,6 +34,9 @@ class PhoneModel {
     this.updatedAt,
   });
 
+  // Computed property for display name
+  String get name => '$brand $model';
+
   factory PhoneModel.fromJson(Map<String, dynamic> json) => _$PhoneModelFromJson(json);
   Map<String, dynamic> toJson() => _$PhoneModelToJson(this);
 } 
