@@ -4,6 +4,9 @@ import 'package:smartphone_desktop_admin/model/search_result.dart';
 import 'package:smartphone_desktop_admin/providers/service_provider.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_screen.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_technician_screen.dart' as technician;
+import 'package:smartphone_desktop_admin/screens/service_parts_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:smartphone_desktop_admin/providers/service_part_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
@@ -108,7 +111,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
     return Column(
       children: [
         CustomDataTableCard(
-          width: 700,
+          width: 900,
           height: 400,
           columns: [
             DataColumn(
@@ -223,6 +226,21 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
               await _performSearch();
             },
           ),
+        IconButton(
+          icon: Icon(Icons.build, color: Colors.purple),
+          tooltip: 'Parts',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider<ServicePartProvider>(
+                  create: (_) => ServicePartProvider(),
+                  child: ServicePartsScreen(service: service),
+                ),
+              ),
+            );
+          },
+        ),
         IconButton(
           icon: Icon(Icons.delete, color: Colors.red),
           tooltip: 'Delete',

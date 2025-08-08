@@ -113,13 +113,28 @@ namespace SmartPhone.Services.Services
             query = query.Include(pc => pc.Part).Include(pc => pc.PhoneModel);
             
             // Apply any additional filters if needed
+            if (search.PartId.HasValue)
+            {
+                query = query.Where(pc => pc.PartId == search.PartId.Value);
+            }
+
+            if (search.PhoneModelId.HasValue)
+            {
+                query = query.Where(pc => pc.PhoneModelId == search.PhoneModelId.Value);
+            }
+
+            if (search.IsVerified.HasValue)
+            {
+                query = query.Where(pc => pc.IsVerified == search.IsVerified.Value);
+            }
+
             if (!string.IsNullOrEmpty(search.FTS))
             {
                 query = query.Where(pc => 
                     pc.Part.Name.Contains(search.FTS) || 
                     pc.PhoneModel.Brand.Contains(search.FTS) || 
                     pc.PhoneModel.Model.Contains(search.FTS) ||
-                    pc.Notes.Contains(search.FTS));
+                    (pc.Notes != null && pc.Notes!.Contains(search.FTS)));
             }
             
             return query;

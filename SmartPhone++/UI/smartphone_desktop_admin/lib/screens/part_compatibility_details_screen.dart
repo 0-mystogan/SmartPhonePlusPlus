@@ -110,7 +110,7 @@ class _PartCompatibilityDetailsScreenState extends State<PartCompatibilityDetail
       final partCompatibility = PartCompatibility(
         id: widget.partCompatibility?.id ?? 0,
         notes: _notesController.text.isEmpty ? null : _notesController.text,
-        isVerified: widget.partCompatibility?.isVerified ?? false,
+        isVerified: widget.partCompatibility?.isVerified ?? true,
         createdAt: widget.partCompatibility?.createdAt ?? DateTime.now(),
         updatedAt: DateTime.now(),
         partId: _selectedPart!.id,

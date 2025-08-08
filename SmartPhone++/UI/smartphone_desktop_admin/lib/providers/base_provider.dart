@@ -131,6 +131,22 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  // Custom POST that returns raw decoded JSON (can be bool, list, map, etc.)
+  Future<dynamic> postCustom(String subEndpoint, dynamic request) async {
+    var url = "$baseUrl$endpoint/$subEndpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode(request);
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      return jsonDecode(response.body);
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
   Future<Map<String, dynamic>> put(String subEndpoint, dynamic request) async {
     var url = "$baseUrl$endpoint/$subEndpoint";
     var uri = Uri.parse(url);
@@ -142,6 +158,22 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       return data;
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
+  // Custom PUT that returns raw decoded JSON (can be bool, list, map, etc.)
+  Future<dynamic> putCustom(String subEndpoint, dynamic request) async {
+    var url = "$baseUrl$endpoint/$subEndpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode(request);
+    var response = await http.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      return jsonDecode(response.body);
     } else {
       throw new Exception("Unknown error");
     }

@@ -41,13 +41,22 @@ class _PartsCompatibilityListScreenState extends State<PartsCompatibilityListScr
     final int pageToFetch = page ?? _currentPage;
     final int pageSizeToUse = pageSize ?? _pageSize;
     final searchText = searchController.text;
-    var filter = {
-      "page": pageToFetch,
-      "pageSize": pageSizeToUse,
-      "includeTotalCount": true,
-      "FTS": searchText,
-    };
-    var partCompatibilities = await partCompatibilityProvider.get(filter: filter);
+    // Mutually exclusive filter behavior using specialized endpoints
+    SearchResult<PartCompatibility> partCompatibilities;
+    if (_selectedPart != null && _selectedPhoneModel == null) {
+      partCompatibilities = await partCompatibilityProvider.getByPart(_selectedPart!.id);
+    } else if (_selectedPhoneModel != null && _selectedPart == null) {
+      partCompatibilities = await partCompatibilityProvider.getByPhoneModel(_selectedPhoneModel!.id);
+    } else {
+      // Fall back to paged list with optional FTS when neither is selected
+      var filter = {
+        "page": pageToFetch,
+        "pageSize": pageSizeToUse,
+        "includeTotalCount": true,
+        if (searchText.isNotEmpty) "FTS": searchText,
+      };
+      partCompatibilities = await partCompatibilityProvider.get(filter: filter);
+    }
     
     // Debug: Print the results
     print('PartCompatibilities found: ${partCompatibilities.items?.length ?? 0}');
@@ -353,7 +362,7 @@ class _PartsCompatibilityListScreenState extends State<PartsCompatibilityListScr
                   Text(', ', style: TextStyle(color: Colors.blue)),
                 if (_sortBy != null)
                   Text(
-                    'Sort: ${_sortBy == 'partName' ? 'Part' : _sortBy == 'phoneModelName' ? 'Phone' : 'Verified'} ${_sortAscending ? '↑' : '↓'}',
+                    'Sort: ${_sortBy == 'partName' ? 'Part' : 'Phone'} ${_sortAscending ? '↑' : '↓'}',
                     style: TextStyle(color: Colors.blue),
                   ),
               ],
@@ -460,51 +469,6 @@ class _PartsCompatibilityListScreenState extends State<PartsCompatibilityListScr
               ),
             ),
             DataColumn(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Verified",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  SizedBox(width: 4),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          _sortBy == 'isVerified' && _sortAscending 
-                            ? Icons.keyboard_arrow_up 
-                            : Icons.keyboard_arrow_up,
-                          size: 16,
-                          color: _sortBy == 'isVerified' && _sortAscending 
-                            ? Colors.blue 
-                            : Colors.grey,
-                        ),
-                        onPressed: () => _sortByColumn('isVerified'),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(minWidth: 20, minHeight: 20),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          _sortBy == 'isVerified' && !_sortAscending 
-                            ? Icons.keyboard_arrow_down 
-                            : Icons.keyboard_arrow_down,
-                          size: 16,
-                          color: _sortBy == 'isVerified' && !_sortAscending 
-                            ? Colors.blue 
-                            : Colors.grey,
-                        ),
-                        onPressed: () => _sortByColumn('isVerified'),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(minWidth: 20, minHeight: 20),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            DataColumn(
               label: Text(
                 "Actions",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -544,36 +508,6 @@ class _PartsCompatibilityListScreenState extends State<PartsCompatibilityListScr
                                 e.compatibilityNotes ?? 'N/A', 
                                 style: TextStyle(fontSize: 15),
                                 overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: e.isVerified 
-                                    ? Colors.green.withOpacity(0.2) 
-                                    : Colors.orange.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    e.isVerified ? Icons.verified : Icons.pending,
-                                    size: 16,
-                                    color: e.isVerified ? Colors.green : Colors.orange,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    e.isVerified ? 'Verified' : 'Pending',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: e.isVerified ? Colors.green : Colors.orange,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ),
@@ -694,6 +628,9 @@ class _PartsCompatibilityListScreenState extends State<PartsCompatibilityListScr
                                   onChanged: (Part? newValue) {
                                     setState(() {
                                       _selectedPart = newValue;
+                                      if (newValue != null) {
+                                        _selectedPhoneModel = null;
+                                      }
                                     });
                                     _performSearch(page: 0);
                                   },
@@ -726,6 +663,9 @@ class _PartsCompatibilityListScreenState extends State<PartsCompatibilityListScr
                                   onChanged: (PhoneModel? newValue) {
                                     setState(() {
                                       _selectedPhoneModel = newValue;
+                                      if (newValue != null) {
+                                        _selectedPart = null;
+                                      }
                                     });
                                     _performSearch(page: 0);
                                   },

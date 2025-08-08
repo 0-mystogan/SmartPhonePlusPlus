@@ -9,6 +9,7 @@ import 'package:smartphone_desktop_admin/providers/part_category_provider.dart';
 import 'package:smartphone_desktop_admin/providers/part_provider.dart';
 import 'package:smartphone_desktop_admin/providers/phone_model_provider.dart';
 import 'package:smartphone_desktop_admin/providers/part_compatibility_provider.dart';
+import 'package:smartphone_desktop_admin/providers/service_part_provider.dart';
 import 'package:smartphone_desktop_admin/screens/dashboard_screen.dart';
 import 'package:smartphone_desktop_admin/screens/dashboard_screen_technician.dart';
 import 'package:smartphone_desktop_admin/screens/dashboard_screen_admin.dart';
@@ -52,6 +53,9 @@ void main() {
         ),
         ChangeNotifierProvider<PartCompatibilityProvider>(
           create: (context) => PartCompatibilityProvider(),
+        ),
+        ChangeNotifierProvider<ServicePartProvider>(
+          create: (context) => ServicePartProvider(),
         ),
       ],
       child: const MyApp(),
