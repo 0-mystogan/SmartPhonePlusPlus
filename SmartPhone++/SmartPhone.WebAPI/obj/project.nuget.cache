@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Uw+MBZ77dY4=",
+  "dgSpecHash": "LsnuqeoDCms=",
   "success": true,
   "projectFilePath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
   "expectedPackageFiles": [
@@ -74,6 +74,7 @@
     "C:\\Users\\Yasir\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Yasir\\.nuget\\packages\\questpdf\\2024.3.0\\questpdf.2024.3.0.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\rabbitmq.client\\6.8.1\\rabbitmq.client.6.8.1.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
@@ -116,5 +117,18 @@
     "C:\\Users\\Yasir\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\Yasir\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "SmartPhone.WebAPI depends on QuestPDF (>= 2024.2.8) but QuestPDF 2024.2.8 was not found. QuestPDF 2024.3.0 was resolved instead.",
+      "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
+      "libraryId": "QuestPDF",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

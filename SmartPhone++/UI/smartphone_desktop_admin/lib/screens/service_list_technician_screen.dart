@@ -5,6 +5,7 @@ import 'package:smartphone_desktop_admin/providers/service_provider.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_screen.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_technician_screen.dart' as technician;
 import 'package:smartphone_desktop_admin/screens/service_parts_screen.dart';
+import 'package:smartphone_desktop_admin/screens/invoice_viewer_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/providers/service_part_provider.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
 import 'package:smartphone_desktop_admin/utils/custom_data_table.dart';
 import 'package:smartphone_desktop_admin/utils/custom_pagination.dart';
+import 'package:smartphone_desktop_admin/providers/user_provider.dart';
 
 class ServiceListScreen extends StatefulWidget {
   const ServiceListScreen({super.key});
@@ -239,6 +241,27 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                 ),
               ),
             );
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.receipt_long, color: Colors.orange),
+          tooltip: 'Invoice',
+          onPressed: () {
+            if (service.status == 'Complete') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => InvoiceViewerScreen(serviceId: service.id),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Only Complete services can print Invoice.'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
           },
         ),
         IconButton(

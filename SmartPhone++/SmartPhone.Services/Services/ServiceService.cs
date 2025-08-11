@@ -88,5 +88,34 @@ namespace SmartPhone.Services.Services
 
             return _mapper.Map<ServiceResponse>(entity);
         }
+
+        public async Task<ServiceInvoiceResponse> GetInvoiceAsync(int serviceId)
+        {
+            var entity = await _context.Services
+                .Include(s => s.ServiceParts)
+                    .ThenInclude(sp => sp.Part)
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.Id == serviceId);
+
+            if (entity == null)
+            {
+                throw new Exception("Service not found");
+            }
+
+            var invoice = new ServiceInvoiceResponse
+            {
+                InvoiceNumber = $"SRV-{entity.Id:0000}",
+                Date = entity.CreatedAt,
+                CustomerName = entity.User != null ? $"{entity.User.FirstName} {entity.User.LastName}".Trim() : "Unknown",
+                Items = entity.ServiceParts.Select(sp => new ServiceInvoiceItemResponse
+                {
+                    Description = sp.Part != null ? sp.Part.Name : "Part",
+                    Quantity = sp.Quantity,
+                    UnitPrice = sp.UnitPrice
+                }).ToList()
+            };
+
+            return invoice;
+        }
     }
 } 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartPhone.Model.Responses;
 using SmartPhone.Model.Requests;
 using SmartPhone.WebAPI.Mapping;
+using SmartPhone.WebAPI.Reports;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IGenderService, GenderService>();
 builder.Services.AddTransient<ICityService, CityService>();
 builder.Services.AddTransient<IServiceService, ServiceService>();
+builder.Services.AddScoped<IServiceInvoiceReportService, ServiceInvoiceReportService>();
 
 // Parts Management Services
 builder.Services.AddTransient<IPartCategoryService, PartCategoryService>();
