@@ -23,6 +23,7 @@ builder.Services.AddTransient<IGenderService, GenderService>();
 builder.Services.AddTransient<ICityService, CityService>();
 builder.Services.AddTransient<IServiceService, ServiceService>();
 builder.Services.AddScoped<IServiceInvoiceReportService, ServiceInvoiceReportService>();
+builder.Services.AddScoped<IServiceVerificationReportService, ServiceVerificationReportService>();
 
 // Parts Management Services
 builder.Services.AddTransient<IPartCategoryService, PartCategoryService>();

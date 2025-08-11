@@ -1,6 +1,6 @@
-import 'package:smartphone_desktop_admin/model/product.dart';
-import 'package:smartphone_desktop_admin/model/search_result.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/product.dart';
+import 'package:smartphone_mobile_client/model/search_result.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
 
 class ProductProvider extends BaseProvider<Product> {
   ProductProvider() : super("Product");

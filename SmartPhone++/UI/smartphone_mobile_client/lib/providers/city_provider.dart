@@ -1,6 +1,5 @@
-
-import 'package:smartphone_desktop_admin/model/city.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/city.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
 
 
 class CityProvider extends BaseProvider<City> {

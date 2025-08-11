@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:smartphone_desktop_admin/providers/auth_provider.dart';
-import 'package:smartphone_desktop_admin/model/search_result.dart';
+import 'package:smartphone_mobile_client/providers/auth_provider.dart';
+import 'package:smartphone_mobile_client/model/search_result.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
@@ -57,7 +58,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var response = await http.get(uri, headers: headers);
+    var response = await http
+        .get(uri, headers: headers)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -79,7 +82,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var response = await http.get(uri, headers: headers);
+    var response = await http
+        .get(uri, headers: headers)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -96,7 +101,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    var response = await http
+        .post(uri, headers: headers, body: jsonRequest)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -112,7 +119,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.put(uri, headers: headers, body: jsonRequest);
+    var response = await http
+        .put(uri, headers: headers, body: jsonRequest)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -127,7 +136,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var response = await http.delete(uri, headers: headers);
+    var response = await http
+        .delete(uri, headers: headers)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -143,7 +154,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    var response = await http
+        .post(uri, headers: headers, body: jsonRequest)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -159,7 +172,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    var response = await http
+        .post(uri, headers: headers, body: jsonRequest)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       return jsonDecode(response.body);
@@ -174,7 +189,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.put(uri, headers: headers, body: jsonRequest);
+    var response = await http
+        .put(uri, headers: headers, body: jsonRequest)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -190,7 +207,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.put(uri, headers: headers, body: jsonRequest);
+    var response = await http
+        .put(uri, headers: headers, body: jsonRequest)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       return jsonDecode(response.body);
@@ -204,15 +223,19 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var response = await http.delete(uri, headers: headers);
+    var response = await http
+        .delete(uri, headers: headers)
+        .timeout(const Duration(seconds: 10));
 
     if (!isValidResponse(response)) {
       throw Exception("Unknown error");
     }
   }
 
-  Future<dynamic> getCustom(String subEndpoint,
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> getCustom(
+    String subEndpoint, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     var url = "$baseUrl$endpoint/$subEndpoint";
 
     if (queryParameters != null) {
@@ -223,7 +246,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var response = await http.get(uri, headers: headers);
+    var response = await http
+        .get(uri, headers: headers)
+        .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -254,10 +279,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     String basicAuth =
         "Basic ${base64Encode(utf8.encode('$username:$password'))}";
 
-    return {
-      "Content-Type": "application/json",
-      "Authorization": basicAuth,
-    };
+    return {"Content-Type": "application/json", "Authorization": basicAuth};
   }
 
   String getQueryString(

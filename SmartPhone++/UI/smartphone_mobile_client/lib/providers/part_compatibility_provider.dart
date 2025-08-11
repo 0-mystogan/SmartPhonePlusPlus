@@ -1,6 +1,6 @@
-import 'package:smartphone_desktop_admin/model/part_compatibility.dart';
-import 'package:smartphone_desktop_admin/model/search_result.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/part_compatibility.dart';
+import 'package:smartphone_mobile_client/model/search_result.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
 
 class PartCompatibilityProvider extends BaseProvider<PartCompatibility> {
   PartCompatibilityProvider() : super("PartCompatibility");

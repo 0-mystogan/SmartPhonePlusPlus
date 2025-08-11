@@ -117,5 +117,40 @@ namespace SmartPhone.Services.Services
 
             return invoice;
         }
+
+        public async Task<ServiceVerificationResponse> GetVerificationAsync(int serviceId)
+        {
+            var entity = await _context.Services
+                .Include(s => s.User)
+                .Include(s => s.Technician)
+                .FirstOrDefaultAsync(s => s.Id == serviceId);
+
+            if (entity == null)
+            {
+                throw new Exception("Service not found");
+            }
+
+            DateTime? estimatedCompletion = null;
+            if (entity.EstimatedDuration.HasValue)
+            {
+                // EstimatedDuration is in hours
+                estimatedCompletion = entity.CreatedAt.AddHours((double)entity.EstimatedDuration.Value);
+            }
+
+            var verification = new ServiceVerificationResponse
+            {
+                ServiceId = entity.Id,
+                Name = entity.Name,
+                Description = entity.Description,
+                ServiceFee = entity.ServiceFee,
+                CustomerNotes = entity.CustomerNotes,
+                CreatedAt = entity.CreatedAt,
+                CustomerName = entity.User != null ? $"{entity.User.FirstName} {entity.User.LastName}".Trim() : "Unknown",
+                TechnicianName = entity.Technician != null ? $"{entity.Technician.FirstName} {entity.Technician.LastName}".Trim() : null,
+                EstimatedCompletion = estimatedCompletion
+            };
+
+            return verification;
+        }
     }
 } 

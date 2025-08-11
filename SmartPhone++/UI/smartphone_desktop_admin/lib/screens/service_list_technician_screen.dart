@@ -6,6 +6,7 @@ import 'package:smartphone_desktop_admin/screens/service_details_screen.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_technician_screen.dart' as technician;
 import 'package:smartphone_desktop_admin/screens/service_parts_screen.dart';
 import 'package:smartphone_desktop_admin/screens/invoice_viewer_screen.dart';
+import 'package:smartphone_desktop_admin/screens/service_verification_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/providers/service_part_provider.dart';
 import 'package:flutter/material.dart';
@@ -226,6 +227,19 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
             onPressed: () async {
               await serviceProvider.complete(service.id);
               await _performSearch();
+            },
+          ),
+        if (service.status == 'Pending')
+          IconButton(
+            icon: Icon(Icons.verified, color: Colors.teal),
+            tooltip: 'Verification',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ServiceVerificationViewerScreen(serviceId: service.id),
+                ),
+              );
             },
           ),
         IconButton(

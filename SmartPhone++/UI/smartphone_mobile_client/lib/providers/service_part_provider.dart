@@ -1,7 +1,7 @@
-import 'package:smartphone_desktop_admin/model/search_result.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
-import 'package:smartphone_desktop_admin/model/service_part.dart';
-import 'package:smartphone_desktop_admin/providers/part_provider.dart';
+import 'package:smartphone_mobile_client/model/search_result.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/service_part.dart';
+import 'package:smartphone_mobile_client/providers/part_provider.dart';
 
 class ServicePartProvider extends BaseProvider<ServicePart> {
   ServicePartProvider() : super("ServicePart");

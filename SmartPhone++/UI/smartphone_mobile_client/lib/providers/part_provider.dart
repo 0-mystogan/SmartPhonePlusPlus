@@ -1,5 +1,5 @@
-import 'package:smartphone_desktop_admin/model/part.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/part.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
 
 class PartProvider extends BaseProvider<Part> {
   PartProvider() : super("Part");

@@ -1,5 +1,5 @@
-import 'package:smartphone_desktop_admin/model/phone_model.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/phone_model.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
 
 class PhoneModelProvider extends BaseProvider<PhoneModel> {
   PhoneModelProvider() : super("PhoneModel");

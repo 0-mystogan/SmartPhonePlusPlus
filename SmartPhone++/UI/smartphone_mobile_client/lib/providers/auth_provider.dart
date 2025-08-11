@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:smartphone_desktop_admin/model/user.dart';
-import 'package:smartphone_desktop_admin/providers/base_provider.dart';
+import 'package:smartphone_mobile_client/model/user.dart';
+import 'package:smartphone_mobile_client/providers/base_provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

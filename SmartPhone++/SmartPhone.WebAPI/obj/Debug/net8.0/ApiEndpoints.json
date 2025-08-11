@@ -16,6 +16,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ServiceVerificationController",
+    "Method": "Get",
+    "RelativePath": "api/ServiceVerification/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "Create",
     "RelativePath": "Category",

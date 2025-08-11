@@ -9,5 +9,6 @@ namespace SmartPhone.Services.Interfaces
     {
         Task<ServiceResponse> CompleteAsync(int id);
         Task<ServiceInvoiceResponse> GetInvoiceAsync(int serviceId);
+        Task<ServiceVerificationResponse> GetVerificationAsync(int serviceId);
     }
 } 
