@@ -28,7 +28,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (Platform.isAndroid) {
       // Android emulator
-      baseUrl = "http://10.0.2.2:7074/";
+      //baseUrl = "http://10.0.2.2:7074/";
+      final info = NetworkInfo();
+      String? ip = await info.getWifiGatewayIP(); 
+      if (ip == null) {
+        ip = await info.getWifiIP(); // Device's IP
+      }
+      if (ip != null) {
+        baseUrl = "http://$ip:7074/";
+      } else {
+        throw Exception("Unable to determine local IP address");
+      }
     } else if (Platform.isIOS) {
       // iOS simulator
       baseUrl = "http://localhost:7074/";

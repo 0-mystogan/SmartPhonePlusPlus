@@ -1,12 +1,14 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/city_provider.dart';
+import 'package:smartphone_mobile_client/providers/gender_provider.dart';
 import 'package:smartphone_mobile_client/screens/home_screen.dart';
+import 'package:smartphone_mobile_client/screens/register_screen.dart';
 import 'package:smartphone_mobile_client/utils/text_field_decoration.dart';
 
 void main() async {
@@ -18,14 +20,15 @@ void main() async {
   // await stripe.Stripe.instance.applySettings();
 
   HttpOverrides.global = MyHttpOverrides();
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<CityProvider>(create: (_) => CityProvider()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+        runApp(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<CityProvider>(create: (_) => CityProvider()),
+            ChangeNotifierProvider<GenderProvider>(create: (_) => GenderProvider()),
+          ],
+          child: const MyApp(),
+        ),
+      );
 }
 
 class MyApp extends StatelessWidget {
@@ -53,8 +56,8 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFFFF9800), // Vibrant orange
-          primary: Color(0xFFFF6F00), // Deep ora
+          seedColor: Color(0xFFB39DDB), // light purple
+          primary: Color(0xFF512DA8), // dark purple
         ),
         useMaterial3: true,
       ),
@@ -131,131 +134,125 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         height: double.infinity,
         color: Colors.white,
-        child: Column(
-          children: [
-            // Header image at the top
-     
-            // Login card and content below the image
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Card(
-                      elevation: 8,
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 24,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 40,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/images/smartphone_logo.png",
+                        height: 120,
+                        width: 120,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 32,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Welcome Back",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFFF6F00),
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            TextField(
-                              controller: _usernameController,
-                              decoration: customTextFieldDecoration(
-                                "Username",
-                                prefixIcon: Icons.account_circle_sharp,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              decoration: customTextFieldDecoration(
-                                "Password",
-                                prefixIcon: Icons.password,
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: _isLoading
-                                    ? null
-                                    : () => _handleLogin(context),
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16.0,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  backgroundColor: Color(0xFFFF6F00),
-                                  elevation: 2,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Login",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    if (_isLoading) ...[
-                                      SizedBox(width: 16),
-                                      SizedBox(
-                                        width: 22,
-                                        height: 22,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                          strokeWidth: 2.5,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            // Debug button for network testing
-                            //   SizedBox(
-                            //     width: double.infinity,
-                            //     child: TextButton(
-                            //       onPressed: () {
-                            //         Navigator.of(context).push(
-                            //           MaterialPageRoute(
-                            //             builder: (context) => DebugScreen(),
-                            //           ),
-                            //         );
-                            //       },
-                            //       child: Text(
-                            //         "Debug Network",
-                            //         style: TextStyle(
-                            //           color: Color(0xFFFF6F00),
-                            //           fontSize: 14,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                          ],
+                      const SizedBox(height: 32),
+                      TextField(
+                        controller: _usernameController,
+                        decoration: customTextFieldDecoration(
+                          "Username",
+                          prefixIcon: Icons.account_circle_sharp,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: customTextFieldDecoration(
+                          "Password",
+                          prefixIcon: Icons.password,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _isLoading
+                              ? null
+                              : () => _handleLogin(context),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16.0,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            backgroundColor: Colors.purple,
+                            elevation: 2,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (_isLoading) ...[
+                                SizedBox(width: 16),
+                                SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Need an account? ",
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 14,
+                            ),
+                          ),
+                                                      TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const RegisterScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Register now",
+                                style: TextStyle(
+                                  color: Colors.purple,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

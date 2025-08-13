@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 InputDecoration customTextFieldDecoration(
   String label, {
   IconData? prefixIcon,
+  Widget? suffixIcon,
 }) {
   return InputDecoration(
     labelText: label,
@@ -17,5 +18,6 @@ InputDecoration customTextFieldDecoration(
       borderSide: BorderSide(color: Color(0xFF512DA8)),
     ),
     prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Color(0xFF512DA8)) : null,
+    suffixIcon: suffixIcon,
   );
 }
