@@ -7,20 +7,25 @@ class ServiceProvider extends BaseProvider<Service> {
   ServiceProvider() : super("Service");
 
   @override
-  Service fromJson(dynamic json) {
-    return Service.fromJson(json);
+  Service fromJson(dynamic data) {
+    return Service.fromJson(data);
   }
 
-  Future<Service> complete(int id) async {
-    var url = "${BaseProvider.baseUrl}${endpoint}/$id/complete";
-    var uri = Uri.parse(url);
-    var headers = createHeaders();
-    var response = await http.put(uri, headers: headers);
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      return Service.fromJson(data);
-    } else {
-      throw Exception("Unknown error");
+  Future<Service?> getByServiceNumber(String serviceNumber) async {
+    try {
+      // Get all services and find the one with matching description (service number)
+      final allServices = await get();
+      if (allServices.items != null) {
+        for (var service in allServices.items!) {
+          if (service.description == serviceNumber) {
+            return service;
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error getting service by service number: $e');
+      rethrow;
     }
   }
 }

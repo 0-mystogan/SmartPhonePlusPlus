@@ -7,7 +7,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/city_provider.dart';
 import 'package:smartphone_mobile_client/providers/gender_provider.dart';
-import 'package:smartphone_mobile_client/screens/home_screen.dart';
+import 'package:smartphone_mobile_client/providers/product_provider.dart';
+import 'package:smartphone_mobile_client/providers/service_provider.dart';
+import 'package:smartphone_mobile_client/screens/navigation_screen.dart';
 import 'package:smartphone_mobile_client/screens/register_screen.dart';
 import 'package:smartphone_mobile_client/utils/text_field_decoration.dart';
 
@@ -23,8 +25,11 @@ void main() async {
         runApp(
         MultiProvider(
           providers: [
+            ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
             ChangeNotifierProvider<CityProvider>(create: (_) => CityProvider()),
             ChangeNotifierProvider<GenderProvider>(create: (_) => GenderProvider()),
+            ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
+            ChangeNotifierProvider<ServiceProvider>(create: (_) => ServiceProvider()),
           ],
           child: const MyApp(),
         ),
@@ -93,20 +98,20 @@ class _LoginPageState extends State<LoginPage> {
     final String username = _usernameController.text.trim();
     final String password = _passwordController.text;
 
-    AuthProvider.username = username;
-    AuthProvider.password = password;
-
-    final cityProvider = Provider.of<CityProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      await cityProvider.initBaseUrl();
-      // Perform an authenticated request; backend will validate credentials.
-      await cityProvider.get();
-
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const PlaceholderCard()),
-      );
+      // Authenticate user using AuthProvider like in Windows app
+      final success = await authProvider.authenticate(username, password);
+      
+      if (success) {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const NavigationScreen()),
+        );
+      } else {
+        throw Exception(authProvider.error ?? 'Authentication failed');
+      }
     } catch (e) {
       if (!mounted) return;
       showDialog(

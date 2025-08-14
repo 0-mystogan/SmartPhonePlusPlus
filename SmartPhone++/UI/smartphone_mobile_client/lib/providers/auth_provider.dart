@@ -2,9 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:smartphone_mobile_client/model/user.dart';
 import 'package:smartphone_mobile_client/providers/base_provider.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-class AuthProvider extends ChangeNotifier {
+class AuthProvider extends BaseProvider<User> {
   static String? username;
   static String? password;
   
@@ -12,6 +11,8 @@ class AuthProvider extends ChangeNotifier {
   bool _isAuthenticated = false;
   bool _isLoading = false;
   String? _error;
+
+  AuthProvider() : super("Users");
 
   // Getters
   User? get currentUser => _currentUser;
@@ -41,27 +42,20 @@ class AuthProvider extends ChangeNotifier {
       AuthProvider.username = username;
       AuthProvider.password = password;
 
-      // Create basic auth header
-      String basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+      // Initialize base URL first
+      await initBaseUrl();
       
-      // Make authentication request to get user info
-      final response = await http.get(
-        Uri.parse('http://localhost:7074/Users/me'),
-        headers: {
-          'Authorization': basicAuth,
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final userData = json.decode(response.body);
-        _currentUser = User.fromJson(userData);
+      // Use the custom endpoint to get current user info
+      final response = await getCustom('me');
+      
+      if (response != null) {
+        _currentUser = User.fromJson(response);
         _isAuthenticated = true;
         _isLoading = false;
         notifyListeners();
         return true;
       } else {
-        _error = 'Authentication failed: ${response.statusCode}';
+        _error = 'Authentication failed: No user data received';
         _isAuthenticated = false;
         _isLoading = false;
         notifyListeners();
@@ -74,6 +68,11 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  @override
+  User fromJson(dynamic data) {
+    return User.fromJson(data);
   }
 
   // Logout
