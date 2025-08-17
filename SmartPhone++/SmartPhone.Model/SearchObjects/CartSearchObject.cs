@@ -1,5 +1,4 @@
 using System;
-using SmartPhone.Model.SearchObjects;
 
 namespace SmartPhone.Model.SearchObjects
 {
@@ -7,7 +6,7 @@ namespace SmartPhone.Model.SearchObjects
     {
         public int? UserId { get; set; }
         public bool? IsActive { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
+        public DateTime? CreatedFrom { get; set; }
+        public DateTime? CreatedTo { get; set; }
     }
 } 

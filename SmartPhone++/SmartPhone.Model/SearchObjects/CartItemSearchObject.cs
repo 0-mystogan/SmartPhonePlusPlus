@@ -6,6 +6,5 @@ namespace SmartPhone.Model.SearchObjects
     {
         public int? CartId { get; set; }
         public int? ProductId { get; set; }
-        public int? UserId { get; set; }
     }
 } 

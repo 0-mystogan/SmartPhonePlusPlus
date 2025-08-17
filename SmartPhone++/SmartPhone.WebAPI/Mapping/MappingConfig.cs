@@ -2,6 +2,8 @@ using Mapster;
 using SmartPhone.Model.Responses;
 using SmartPhone.Model.Requests;
 using SmartPhone.Services.Database;
+using System;
+using System.Linq;
 
 namespace SmartPhone.WebAPI.Mapping
 {
@@ -20,6 +22,8 @@ namespace SmartPhone.WebAPI.Mapping
             ConfigureProductImageMappings();
             ConfigurePartMappings();
             ConfigureServiceMappings();
+            ConfigureCartMappings();
+            ConfigureCartItemMappings();
         }
 
         private static void ConfigureCategoryMappings()
@@ -79,6 +83,36 @@ namespace SmartPhone.WebAPI.Mapping
             TypeAdapterConfig<ServiceUpsertRequest, Service>
                 .NewConfig()
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
+        }
+
+        private static void ConfigureCartMappings()
+        {
+            TypeAdapterConfig<Cart, CartResponse>
+                .NewConfig()
+                .Map(dest => dest.UserName, src => src.User != null ? src.User.Username : string.Empty)
+                .Map(dest => dest.UserEmail, src => src.User != null ? src.User.Email : string.Empty)
+                .Map(dest => dest.TotalItems, src => src.CartItems != null ? src.CartItems.Count : 0);
+
+            TypeAdapterConfig<CartUpsertRequest, Cart>
+                .NewConfig()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow);
+        }
+
+        private static void ConfigureCartItemMappings()
+        {
+            TypeAdapterConfig<CartItem, CartItemResponse>
+                .NewConfig()
+                .Map(dest => dest.ProductName, src => src.Product != null ? src.Product.Name : string.Empty)
+                .Map(dest => dest.ProductPrice, src => src.Product != null ? src.Product.Price : 0)
+                .Map(dest => dest.TotalPrice, src => src.Product != null ? src.Product.Price * src.Quantity : 0)
+                .Map(dest => dest.ProductImageUrl, src => src.Product != null && src.Product.ProductImages != null && src.Product.ProductImages.Any() 
+                    ? Convert.ToBase64String(src.Product.ProductImages.First().ImageData ?? new byte[0])
+                    : null);
+
+            TypeAdapterConfig<CartItemUpsertRequest, CartItem>
+                .NewConfig()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.CartId, src => src.CartId);
         }
     }
 } 

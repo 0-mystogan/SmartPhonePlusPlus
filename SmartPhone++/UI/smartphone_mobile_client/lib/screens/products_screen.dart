@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:smartphone_mobile_client/model/product.dart';
 import 'package:smartphone_mobile_client/providers/product_provider.dart';
+import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
+import 'package:smartphone_mobile_client/widgets/cart_fab.dart';
+import 'package:smartphone_mobile_client/widgets/cart_icon.dart';
+import 'package:smartphone_mobile_client/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -49,15 +53,47 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
-  void _addToCart(Product product) {
-    // TODO: Implement add to cart functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${product.name} added to cart!'),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+  void _addToCart(Product product) async {
+    try {
+      final cartManager = Provider.of<CartManagerProvider>(context, listen: false);
+      
+      // Initialize base URL if not already done
+      await cartManager.initBaseUrl();
+      
+      // Load or create cart for demo user (you should get this from auth)
+      await cartManager.loadOrCreateCart(1);
+      
+      // Add product to cart
+      await cartManager.addToCart(product);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${product.name} added to cart!'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+                      action: SnackBarAction(
+              label: 'View Cart',
+              textColor: Colors.white,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartScreen(),
+                  ),
+                );
+              },
+            ),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to add to cart: $e'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override
@@ -68,8 +104,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: const [
+          CartIcon(),
+        ],
       ),
       body: _buildBody(),
+      floatingActionButton: const CartFAB(),
     );
   }
 

@@ -32,6 +32,346 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CartResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "Cart",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CartUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CartResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CartResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "Cart",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedFrom",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedTo",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.CartResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CartResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "Cart/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CartUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CartResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CartResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "Cart/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CartResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "Cart/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CartResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CartItemResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartItemSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartItemUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartItemUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Create",
+    "RelativePath": "CartItem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CartItemUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CartItemResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CartItemResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartItemSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "CartItem",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CartId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProductId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FTS",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncludeTotalCount",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "RetrieveAll",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.PagedResult\u00601[[SmartPhone.Model.Responses.CartItemResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CartItemResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartItemSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartItemUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartItemUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Update",
+    "RelativePath": "CartItem/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartPhone.Model.Requests.CartItemUpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CartItemResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CartItemResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartItemSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartItemUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CartItemUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "CartItem/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.BaseController\u00602[[SmartPhone.Model.Responses.CartItemResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CartItemSearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "CartItem/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartPhone.Model.Responses.CartItemResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SmartPhone.WebAPI.Controllers.BaseCRUDController\u00604[[SmartPhone.Model.Responses.CategoryResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.SearchObjects.CategorySearchObject, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[SmartPhone.Model.Requests.CategoryUpsertRequest, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "Create",
     "RelativePath": "Category",

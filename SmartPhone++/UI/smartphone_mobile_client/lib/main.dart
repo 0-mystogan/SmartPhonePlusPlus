@@ -9,9 +9,13 @@ import 'package:smartphone_mobile_client/providers/city_provider.dart';
 import 'package:smartphone_mobile_client/providers/gender_provider.dart';
 import 'package:smartphone_mobile_client/providers/product_provider.dart';
 import 'package:smartphone_mobile_client/providers/service_provider.dart';
+import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/screens/navigation_screen.dart';
 import 'package:smartphone_mobile_client/screens/register_screen.dart';
+import 'package:smartphone_mobile_client/screens/products_screen.dart';
+import 'package:smartphone_mobile_client/screens/cart_screen.dart';
 import 'package:smartphone_mobile_client/utils/text_field_decoration.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +34,7 @@ void main() async {
             ChangeNotifierProvider<GenderProvider>(create: (_) => GenderProvider()),
             ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
             ChangeNotifierProvider<ServiceProvider>(create: (_) => ServiceProvider()),
+            ChangeNotifierProvider<CartManagerProvider>(create: (_) => CartManagerProvider()),
           ],
           child: const MyApp(),
         ),
@@ -43,7 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Smartphone Client',
+      title: 'SmartPhone++ Mobile',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -68,6 +73,7 @@ class MyApp extends StatelessWidget {
       ),
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
+
     );
   }
 }

@@ -536,7 +536,6 @@ C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.AssemblyInfoInputs.cache
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.AssemblyInfo.cs
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.csproj.CoreCompileInputs.cache
-C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.sourcelink.json
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\scopedcss\bundle\SmartPhone.WebAPI.styles.css

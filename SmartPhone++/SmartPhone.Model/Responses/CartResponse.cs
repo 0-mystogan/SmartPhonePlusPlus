@@ -11,7 +11,8 @@ namespace SmartPhone.Model.Responses
         public bool IsActive { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
-        public int ItemCount { get; set; }
+        public string UserEmail { get; set; } = string.Empty;
+        public int TotalItems { get; set; }
         public decimal TotalAmount { get; set; }
     }
 } 

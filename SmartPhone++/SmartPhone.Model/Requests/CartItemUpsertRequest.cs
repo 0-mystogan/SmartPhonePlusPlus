@@ -9,9 +9,9 @@ namespace SmartPhone.Model.Requests
         public int Quantity { get; set; }
         
         [Required]
-        public int CartId { get; set; }
+        public int ProductId { get; set; }
         
         [Required]
-        public int ProductId { get; set; }
+        public int CartId { get; set; }
     }
 } 
