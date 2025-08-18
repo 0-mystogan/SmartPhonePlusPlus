@@ -36,7 +36,6 @@ builder.Services.AddTransient<IServicePartService, ServicePartService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICartService, CartService>();
-builder.Services.AddTransient<ICartItemService, CartItemService>();
 //builder.Services.AddTransient<IChatService, ChatService>();
 
 // State Machine
@@ -101,6 +100,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

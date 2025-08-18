@@ -483,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         if (product.currentPrice != null) ...[
                           Text(
-                            '\$${product.currentPrice!.toStringAsFixed(2)}',
+                            'BAM ${product.currentPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -493,7 +493,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (product.originalPrice != null &&
                               product.originalPrice! > product.currentPrice!)
                             Text(
-                              '\$${product.originalPrice!.toStringAsFixed(2)}',
+                              'BAM ${product.originalPrice!.toStringAsFixed(2)}',
                               style: TextStyle(
                                 fontSize: 16,
                                 decoration: TextDecoration.lineThrough,

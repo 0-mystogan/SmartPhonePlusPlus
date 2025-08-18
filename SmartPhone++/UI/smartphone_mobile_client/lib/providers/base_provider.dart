@@ -172,13 +172,13 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var jsonRequest = jsonEncode(request);
     var response = await http
-        .post(uri, headers: headers, body: jsonRequest)
+        .post(uri, headers: headers, body: jsonEncode(request))
         .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
-      return jsonDecode(response.body);
+      var data = jsonDecode(response.body);
+      return data;
     } else {
       throw Exception("Unknown error");
     }
@@ -207,28 +207,41 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var jsonRequest = jsonEncode(request);
     var response = await http
-        .put(uri, headers: headers, body: jsonRequest)
+        .put(uri, headers: headers, body: jsonEncode(request))
         .timeout(const Duration(seconds: 10));
 
     if (isValidResponse(response)) {
-      return jsonDecode(response.body);
+      var data = jsonDecode(response.body);
+      return data;
     } else {
       throw Exception("Unknown error");
     }
   }
 
-  Future<void> deleteCustom(String subEndpoint) async {
+  Future<dynamic> deleteCustom(String subEndpoint, [dynamic request]) async {
     var url = "$baseUrl$endpoint/$subEndpoint";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    var response = await http
-        .delete(uri, headers: headers)
-        .timeout(const Duration(seconds: 10));
+    http.Response response;
+    if (request != null) {
+      response = await http
+          .delete(uri, headers: headers, body: jsonEncode(request))
+          .timeout(const Duration(seconds: 10));
+    } else {
+      response = await http
+          .delete(uri, headers: headers)
+          .timeout(const Duration(seconds: 10));
+    }
 
-    if (!isValidResponse(response)) {
+    if (isValidResponse(response)) {
+      if (response.body.isNotEmpty) {
+        var data = jsonDecode(response.body);
+        return data;
+      }
+      return null;
+    } else {
       throw Exception("Unknown error");
     }
   }

@@ -536,8 +536,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           DataCell(
                             Text(
                               e.currentPrice != null
-                                  ? '\$${e.currentPrice!.toStringAsFixed(2)}'
-                                  : '\$${e.originalPrice?.toStringAsFixed(2) ?? '0.00'}',
+                                  ? 'BAM ${e.currentPrice!.toStringAsFixed(2)}'
+                                  : 'BAM ${e.originalPrice?.toStringAsFixed(2) ?? '0.00'}',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.green,

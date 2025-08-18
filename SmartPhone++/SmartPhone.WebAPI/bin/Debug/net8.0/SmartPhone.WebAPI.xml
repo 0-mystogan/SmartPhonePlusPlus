@@ -4,6 +4,41 @@
         <name>SmartPhone.WebAPI</name>
     </assembly>
     <members>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.DebugCart(System.Int32)">
+            <summary>
+            Test endpoint to debug cart data
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.DebugAllCarts">
+            <summary>
+            Debug endpoint to check all carts in database
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.GetMyCart">
+            <summary>
+            Get the current user's cart
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.AddItemToCart(SmartPhone.Model.Requests.CartItemOperationRequest)">
+            <summary>
+            Add item to cart
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.UpdateItemQuantity(SmartPhone.Model.Requests.CartItemOperationRequest)">
+            <summary>
+            Update item quantity in cart
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.RemoveItemFromCart(SmartPhone.Model.Requests.CartItemOperationRequest)">
+            <summary>
+            Remove item from cart
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.ClearCart">
+            <summary>
+            Clear current user's cart
+            </summary>
+        </member>
         <member name="T:SmartPhone.WebAPI.Mapping.MappingConfig">
             <summary>
             Centralized mapping configuration for Mapster

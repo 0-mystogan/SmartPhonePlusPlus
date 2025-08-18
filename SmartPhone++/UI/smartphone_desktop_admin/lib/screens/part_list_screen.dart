@@ -370,7 +370,7 @@ class _PartListScreenState extends State<PartListScreen> {
                             ),
                           ),
                           DataCell(
-                            Text('\$${e.price.toStringAsFixed(2)}', style: TextStyle(fontSize: 15)),
+                            Text('BAM ${e.price.toStringAsFixed(2)}', style: TextStyle(fontSize: 15)),
                           ),
                           DataCell(
                             e.stockQuantity == (e.minimumStockLevel ?? 5)

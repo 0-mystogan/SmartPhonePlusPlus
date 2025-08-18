@@ -90,4 +90,10 @@ class AuthProvider extends BaseProvider<User> {
     _error = null;
     notifyListeners();
   }
+
+  // Update current user data
+  void updateCurrentUser(User updatedUser) {
+    _currentUser = updatedUser;
+    notifyListeners();
+  }
 }

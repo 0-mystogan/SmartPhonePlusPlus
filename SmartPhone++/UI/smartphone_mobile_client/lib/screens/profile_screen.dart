@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
+import 'package:smartphone_mobile_client/model/user.dart';
 import 'dart:convert';
+import 'package:smartphone_mobile_client/screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -204,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: _isLoading ? null : _editProfile,
+                        onPressed: _isLoading ? null : () => _editProfile(user),
                         icon: const Icon(Icons.edit),
                         label: const Text('Edit Profile'),
                         style: ElevatedButton.styleFrom(
@@ -313,18 +315,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return '${date.day}/${date.month}/${date.year} at ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  void _editProfile() {
-    setState(() => _isLoading = true);
-    
-    // TODO: Implement edit profile functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Edit profile functionality coming soon...'),
-        backgroundColor: Colors.blue,
+  void _editProfile(User user) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditProfileScreen(user: user),
       ),
     );
-    
-    setState(() => _isLoading = false);
   }
 
   void _deleteProfile() {

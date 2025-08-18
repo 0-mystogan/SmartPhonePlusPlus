@@ -191,54 +191,6 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
                         ],
                       ),
                       SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _colorController,
-                              decoration: InputDecoration(
-                                labelText: 'Color',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _storageController,
-                              decoration: InputDecoration(
-                                labelText: 'Storage',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _ramController,
-                              decoration: InputDecoration(
-                                labelText: 'RAM',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _networkController,
-                              decoration: InputDecoration(
-                                labelText: 'Network',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
                       SwitchListTile(
                         title: Text('Active'),
                         value: _isActive,

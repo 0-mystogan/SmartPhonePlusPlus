@@ -60,10 +60,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       // Initialize base URL if not already done
       await cartManager.initBaseUrl();
       
-      // Load or create cart for demo user (you should get this from auth)
-      await cartManager.loadOrCreateCart(1);
-      
-      // Add product to cart
+      // Add product to cart (cart will be created automatically if needed)
       await cartManager.addToCart(product);
       
       ScaffoldMessenger.of(context).showSnackBar(
@@ -71,18 +68,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
           content: Text('${product.name} added to cart!'),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 2),
-                      action: SnackBarAction(
-              label: 'View Cart',
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartScreen(),
-                  ),
-                );
-              },
-            ),
+          action: SnackBarAction(
+            label: 'View Cart',
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(),
+                ),
+              );
+            },
+          ),
         ),
       );
     } catch (e) {

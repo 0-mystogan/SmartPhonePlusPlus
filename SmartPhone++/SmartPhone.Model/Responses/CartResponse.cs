@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SmartPhone.Model.Responses
 {
@@ -14,5 +15,6 @@ namespace SmartPhone.Model.Responses
         public string UserEmail { get; set; } = string.Empty;
         public int TotalItems { get; set; }
         public decimal TotalAmount { get; set; }
+        public List<CartItemResponse>? CartItems { get; set; }
     }
 } 

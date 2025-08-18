@@ -372,8 +372,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       TextFormField(
                         controller: _serviceFeeController,
                         decoration: customTextFieldDecoration(
-                          "Service Fee (\$)",
-                          prefixIcon: Icons.attach_money,
+                          "Service Fee (BAM)",
                         ),
                         keyboardType: TextInputType.number,
                         validator: (value) {

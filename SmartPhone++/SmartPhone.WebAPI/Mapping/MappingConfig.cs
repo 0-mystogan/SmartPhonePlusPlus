@@ -91,7 +91,8 @@ namespace SmartPhone.WebAPI.Mapping
                 .NewConfig()
                 .Map(dest => dest.UserName, src => src.User != null ? src.User.Username : string.Empty)
                 .Map(dest => dest.UserEmail, src => src.User != null ? src.User.Email : string.Empty)
-                .Map(dest => dest.TotalItems, src => src.CartItems != null ? src.CartItems.Count : 0);
+                .Map(dest => dest.TotalItems, src => src.CartItems != null ? src.CartItems.Count : 0)
+                .Map(dest => dest.CartItems, src => src.CartItems);
 
             TypeAdapterConfig<CartUpsertRequest, Cart>
                 .NewConfig()

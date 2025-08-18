@@ -298,7 +298,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                               decoration: InputDecoration(
                                 labelText: 'Price *',
                                 border: OutlineInputBorder(),
-                                prefixText: '\$',
+                                suffixText: 'BAM',
                               ),
                               keyboardType: TextInputType.number,
                               validator: (value) {
@@ -319,7 +319,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                               decoration: InputDecoration(
                                 labelText: 'Cost Price',
                                 border: OutlineInputBorder(),
-                                prefixText: '\$',
+                                suffixText: 'BAM',
                               ),
                               keyboardType: TextInputType.number,
                             ),

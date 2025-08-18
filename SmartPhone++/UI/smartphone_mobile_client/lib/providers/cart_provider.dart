@@ -1,5 +1,6 @@
 import 'package:smartphone_mobile_client/model/cart.dart';
 import 'package:smartphone_mobile_client/model/cart_upsert_request.dart';
+import 'package:smartphone_mobile_client/model/cart_item_operation_request.dart';
 import 'package:smartphone_mobile_client/model/search_result.dart';
 import 'package:smartphone_mobile_client/providers/base_provider.dart';
 
@@ -11,6 +12,21 @@ class CartProvider extends BaseProvider<Cart> {
     return Cart.fromJson(data);
   }
 
+  /// Get the current user's cart
+  Future<Cart?> getMyCart() async {
+    try {
+      final response = await getCustom('my-cart');
+      if (response != null) {
+        return Cart.fromJson(response);
+      }
+      return null;
+    } catch (e) {
+      print('Error getting my cart: $e');
+      rethrow;
+    }
+  }
+
+  /// Get cart by user ID (for admin purposes)
   Future<Cart?> getByUserId(int userId) async {
     try {
       final response = await get(filter: {'userId': userId});
@@ -49,6 +65,58 @@ class CartProvider extends BaseProvider<Cart> {
     } catch (e) {
       print('Error deleting cart: $e');
       return false;
+    }
+  }
+
+  /// Add item to cart using the new unified endpoint
+  Future<Cart> addItemToCart(CartItemOperationRequest request) async {
+    try {
+      final response = await postCustom('add', request.toJson());
+      if (response != null) {
+        return Cart.fromJson(response);
+      }
+      throw Exception('Failed to add item to cart');
+    } catch (e) {
+      print('Error adding item to cart: $e');
+      rethrow;
+    }
+  }
+
+  /// Update item quantity using the new unified endpoint
+  Future<Cart> updateItemQuantity(CartItemOperationRequest request) async {
+    try {
+      final response = await putCustom('update', request.toJson());
+      if (response != null) {
+        return Cart.fromJson(response);
+      }
+      throw Exception('Failed to update item quantity');
+    } catch (e) {
+      print('Error updating item quantity: $e');
+      rethrow;
+    }
+  }
+
+  /// Remove item from cart using the new unified endpoint
+  Future<Cart> removeItemFromCart(CartItemOperationRequest request) async {
+    try {
+      final response = await deleteCustom('remove', request.toJson());
+      if (response != null) {
+        return Cart.fromJson(response);
+      }
+      throw Exception('Failed to remove item from cart');
+    } catch (e) {
+      print('Error removing item from cart: $e');
+      rethrow;
+    }
+  }
+
+  /// Clear cart
+  Future<void> clearCart() async {
+    try {
+      await deleteCustom('clear');
+    } catch (e) {
+      print('Error clearing cart: $e');
+      rethrow;
     }
   }
 }

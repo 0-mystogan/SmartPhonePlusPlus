@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_mobile_client/model/cart_item.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
+import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -15,13 +16,19 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize cart for demo user (you should get this from auth)
+    // Initialize cart for current user
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final cartManager = context.read<CartManagerProvider>();
-        if (cartManager != null) {
-          print('CartScreen: Initializing cart for user ID 1');
-          cartManager.loadOrCreateCart(1); // Demo user ID
+        final authProvider = context.read<AuthProvider>();
+        
+        if (cartManager != null && authProvider.currentUser != null) {
+          print('CartScreen: Initializing cart for user ID ${authProvider.currentUser!.id}');
+          cartManager.loadOrCreateCart(authProvider.currentUser!.id);
+        } else {
+          // For demo purposes, use user ID 1 if no auth user
+          print('CartScreen: No auth user, using demo user ID 1');
+          cartManager.loadOrCreateCart(1);
         }
       } catch (e) {
         print('CartScreen: CartManagerProvider not available: $e');
@@ -101,12 +108,16 @@ class _CartScreenState extends State<CartScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                                      ElevatedButton(
-                      onPressed: () {
-                        if (cartManager != null) {
-                          cartManager.loadOrCreateCart(1);
-                        }
-                      },
+                  ElevatedButton(
+                    onPressed: () {
+                      final authProvider = context.read<AuthProvider>();
+                      if (cartManager != null && authProvider.currentUser != null) {
+                        cartManager.loadOrCreateCart(authProvider.currentUser!.id);
+                      } else {
+                        // For demo purposes, use user ID 1 if no auth user
+                        cartManager.loadOrCreateCart(1);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,
                       foregroundColor: Colors.white,
@@ -148,11 +159,14 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               Expanded(
                 child: RefreshIndicator(
-                  onRefresh: () {
-                    if (cartManager != null) {
+                  onRefresh: () async {
+                    final authProvider = context.read<AuthProvider>();
+                    if (cartManager != null && authProvider.currentUser != null) {
+                      return cartManager.loadOrCreateCart(authProvider.currentUser!.id);
+                    } else {
+                      // For demo purposes, use user ID 1 if no auth user
                       return cartManager.loadOrCreateCart(1);
                     }
-                    return Future.value();
                   },
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
@@ -245,15 +259,15 @@ class _CartScreenState extends State<CartScreen> {
                   // Quantity controls
                   Row(
                     children: [
-                                             IconButton(
-                         onPressed: () {
-                           if (cartItem.quantity > 1 && cartManager != null) {
-                             cartManager.updateItemQuantity(
-                               cartItem.id,
-                               cartItem.quantity - 1,
-                             );
-                           }
-                         },
+                      IconButton(
+                        onPressed: () {
+                          if (cartItem.quantity > 1 && cartManager != null) {
+                            cartManager.updateItemQuantity(
+                              cartItem.id,
+                              cartItem.quantity - 1,
+                            );
+                          }
+                        },
                         icon: const Icon(Icons.remove_circle_outline),
                         color: Colors.purple,
                         iconSize: 20,
@@ -275,15 +289,15 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                       ),
-                                             IconButton(
-                         onPressed: () {
-                           if (cartManager != null) {
-                             cartManager.updateItemQuantity(
-                               cartItem.id,
-                               cartItem.quantity + 1,
-                             );
-                           }
-                         },
+                      IconButton(
+                        onPressed: () {
+                          if (cartManager != null) {
+                            cartManager.updateItemQuantity(
+                              cartItem.id,
+                              cartItem.quantity + 1,
+                            );
+                          }
+                        },
                         icon: const Icon(Icons.add_circle_outline),
                         color: Colors.purple,
                         iconSize: 20,

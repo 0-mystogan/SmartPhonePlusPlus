@@ -253,8 +253,8 @@ class _DashboardScreenAdminState extends State<DashboardScreenAdmin> {
                 ),
                 _buildStatCard(
                   title: 'Total Revenue',
-                  value: '\$${totalRevenue.toStringAsFixed(2)}',
-                  icon: Icons.attach_money,
+                  value: 'BAM ${totalRevenue.toStringAsFixed(2)}',
+                  icon: Icons.currency_exchange_outlined,
                   color: Colors.purple,
                   subtitle: 'Generated',
                 ),
