@@ -171,7 +171,7 @@
       }
     },
     "/Cart/remove": {
-      "delete": {
+      "post": {
         "tags": [
           "Cart"
         ],
@@ -5972,7 +5972,7 @@
           },
           "quantity": {
             "maximum": 2147483647,
-            "minimum": 1,
+            "minimum": 0,
             "type": "integer",
             "format": "int32"
           }

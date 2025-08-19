@@ -277,11 +277,16 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   bool isValidResponse(Response response) {
+    print('BaseProvider: HTTP Response Status: ${response.statusCode}');
+    print('BaseProvider: HTTP Response Body: ${response.body}');
+    
     if (response.statusCode < 299) {
       return true;
     } else if (response.statusCode == 401) {
+      print('BaseProvider: Authentication failed - 401 Unauthorized');
       throw Exception("Please check your credentials and try again.");
     } else {
+      print('BaseProvider: Request failed with status ${response.statusCode}');
       throw Exception("Something went wrong, please try again later!");
     }
   }
@@ -293,7 +298,12 @@ abstract class BaseProvider<T> with ChangeNotifier {
     String basicAuth =
         "Basic ${base64Encode(utf8.encode('$username:$password'))}";
 
-    return {"Content-Type": "application/json", "Authorization": basicAuth};
+    var headers = {"Content-Type": "application/json", "Authorization": basicAuth};
+    
+    print('BaseProvider: Creating headers with username: $username, password length: ${password.length}');
+    print('BaseProvider: Authorization header: $basicAuth');
+    
+    return headers;
   }
 
   String getQueryString(

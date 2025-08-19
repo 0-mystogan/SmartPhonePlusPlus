@@ -8,6 +8,7 @@ import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/city_provider.dart';
 import 'package:smartphone_mobile_client/providers/gender_provider.dart';
 import 'package:smartphone_mobile_client/providers/product_provider.dart';
+import 'package:smartphone_mobile_client/providers/category_provider.dart';
 import 'package:smartphone_mobile_client/providers/service_provider.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/providers/user_provider.dart';
@@ -34,6 +35,7 @@ void main() async {
             ChangeNotifierProvider<CityProvider>(create: (_) => CityProvider()),
             ChangeNotifierProvider<GenderProvider>(create: (_) => GenderProvider()),
             ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
+            ChangeNotifierProvider<CategoryProvider>(create: (_) => CategoryProvider()),
             ChangeNotifierProvider<ServiceProvider>(create: (_) => ServiceProvider()),
             ChangeNotifierProvider<CartManagerProvider>(create: (_) => CartManagerProvider()),
             ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),

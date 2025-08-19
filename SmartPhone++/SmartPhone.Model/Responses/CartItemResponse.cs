@@ -15,5 +15,9 @@ namespace SmartPhone.Model.Responses
         public decimal? ProductPrice { get; set; }
         public string? ProductImageUrl { get; set; }
         public decimal TotalPrice { get; set; }
+        
+        // Category information for recommendations
+        public int ProductCategoryId { get; set; }
+        public string ProductCategoryName { get; set; } = string.Empty;
     }
 } 

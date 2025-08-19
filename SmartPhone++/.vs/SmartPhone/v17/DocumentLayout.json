@@ -74,8 +74,7 @@
               "RelativeToolTip": "SmartPhone.Services\\Interfaces\\ICartService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-17T10:04:38.799Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-17T10:04:38.799Z"
             },
             {
               "$type": "Document",
@@ -111,8 +110,7 @@
               "RelativeToolTip": "SmartPhone.Services\\Database\\Cart.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABoAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-17T10:01:06.58Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-17T10:01:06.58Z"
             },
             {
               "$type": "Document",
@@ -124,8 +122,7 @@
               "RelativeToolTip": "SmartPhone.Services\\Database\\CartItem.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-17T10:00:56.708Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-17T10:00:56.708Z"
             },
             {
               "$type": "Document",
@@ -137,8 +134,7 @@
               "RelativeToolTip": "SmartPhone.WebAPI\\Program.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAAACUAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T18:41:15.999Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-16T18:41:15.999Z"
             },
             {
               "$type": "Document",
@@ -172,7 +168,7 @@
               "RelativeDocumentMoniker": "SmartPhone.Services\\Services\\CartService.cs",
               "ToolTip": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\CartService.cs",
               "RelativeToolTip": "SmartPhone.Services\\Services\\CartService.cs",
-              "ViewState": "AgIAAO8AAAAAAAAAAAAAAAgBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAE8BAAAAAAAAAAAowAgBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-16T17:26:43.36Z",
               "EditorCaption": ""

@@ -108,7 +108,9 @@ namespace SmartPhone.WebAPI.Mapping
                 .Map(dest => dest.TotalPrice, src => src.Product != null ? src.Product.Price * src.Quantity : 0)
                 .Map(dest => dest.ProductImageUrl, src => src.Product != null && src.Product.ProductImages != null && src.Product.ProductImages.Any() 
                     ? Convert.ToBase64String(src.Product.ProductImages.First().ImageData ?? new byte[0])
-                    : null);
+                    : null)
+                .Map(dest => dest.ProductCategoryId, src => src.Product != null ? src.Product.CategoryId : 0)
+                .Map(dest => dest.ProductCategoryName, src => src.Product != null && src.Product.Category != null ? src.Product.Category.Name : string.Empty);
 
             TypeAdapterConfig<CartItemUpsertRequest, CartItem>
                 .NewConfig()

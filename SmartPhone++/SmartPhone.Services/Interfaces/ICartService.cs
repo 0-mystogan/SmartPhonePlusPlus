@@ -20,6 +20,9 @@ namespace SmartPhone.Services.Interfaces
         
         // Helper method for cart operations
         Task<List<CartItem>> GetCartItemsAsync(int cartId);
+        
+        // Clear cart method
+        Task<CartResponse> ClearCartAsync(int userId);
     }
 
     public class CartSummaryResponse

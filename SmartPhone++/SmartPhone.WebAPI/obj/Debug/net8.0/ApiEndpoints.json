@@ -292,7 +292,7 @@
     "ContainingType": "SmartPhone.WebAPI.Controllers.CartController",
     "Method": "RemoveItemFromCart",
     "RelativePath": "Cart/remove",
-    "HttpMethod": "DELETE",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [

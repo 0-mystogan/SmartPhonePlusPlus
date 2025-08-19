@@ -15,6 +15,9 @@ class CartItem {
   final double? productPrice;
   final String? productImageUrl;
   final double totalPrice;
+  // Category information for recommendations
+  final int? productCategoryId;
+  final String? productCategoryName;
 
   CartItem({
     required this.id,
@@ -28,6 +31,8 @@ class CartItem {
     this.productPrice,
     this.productImageUrl,
     required this.totalPrice,
+    this.productCategoryId,
+    this.productCategoryName,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) => _$CartItemFromJson(json);
@@ -45,6 +50,8 @@ class CartItem {
     double? productPrice,
     String? productImageUrl,
     double? totalPrice,
+    int? productCategoryId,
+    String? productCategoryName,
   }) {
     return CartItem(
       id: id ?? this.id,
@@ -58,6 +65,8 @@ class CartItem {
       productPrice: productPrice ?? this.productPrice,
       productImageUrl: productImageUrl ?? this.productImageUrl,
       totalPrice: totalPrice ?? this.totalPrice,
+      productCategoryId: productCategoryId ?? this.productCategoryId,
+      productCategoryName: productCategoryName ?? this.productCategoryName,
     );
   }
 }

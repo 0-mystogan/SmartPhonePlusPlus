@@ -366,5 +366,28 @@ namespace SmartPhone.Services.Services
                 .Where(ci => ci.CartId == cartId)
                 .ToListAsync();
         }
+
+        /// <summary>
+        /// Clear all items from user's cart efficiently
+        /// </summary>
+        public async Task<CartResponse> ClearCartAsync(int userId)
+        {
+            var cart = await GetByUserIdAsync(userId);
+            if (cart == null)
+                throw new System.ArgumentException("No active cart found for user");
+
+            // Remove all cart items in a single operation
+            var cartItems = await _context.CartItems
+                .Where(ci => ci.CartId == cart.Id)
+                .ToListAsync();
+
+            if (cartItems.Any())
+            {
+                _context.CartItems.RemoveRange(cartItems);
+                await _context.SaveChangesAsync();
+            }
+            
+            return await GetByUserIdAsync(userId);
+        }
     }
 }

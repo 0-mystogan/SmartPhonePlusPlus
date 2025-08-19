@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_mobile_client/model/cart_item.dart';
+import 'package:smartphone_mobile_client/model/product.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
+import 'package:smartphone_mobile_client/providers/product_provider.dart';
+import 'package:smartphone_mobile_client/services/recommendation_service.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -13,6 +16,12 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  List<Product> _recommendations = [];
+  bool _isLoadingRecommendations = false;
+  bool _hasLoadedRecommendations = false; // Track if recommendations have been loaded
+  RecommendationService? _recommendationService;
+  bool _mounted = true; // Track if widget is still mounted
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +43,12 @@ class _CartScreenState extends State<CartScreen> {
         print('CartScreen: CartManagerProvider not available: $e');
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _mounted = false; // Mark widget as disposed
+    super.dispose();
   }
 
   @override
@@ -168,16 +183,20 @@ class _CartScreenState extends State<CartScreen> {
                       return cartManager.loadOrCreateCart(1);
                     }
                   },
-                  child: ListView.builder(
+                  child: ListView(
                     padding: const EdgeInsets.all(16),
-                    itemCount: cartManager?.cartItems.length ?? 0,
-                    itemBuilder: (context, index) {
-                      if (cartManager != null && index < cartManager.cartItems.length) {
-                        final cartItem = cartManager.cartItems[index];
-                        return _buildCartItemCard(cartItem, cartManager);
-                      }
-                      return const SizedBox.shrink();
-                    },
+                    children: [
+                      // Cart items
+                      ...cartManager.cartItems.map((cartItem) => 
+                        _buildCartItemCard(cartItem, cartManager)
+                      ),
+                      
+                      // Recommendations section
+                      if (cartManager.cartItems.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        _buildRecommendationsSection(cartManager.cartItems),
+                      ],
+                    ],
                   ),
                 ),
               ),
@@ -487,5 +506,248 @@ class _CartScreenState extends State<CartScreen> {
         );
       },
     );
+  }
+
+  Widget _buildRecommendationsSection(List<CartItem> cartItems) {
+    // Only show recommendations if we have cart items with category information
+    final hasCategoryInfo = cartItems.any((item) => item.productCategoryId != null);
+    
+    if (!hasCategoryInfo) {
+      return const SizedBox.shrink();
+    }
+
+    // Load recommendations only once when this section is built, but only if widget is mounted
+    if (_mounted && !_hasLoadedRecommendations && !_isLoadingRecommendations) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_mounted && !_hasLoadedRecommendations) { // Double-check mounted state
+          _loadRecommendations(cartItems);
+        }
+      });
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.lightbulb_outline,
+              color: Colors.orange[600],
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'You might also like',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (_isLoadingRecommendations)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: CircularProgressIndicator(
+                color: Colors.purple,
+                strokeWidth: 2,
+              ),
+            ),
+          )
+        else if (_recommendations.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: Text(
+                'No recommendations available',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          )
+        else
+          SizedBox(
+            height: 200,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _recommendations.length,
+              itemBuilder: (context, index) {
+                final product = _recommendations[index];
+                return _buildRecommendationCard(product, cartItems);
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildRecommendationCard(Product product, List<CartItem> cartItems) {
+    return Container(
+      width: 160,
+      margin: const EdgeInsets.only(right: 12),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product image
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  color: Colors.grey[100],
+                ),
+                child: product.productImages != null && product.productImages!.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        child: Image.memory(
+                          base64Decode(product.productImages!.first.imageData!),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.image_not_supported_outlined,
+                              size: 32,
+                              color: Colors.grey,
+                            );
+                          },
+                        ),
+                      )
+                    : const Icon(
+                        Icons.image_not_supported_outlined,
+                        size: 32,
+                        color: Colors.grey,
+                      ),
+              ),
+            ),
+            
+            // Product details
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${product.currentPrice?.toStringAsFixed(2) ?? '0.00'} BAM',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => _addToCart(product),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _loadRecommendations(List<CartItem> cartItems) async {
+    if (_isLoadingRecommendations || !_mounted) return;
+
+    setState(() {
+      _isLoadingRecommendations = true;
+    });
+
+    try {
+      // Initialize recommendation service if not already done
+      if (_recommendationService == null) {
+        final productProvider = Provider.of<ProductProvider>(context, listen: false);
+        _recommendationService = RecommendationService(productProvider);
+      }
+
+      final recommendations = await _recommendationService!.getRecommendations(cartItems);
+      
+      // Check if widget is still mounted before updating state
+      if (_mounted) {
+        setState(() {
+          _recommendations = recommendations;
+          _isLoadingRecommendations = false;
+          _hasLoadedRecommendations = true; // Mark recommendations as loaded
+        });
+      }
+    } catch (e) {
+      print('Error loading recommendations: $e');
+      // Only update state if widget is still mounted
+      if (_mounted) {
+        setState(() {
+          _isLoadingRecommendations = false;
+        });
+      }
+    }
+  }
+
+  void _addToCart(Product product) {
+    try {
+      final cartManager = context.read<CartManagerProvider>();
+      
+      if (cartManager != null) {
+        // Add product to cart using the Product object
+        cartManager.addToCart(product);
+        
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${product.name} added to cart'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        
+        // Reset recommendations flag and reload to exclude the added product
+        if (_mounted) {
+          _hasLoadedRecommendations = false;
+          _loadRecommendations(cartManager.cartItems);
+        }
+      }
+    } catch (e) {
+      print('Error adding product to cart: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error adding product to cart'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 }

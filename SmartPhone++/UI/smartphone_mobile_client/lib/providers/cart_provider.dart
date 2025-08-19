@@ -99,13 +99,16 @@ class CartProvider extends BaseProvider<Cart> {
   /// Remove item from cart using the new unified endpoint
   Future<Cart> removeItemFromCart(CartItemOperationRequest request) async {
     try {
-      final response = await deleteCustom('remove', request.toJson());
+      print('CartProvider: Attempting to remove item with ProductId: ${request.productId}');
+      final response = await postCustom('remove', request.toJson());
       if (response != null) {
+        print('CartProvider: Successfully removed item, response: $response');
         return Cart.fromJson(response);
       }
-      throw Exception('Failed to remove item from cart');
+      throw Exception('Failed to remove item to cart');
     } catch (e) {
-      print('Error removing item from cart: $e');
+      print('CartProvider: Error removing item from cart: $e');
+      print('CartProvider: Request data: ${request.toJson()}');
       rethrow;
     }
   }
