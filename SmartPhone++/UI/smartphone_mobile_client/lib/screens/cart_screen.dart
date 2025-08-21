@@ -7,6 +7,7 @@ import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/product_provider.dart';
 import 'package:smartphone_mobile_client/services/recommendation_service.dart';
+import 'package:smartphone_mobile_client/screens/stripe_payment_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -491,21 +492,18 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _showCheckoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Checkout'),
-          content: const Text('Checkout functionality will be implemented in the next phase.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    final cartManager = context.read<CartManagerProvider>();
+    if (cartManager != null && cartManager.cartItems.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StripePaymentScreen(
+            cartItems: cartManager.cartItems,
+            totalAmount: cartManager.totalAmount,
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildRecommendationsSection(List<CartItem> cartItems) {
@@ -691,11 +689,15 @@ class _CartScreenState extends State<CartScreen> {
     try {
       // Initialize recommendation service if not already done
       if (_recommendationService == null) {
-        final productProvider = Provider.of<ProductProvider>(context, listen: false);
-        _recommendationService = RecommendationService(productProvider);
+        _recommendationService = RecommendationService();
       }
 
-      final recommendations = await _recommendationService!.getRecommendations(cartItems);
+      // Get current user ID from auth provider
+      final authProvider = context.read<AuthProvider>();
+      final userId = authProvider.currentUser?.id ?? 1; // Fallback to user 1 for demo
+
+      // Use the new user-based recommendation method that fetches cart from database
+      final recommendations = await _recommendationService!.getUserRecommendations(userId);
       
       // Check if widget is still mounted before updating state
       if (_mounted) {

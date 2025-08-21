@@ -5,73 +5,6 @@
     "version": "1.0"
   },
   "paths": {
-    "/Cart/debug/{userId}": {
-      "get": {
-        "tags": [
-          "Cart"
-        ],
-        "summary": "Test endpoint to debug cart data",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/Cart/debug-all-carts": {
-      "get": {
-        "tags": [
-          "Cart"
-        ],
-        "summary": "Debug endpoint to check all carts in database",
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/Cart/my-cart": {
-      "get": {
-        "tags": [
-          "Cart"
-        ],
-        "summary": "Get the current user's cart",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CartResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CartResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CartResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Cart/add": {
       "post": {
         "tags": [
@@ -4406,6 +4339,145 @@
         }
       }
     },
+    "/api/ProductRecommendation/user/{userId}": {
+      "get": {
+        "tags": [
+          "ProductRecommendation"
+        ],
+        "summary": "Get product recommendations for the current user based on their cart",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of the current logged-in user",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "maxRecommendations",
+            "in": "query",
+            "description": "Maximum number of recommendations (default: 10)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ProductRecommendation/cart-based": {
+      "get": {
+        "tags": [
+          "ProductRecommendation"
+        ],
+        "summary": "Get product recommendations based on provided cart data (for external calls)",
+        "parameters": [
+          {
+            "name": "cartItemProductIds",
+            "in": "query",
+            "description": "Comma-separated list of product IDs in cart",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "cartItemProductNames",
+            "in": "query",
+            "description": "Comma-separated list of product names in cart",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "cartItemCategoryIds",
+            "in": "query",
+            "description": "Comma-separated list of category IDs in cart",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "maxRecommendations",
+            "in": "query",
+            "description": "Maximum number of recommendations (default: 10)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Role": {
       "get": {
         "tags": [
@@ -6027,6 +6099,14 @@
           "totalPrice": {
             "type": "number",
             "format": "double"
+          },
+          "productCategoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productCategoryName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

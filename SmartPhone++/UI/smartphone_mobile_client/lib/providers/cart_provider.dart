@@ -13,11 +13,11 @@ class CartProvider extends BaseProvider<Cart> {
   }
 
   /// Get the current user's cart
-  Future<Cart?> getMyCart() async {
+  Future<Cart?> getMyCart(int userId) async {
     try {
-      final response = await getCustom('my-cart');
-      if (response != null) {
-        return Cart.fromJson(response);
+      final response = await get(filter: {'userId': userId});
+      if (response.items != null && response.items!.isNotEmpty) {
+        return response.items!.first;
       }
       return null;
     } catch (e) {

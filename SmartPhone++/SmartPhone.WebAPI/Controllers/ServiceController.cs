@@ -10,7 +10,7 @@ namespace SmartPhone.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Roles = "Technician,Administrator")]
+    [Authorize(Roles = "Technician,Administrator,User")]
     public class ServiceController : BaseCRUDController<ServiceResponse, ServiceSearchObject, ServiceUpsertRequest, ServiceUpsertRequest>
     {
         private readonly IServiceService _serviceService;

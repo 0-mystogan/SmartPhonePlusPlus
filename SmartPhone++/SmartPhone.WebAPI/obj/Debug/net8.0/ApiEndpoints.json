@@ -1,5 +1,77 @@
 [
   {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductRecommendationController",
+    "Method": "GetCartBasedRecommendations",
+    "RelativePath": "api/ProductRecommendation/cart-based",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cartItemProductIds",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "cartItemProductNames",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "cartItemCategoryIds",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "maxRecommendations",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartPhone.WebAPI.Controllers.ProductRecommendationController",
+    "Method": "GetUserRecommendations",
+    "RelativePath": "api/ProductRecommendation/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "maxRecommendations",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[SmartPhone.Model.Responses.ProductResponse, SmartPhone.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SmartPhone.WebAPI.Controllers.ServiceInvoiceController",
     "Method": "Get",
     "RelativePath": "api/ServiceInvoice/{id}",
@@ -241,52 +313,6 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SmartPhone.WebAPI.Controllers.CartController",
-    "Method": "DebugAllCarts",
-    "RelativePath": "Cart/debug-all-carts",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SmartPhone.WebAPI.Controllers.CartController",
-    "Method": "DebugCart",
-    "RelativePath": "Cart/debug/{userId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SmartPhone.WebAPI.Controllers.CartController",
-    "Method": "GetMyCart",
-    "RelativePath": "Cart/my-cart",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "SmartPhone.Model.Responses.CartResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "SmartPhone.WebAPI.Controllers.CartController",

@@ -1,112 +1,151 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:smartphone_mobile_client/model/product.dart';
 import 'package:smartphone_mobile_client/model/cart_item.dart';
-import 'package:smartphone_mobile_client/providers/product_provider.dart';
 
 class RecommendationService {
-  final ProductProvider _productProvider;
+  static const String _baseUrl = 'http://10.0.2.2:5000/api'; // Android emulator localhost
+  // static const String _baseUrl = 'http://localhost:5000/api'; // For web/desktop
+  
+  final http.Client _httpClient;
+  
+  RecommendationService({http.Client? httpClient}) 
+      : _httpClient = httpClient ?? http.Client();
 
-  RecommendationService(this._productProvider);
-
-  /// Get recommended products based on cart items
-  /// This service suggests products from related categories
-  Future<List<Product>> getRecommendations(List<CartItem> cartItems) async {
-    if (cartItems.isEmpty) {
-      return await _getFeaturedProducts();
-    }
-
+  /// Get product recommendations for a specific user based on their cart
+  /// 
+  /// This method gets recommendations directly from the backend by user ID,
+  /// which fetches the user's cart from the database and provides intelligent recommendations.
+  Future<List<Product>> getUserRecommendations(int userId) async {
     try {
-      // Extract unique category IDs from cart items
-      final Set<int> cartCategoryIds = cartItems
-          .where((item) => item.productCategoryId != null)
-          .map((item) => item.productCategoryId!)
-          .toSet();
+      final uri = Uri.parse('$_baseUrl/ProductRecommendation/user/$userId?maxRecommendations=10');
 
-      if (cartCategoryIds.isEmpty) {
-        return await _getFeaturedProducts();
+      final response = await _httpClient.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        final recommendations = jsonData
+            .map((json) => Product.fromJson(json))
+            .where((product) => product != null)
+            .toList();
+
+        return recommendations;
+      } else {
+        print('Failed to get user recommendations: ${response.statusCode} - ${response.body}');
+        return [];
+      }
+    } catch (e) {
+      print('Error getting user recommendations: $e');
+      return [];
+    }
+  }
+
+  /// Get product recommendations based on cart items (for backward compatibility)
+  /// 
+  /// This method implements association-based recommendations:
+  /// 1. Name-based: Finds products with similar names (cases, glass, accessories)
+  /// 2. Category-based: Finds complementary products from different categories
+  /// 3. Featured: Falls back to featured products if needed
+  Future<List<Product>> getRecommendations(List<CartItem> cartItems) async {
+    try {
+      if (cartItems.isEmpty) {
+        return [];
       }
 
-      // Get recommended products from cart categories (excluding products already in cart)
-      final List<Product> recommendations = [];
-      final Set<int> recommendedProductIds = <int>{};
-      final Set<int> cartProductIds = cartItems.map((item) => item.productId).toSet();
+      // Extract data from cart items for recommendation
+      final productIds = cartItems.map((item) => item.productId).toList();
+      final productNames = cartItems.map((item) => item.productName).toList();
+      final categoryIds = cartItems.map((item) => item.productCategoryId).where((id) => id != null).cast<int>().toList();
 
-      // Add products from cart categories
-      for (int categoryId in cartCategoryIds) {
-        try {
-          final categoryProducts = await _productProvider.getByCategory(categoryId);
-          if (categoryProducts?.items != null) {
-            for (Product product in categoryProducts!.items!) {
-              // Skip if product is already in cart or already recommended
-              if (!cartProductIds.contains(product.id) && 
-                  !recommendedProductIds.contains(product.id)) {
-                recommendations.add(product);
-                recommendedProductIds.add(product.id);
-                
-                // Limit recommendations per category
-                if (recommendations.length >= 6) break;
-              }
-            }
-          }
-        } catch (e) {
-          print('Error getting products for category $categoryId: $e');
-          continue;
-        }
-        
-        // Limit total recommendations
-        if (recommendations.length >= 8) break;
+      // Build query parameters
+      final queryParams = <String, String>{
+        'cartItemProductIds': productIds.join(','),
+        'cartItemProductNames': productNames.join(','),
+        'cartItemCategoryIds': categoryIds.join(','),
+        'maxRecommendations': '10',
+      };
+
+      // Build URL with query parameters
+      final uri = Uri.parse('$_baseUrl/ProductRecommendation/cart-based')
+          .replace(queryParameters: queryParams);
+
+      // Make HTTP request
+      final response = await _httpClient.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        final recommendations = jsonData
+            .map((json) => Product.fromJson(json))
+            .where((product) => product != null)
+            .toList();
+
+        // Filter out products that are already in the cart
+        final filteredRecommendations = recommendations
+            .where((product) => !productIds.contains(product.id))
+            .toList();
+
+        return filteredRecommendations;
+      } else {
+        print('Failed to get recommendations: ${response.statusCode} - ${response.body}');
+        return [];
       }
-
-      // If we don't have enough recommendations, add some featured products
-      if (recommendations.length < 4) {
-        final featuredProducts = await _getFeaturedProducts();
-        for (Product product in featuredProducts) {
-          if (!cartProductIds.contains(product.id) && 
-              !recommendedProductIds.contains(product.id)) {
-            recommendations.add(product);
-            recommendedProductIds.add(product.id);
-            
-            if (recommendations.length >= 8) break;
-          }
-        }
-      }
-
-      // Shuffle recommendations for variety
-      recommendations.shuffle();
-      
-      // Return top 8 recommendations
-      return recommendations.take(8).toList();
     } catch (e) {
       print('Error getting recommendations: $e');
-      return await _getFeaturedProducts();
+      return [];
     }
   }
 
-  /// Get featured products as fallback
-  Future<List<Product>> _getFeaturedProducts() async {
+  /// Get recommendations for a specific product (for product detail pages)
+  Future<List<Product>> getProductRecommendations(int productId, String productName, int categoryId) async {
     try {
-      final featuredProducts = await _productProvider.getCustom('featured');
-      if (featuredProducts != null && featuredProducts is List) {
-        final List<Product> products = [];
-        for (var productData in featuredProducts) {
-          try {
-            final product = _productProvider.fromJson(productData);
-            products.add(product);
-            if (products.length >= 6) break;
-          } catch (e) {
-            print('Error parsing featured product: $e');
-            continue;
-          }
-        }
-        return products;
+      final queryParams = <String, String>{
+        'cartItemProductIds': productId.toString(),
+        'cartItemProductNames': productName,
+        'cartItemCategoryIds': categoryId.toString(),
+        'maxRecommendations': '6',
+      };
+
+      final uri = Uri.parse('$_baseUrl/ProductRecommendation/cart-based')
+          .replace(queryParameters: queryParams);
+
+      final response = await _httpClient.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        return jsonData
+            .map((json) => Product.fromJson(json))
+            .where((product) => product != null && product.id != productId)
+            .toList();
+      } else {
+        print('Failed to get product recommendations: ${response.statusCode}');
+        return [];
       }
     } catch (e) {
-      print('Error fetching featured products: $e');
+      print('Error getting product recommendations: $e');
+      return [];
     }
-    return [];
   }
 
-  /// Check if a product is already in the cart
-  bool _isProductInCart(int productId, List<CartItem> cartItems) {
-    return cartItems.any((item) => item.productId == productId);
+  /// Dispose the HTTP client
+  void dispose() {
+    _httpClient.close();
   }
 }

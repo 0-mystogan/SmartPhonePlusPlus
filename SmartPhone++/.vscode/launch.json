@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "smartphone_desktop_admin",
+            "cwd": "UI\\smartphone_desktop_admin",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "smartphone_desktop_admin (profile mode)",
+            "cwd": "UI\\smartphone_desktop_admin",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "smartphone_desktop_admin (release mode)",
+            "cwd": "UI\\smartphone_desktop_admin",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "smartphone_mobile_client",
+            "cwd": "UI\\smartphone_mobile_client",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "smartphone_mobile_client (profile mode)",
+            "cwd": "UI\\smartphone_mobile_client",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "smartphone_mobile_client (release mode)",
+            "cwd": "UI\\smartphone_mobile_client",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

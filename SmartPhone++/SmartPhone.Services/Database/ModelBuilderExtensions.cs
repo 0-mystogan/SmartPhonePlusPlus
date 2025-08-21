@@ -128,7 +128,9 @@ namespace SmartPhone.Services.Database
                 new Category { Id = 3, Name = "Laptops", Description = "Laptops and notebooks", IsActive = true, CreatedAt = fixedDate },
                 new Category { Id = 4, Name = "Accessories", Description = "Phone and device accessories", IsActive = true, CreatedAt = fixedDate },
                 new Category { Id = 5, Name = "Phone Cases", Description = "Protective cases for phones", ParentCategoryId = 4, IsActive = true, CreatedAt = fixedDate },
-                new Category { Id = 6, Name = "Chargers", Description = "Charging cables and adapters", ParentCategoryId = 4, IsActive = true, CreatedAt = fixedDate }
+                new Category { Id = 6, Name = "Chargers", Description = "Charging cables and adapters", ParentCategoryId = 4, IsActive = true, CreatedAt = fixedDate },
+                new Category { Id = 7, Name = "Audio", Description = "Headphones, earbuds, and audio accessories", ParentCategoryId = 4, IsActive = true, CreatedAt = fixedDate },
+                new Category { Id = 8, Name = "Screen Protectors", Description = "Tempered glass and film protectors", ParentCategoryId = 4, IsActive = true, CreatedAt = fixedDate }
             );
 
             // Seed eCommerce Products
@@ -183,6 +185,119 @@ namespace SmartPhone.Services.Database
                     IsActive = true, 
                     IsFeatured = false, 
                     CreatedAt = fixedDate 
+                },
+                // Accessories and complementary products for testing recommendations
+                new Product 
+                { 
+                    Id = 4, 
+                    Name = "iPhone 15 Pro Case", 
+                    Description = "Premium protective case for iPhone 15 Pro", 
+                    Price = 49.99m,
+                    StockQuantity = 100, 
+                    SKU = "IPH15PRO-CASE", 
+                    Brand = "Apple", 
+                    Model = "iPhone 15 Pro", 
+                    Color = "Clear", 
+                    CategoryId = 5, 
+                    IsActive = true, 
+                    IsFeatured = true, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 5, 
+                    Name = "Samsung S24 Ultra Case", 
+                    Description = "Protective case for Samsung Galaxy S24 Ultra", 
+                    Price = 39.99m,
+                    StockQuantity = 80, 
+                    SKU = "SAMS24ULT-CASE", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy S24 Ultra", 
+                    Color = "Black", 
+                    CategoryId = 5, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 6, 
+                    Name = "Samsung S24 Ultra Glass Protector", 
+                    Description = "Tempered glass screen protector for S24 Ultra", 
+                    Price = 19.99m,
+                    StockQuantity = 150, 
+                    SKU = "SAMS24ULT-GLASS", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy S24 Ultra", 
+                    Color = "Clear", 
+                    CategoryId = 8, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 7, 
+                    Name = "Fast Charger 25W", 
+                    Description = "25W fast charger compatible with Samsung devices", 
+                    Price = 29.99m,
+                    StockQuantity = 75, 
+                    SKU = "CHARGER-25W", 
+                    Brand = "Samsung", 
+                    Model = "Fast Charger", 
+                    Color = "White", 
+                    CategoryId = 6, 
+                    IsActive = true, 
+                    IsFeatured = true, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 8, 
+                    Name = "Samsung Galaxy Buds2 Pro", 
+                    Description = "Premium wireless earbuds with active noise cancellation", 
+                    Price = 199.99m,
+                    StockQuantity = 40, 
+                    SKU = "BUDS2PRO", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy Buds2 Pro", 
+                    Color = "Graphite", 
+                    CategoryId = 7, 
+                    IsActive = true, 
+                    IsFeatured = true, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 9, 
+                    Name = "iPhone 15 Pro Glass Protector", 
+                    Description = "Tempered glass screen protector for iPhone 15 Pro", 
+                    Price = 24.99m,
+                    StockQuantity = 120, 
+                    SKU = "IPH15PRO-GLASS", 
+                    Brand = "Apple", 
+                    Model = "iPhone 15 Pro", 
+                    Color = "Clear", 
+                    CategoryId = 8, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 10, 
+                    Name = "Wireless Charging Pad", 
+                    Description = "15W wireless charging pad for all Qi-compatible devices", 
+                    Price = 34.99m,
+                    StockQuantity = 60, 
+                    SKU = "WIRELESS-CHARGER", 
+                    Brand = "Generic", 
+                    Model = "Wireless Charger", 
+                    Color = "Black", 
+                    CategoryId = 6, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
                 }
             );
 
@@ -232,6 +347,91 @@ namespace SmartPhone.Services.Database
                     FileName = "ipad-air.jpg",
                     ContentType = "image/jpeg",
                     AltText = "iPad Air 5th Generation",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                // Product images for accessories and complementary products
+                new ProductImage 
+                { 
+                    Id = 5, 
+                    ProductId = 4, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "iphone15pro-case.jpg") ?? new byte[0],
+                    FileName = "iphone15pro-case.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "iPhone 15 Pro Case",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 6, 
+                    ProductId = 5, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-s24-ultra-case.jpg") ?? new byte[0],
+                    FileName = "samsung-s24-ultra-case.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung S24 Ultra Case",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 7, 
+                    ProductId = 6, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-s24-ultra-glass.jpg") ?? new byte[0],
+                    FileName = "samsung-s24-ultra-glass.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung S24 Ultra Glass Protector",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 8, 
+                    ProductId = 7, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "fast-charger.jpg") ?? new byte[0],
+                    FileName = "fast-charger.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Fast Charger 25W",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 9, 
+                    ProductId = 8, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-buds2pro.jpg") ?? new byte[0],
+                    FileName = "samsung-buds2pro.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy Buds2 Pro",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 10, 
+                    ProductId = 9, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "iphone15pro-glass.jpg") ?? new byte[0],
+                    FileName = "iphone15pro-glass.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "iPhone 15 Pro Glass Protector",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 11, 
+                    ProductId = 10, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "wireless-charger.jpg") ?? new byte[0],
+                    FileName = "wireless-charger.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Wireless Charging Pad",
                     IsPrimary = true,
                     DisplayOrder = 1,
                     CreatedAt = fixedDate 

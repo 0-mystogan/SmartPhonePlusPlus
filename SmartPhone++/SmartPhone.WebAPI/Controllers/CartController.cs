@@ -26,6 +26,38 @@ namespace SmartPhone.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Add item to cart
+        /// </summary>
+        [HttpPost("add")]
+        public async Task<ActionResult<CartResponse>> AddItemToCart([FromBody] CartItemOperationRequest request)
+        {
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                if (currentUserId == null)
+                    return Unauthorized("User ID not found in authentication token");
+
+                _logger.LogInformation("AddItemToCart called with ProductId: {ProductId}, Quantity: {Quantity} for user {UserId}", 
+                    request.ProductId, request.Quantity, currentUserId.Value);
+
+                var cart = await _cartService.AddItemToCartAsync(currentUserId.Value, request.ProductId, request.Quantity);
+                _logger.LogInformation("Successfully added item to cart for user {UserId}", currentUserId.Value);
+                
+                return Ok(cart);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request in AddItemToCart for user, product {ProductId}", request.ProductId);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in AddItemToCart for user, product {ProductId}", request.ProductId);
+                return StatusCode(500, "Internal server error occurred while adding item to cart");
+            }
+        }
+
+        /// <summary>
         /// Update item quantity in cart
         /// </summary>
         [HttpPut("update")]

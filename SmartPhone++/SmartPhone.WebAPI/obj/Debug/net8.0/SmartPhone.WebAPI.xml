@@ -4,21 +4,6 @@
         <name>SmartPhone.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:SmartPhone.WebAPI.Controllers.CartController.DebugCart(System.Int32)">
-            <summary>
-            Test endpoint to debug cart data
-            </summary>
-        </member>
-        <member name="M:SmartPhone.WebAPI.Controllers.CartController.DebugAllCarts">
-            <summary>
-            Debug endpoint to check all carts in database
-            </summary>
-        </member>
-        <member name="M:SmartPhone.WebAPI.Controllers.CartController.GetMyCart">
-            <summary>
-            Get the current user's cart
-            </summary>
-        </member>
         <member name="M:SmartPhone.WebAPI.Controllers.CartController.AddItemToCart(SmartPhone.Model.Requests.CartItemOperationRequest)">
             <summary>
             Add item to cart
@@ -38,6 +23,24 @@
             <summary>
             Clear current user's cart
             </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.ProductRecommendationController.GetUserRecommendations(System.Int32,System.Int32)">
+            <summary>
+            Get product recommendations for the current user based on their cart
+            </summary>
+            <param name="userId">ID of the current logged-in user</param>
+            <param name="maxRecommendations">Maximum number of recommendations (default: 10)</param>
+            <returns>List of recommended products</returns>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.ProductRecommendationController.GetCartBasedRecommendations(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Get product recommendations based on provided cart data (for external calls)
+            </summary>
+            <param name="cartItemProductIds">Comma-separated list of product IDs in cart</param>
+            <param name="cartItemProductNames">Comma-separated list of product names in cart</param>
+            <param name="cartItemCategoryIds">Comma-separated list of category IDs in cart</param>
+            <param name="maxRecommendations">Maximum number of recommendations (default: 10)</param>
+            <returns>List of recommended products</returns>
         </member>
         <member name="T:SmartPhone.WebAPI.Mapping.MappingConfig">
             <summary>

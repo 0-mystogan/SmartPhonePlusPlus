@@ -21,11 +21,14 @@ import 'package:smartphone_mobile_client/utils/text_field_decoration.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await dotenv.load(fileName: ".env");
-  // stripe.Stripe.publishableKey = dotenv.env["STRIPE_PUBLISHABLE_KEY"] ?? "";
-  // stripe.Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
-  // stripe.Stripe.urlScheme = 'flutterstripe';
-  // await stripe.Stripe.instance.applySettings();
+
+  await dotenv.load(fileName: ".env");
+
+  stripe.Stripe.publishableKey = dotenv.env["STRIPE_PUBLISHABLE_KEY"] ?? "";
+  stripe.Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  stripe.Stripe.urlScheme = 'flutterstripe';
+  await stripe.Stripe.instance.applySettings();
+
 
   HttpOverrides.global = MyHttpOverrides();
         runApp(

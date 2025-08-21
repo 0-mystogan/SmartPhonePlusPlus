@@ -32,8 +32,8 @@ class CartManagerProvider with ChangeNotifier {
       setLoading(true);
       clearError();
       
-      // Try to get existing cart using the my-cart endpoint
-      _currentCart = await _cartProvider.getMyCart();
+      // Try to get existing cart using the user ID
+      _currentCart = await _cartProvider.getMyCart(userId);
       
       if (_currentCart == null) {
         print('No existing cart found for user $userId');

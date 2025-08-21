@@ -36,6 +36,7 @@ builder.Services.AddTransient<IServicePartService, ServicePartService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<IProductRecommendationService, ProductRecommendationService>();
 //builder.Services.AddTransient<IChatService, ChatService>();
 
 // State Machine
@@ -116,6 +117,16 @@ using (var scope = app.Services.CreateScope())
     {
         dataContext.Database.Migrate();
     }
+    
+    // Train the product recommendation model after startup
+    _ = Task.Run(async () =>
+    {
+        await Task.Delay(2000);
+        using var trainingScope = app.Services.CreateScope();
+        var recommendationService = trainingScope.ServiceProvider.GetRequiredService<IProductRecommendationService>();
+        // The recommendation service will be initialized and ready for use
+        Console.WriteLine("Product recommendation service initialized successfully");
+    });
 }
 
 app.Run();
