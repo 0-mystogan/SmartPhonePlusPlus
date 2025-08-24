@@ -6,7 +6,7 @@ namespace SmartPhone.Services.Database
 {
     public static class ModelBuilderExtensions
     {
-        private const string DefaultPhoneNumber = "+387 62 667 961";
+        private const string DefaultPhoneNumber = "+387 64 40 65 969";
         
         private const string TestMailSender = "smartphoneplusplus.sender@gmail.com";
         private const string TestMailReceiver = "panzermystogan@gmail.com";
@@ -33,7 +33,15 @@ namespace SmartPhone.Services.Database
                     Description = "Standard user role", 
                     CreatedAt = fixedDate, 
                     IsActive = true 
-                }
+                },
+                 new Role
+                 {
+                    Id = 3,
+                    Name = "Technician",
+                    Description = "Technician role for services and parts",
+                    CreatedAt = fixedDate,
+                    IsActive = true
+                 }
             );
 
             // Seed Users
@@ -45,7 +53,7 @@ namespace SmartPhone.Services.Database
                     LastName = "Mušić", 
                     Email = TestMailReceiver, 
                     Username = "admin", 
-                    PasswordHash = "3KbrBi5n9zdQnceWWOK5zaeAwfEjsluyhRQUbNkcgLQ=", 
+                    PasswordHash = "3KbrBi5n9zdQnceWWOK5zaeAwfEjsluyhRQUbNkcgLQ=", //test
                     PasswordSalt = "6raKZCuEsvnBBxPKHGpRtA==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
@@ -60,9 +68,9 @@ namespace SmartPhone.Services.Database
                     FirstName = "Amel", 
                     LastName = "Musić",
                     Email = "example1@gmail.com",
-                    Username = "user", 
-                    PasswordHash = "kDPVcZaikiII7vXJbMEw6B0xZ245I29ocaxBjLaoAC0=", 
-                    PasswordSalt = "O5R9WmM6IPCCMci/BCG/eg==", 
+                    Username = "ameltech", 
+                    PasswordHash = "n9yGhSv6sNNKNNMG3uAVpN0YWDZGeVRz2Te3MsESj0I=", //ameltech123
+                    PasswordSalt = "E2d9m5yJ2+VWXK1FF4NTOw==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
                     PhoneNumber = DefaultPhoneNumber,
@@ -85,7 +93,7 @@ namespace SmartPhone.Services.Database
                 { 
                     Id = 2, 
                     UserId = 2, 
-                    RoleId = 2, 
+                    RoleId = 3, 
                     DateAssigned = fixedDate // Driver One with Driver role
                 }
             );
@@ -182,6 +190,58 @@ namespace SmartPhone.Services.Database
                     Model = "iPad Air", 
                     Color = "Space Gray", 
                     CategoryId = 2, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
+                },
+                // Samsung Galaxy A Series Products
+                new Product 
+                { 
+                    Id = 11, 
+                    Name = "Samsung Galaxy A36", 
+                    Description = "Affordable smartphone with great performance", 
+                    Price = 199.99m,
+                    DiscountedPrice = 179.99m,
+                    StockQuantity = 40, 
+                    SKU = "SAMSUNG-A36-64", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A36", 
+                    Color = "Black", 
+                    CategoryId = 1, 
+                    IsActive = true, 
+                    IsFeatured = true, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 12, 
+                    Name = "Samsung Galaxy S25", 
+                    Description = "Mid-range smartphone with excellent camera", 
+                    Price = 299.99m,
+                    DiscountedPrice = 269.99m,
+                    StockQuantity = 35, 
+                    SKU = "SAMSUNG-S25-128", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy S25", 
+                    Color = "Blue", 
+                    CategoryId = 1, 
+                    IsActive = true, 
+                    IsFeatured = true, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 13, 
+                    Name = "Samsung Galaxy A56", 
+                    Description = "Budget-friendly smartphone with reliable performance", 
+                    Price = 249.99m,
+                    DiscountedPrice = 229.99m,
+                    StockQuantity = 45, 
+                    SKU = "SAMSUNG-A56-128", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A56", 
+                    Color = "Gray", 
+                    CategoryId = 1, 
                     IsActive = true, 
                     IsFeatured = false, 
                     CreatedAt = fixedDate 
@@ -298,6 +358,55 @@ namespace SmartPhone.Services.Database
                     IsActive = true, 
                     IsFeatured = false, 
                     CreatedAt = fixedDate 
+                },
+                // Samsung Galaxy A Series Accessories
+                new Product 
+                { 
+                    Id = 14, 
+                    Name = "Samsung Galaxy A56 MagSafe Case", 
+                    Description = "Premium MagSafe compatible case for Galaxy A56", 
+                    Price = 29.99m,
+                    StockQuantity = 60, 
+                    SKU = "SAMSUNG-A56-MAGSAFE", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A56", 
+                    Color = "Black", 
+                    CategoryId = 5, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 15, 
+                    Name = "Samsung Galaxy A56 Glass Protector", 
+                    Description = "9D tempered glass screen protector for Galaxy A56", 
+                    Price = 14.99m,
+                    StockQuantity = 80, 
+                    SKU = "SAMSUNG-A56-GLASS", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A56", 
+                    Color = "Clear", 
+                    CategoryId = 8, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
+                },
+                new Product 
+                { 
+                    Id = 16, 
+                    Name = "Samsung Galaxy A56 Black Case", 
+                    Description = "Slim protective case for Galaxy A56", 
+                    Price = 19.99m,
+                    StockQuantity = 70, 
+                    SKU = "SAMSUNG-A56-CASE-BLACK", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A56", 
+                    Color = "Black", 
+                    CategoryId = 5, 
+                    IsActive = true, 
+                    IsFeatured = false, 
+                    CreatedAt = fixedDate 
                 }
             );
 
@@ -351,6 +460,115 @@ namespace SmartPhone.Services.Database
                     DisplayOrder = 1,
                     CreatedAt = fixedDate 
                 },
+                // Samsung Galaxy A Series Product Images
+                new ProductImage 
+                { 
+                    Id = 17, 
+                    ProductId = 11, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "a36.jpg") ?? new byte[0],
+                    FileName = "a36.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A36",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 18, 
+                    ProductId = 11, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "a36-2.jpg") ?? new byte[0],
+                    FileName = "a36-2.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A36 - Side View",
+                    IsPrimary = false,
+                    DisplayOrder = 2,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 19, 
+                    ProductId = 11, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "a36-3.jpg") ?? new byte[0],
+                    FileName = "a36-3.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A36 - Back View",
+                    IsPrimary = false,
+                    DisplayOrder = 3,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 20, 
+                    ProductId = 12, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "s25.jpg") ?? new byte[0],
+                    FileName = "s25.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy S25",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 21, 
+                    ProductId = 12, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "s25-2.jpg") ?? new byte[0],
+                    FileName = "s25-2.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy S25 - Side View",
+                    IsPrimary = false,
+                    DisplayOrder = 2,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 22, 
+                    ProductId = 12, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "s25-3.jpg") ?? new byte[0],
+                    FileName = "s25-3.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy S25 - Back View",
+                    IsPrimary = false,
+                    DisplayOrder = 3,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 23, 
+                    ProductId = 13, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "a56.jpg") ?? new byte[0],
+                    FileName = "a56.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A56",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 24, 
+                    ProductId = 13, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "a56-2.jpg") ?? new byte[0],
+                    FileName = "a56-2.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A56 - Side View",
+                    IsPrimary = false,
+                    DisplayOrder = 2,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 25, 
+                    ProductId = 13, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "a56-3.jpg") ?? new byte[0],
+                    FileName = "a56-3.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A56 - Back View",
+                    IsPrimary = false,
+                    DisplayOrder = 3,
+                    CreatedAt = fixedDate 
+                },
                 // Product images for accessories and complementary products
                 new ProductImage 
                 { 
@@ -368,8 +586,8 @@ namespace SmartPhone.Services.Database
                 { 
                     Id = 6, 
                     ProductId = 5, 
-                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-s24-ultra-case.jpg") ?? new byte[0],
-                    FileName = "samsung-s24-ultra-case.jpg",
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "caseblack24ultra.jpg") ?? new byte[0],
+                    FileName = "caseblack24ultra.jpg",
                     ContentType = "image/jpeg",
                     AltText = "Samsung S24 Ultra Case",
                     IsPrimary = true,
@@ -380,8 +598,8 @@ namespace SmartPhone.Services.Database
                 { 
                     Id = 7, 
                     ProductId = 6, 
-                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-s24-ultra-glass.jpg") ?? new byte[0],
-                    FileName = "samsung-s24-ultra-glass.jpg",
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "glassS24ultra.jpg") ?? new byte[0],
+                    FileName = "glassS24ultra.jpg", 
                     ContentType = "image/jpeg",
                     AltText = "Samsung S24 Ultra Glass Protector",
                     IsPrimary = true,
@@ -392,8 +610,8 @@ namespace SmartPhone.Services.Database
                 { 
                     Id = 8, 
                     ProductId = 7, 
-                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "fast-charger.jpg") ?? new byte[0],
-                    FileName = "fast-charger.jpg",
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "samsung-charger-type c.jpg") ?? new byte[0],
+                    FileName = "samsung-charger-type c.jpg",
                     ContentType = "image/jpeg",
                     AltText = "Fast Charger 25W",
                     IsPrimary = true,
@@ -428,10 +646,47 @@ namespace SmartPhone.Services.Database
                 { 
                     Id = 11, 
                     ProductId = 10, 
-                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "wireless-charger.jpg") ?? new byte[0],
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "wirelesscharger1.jpg") ?? new byte[0],
                     FileName = "wireless-charger.jpg",
                     ContentType = "image/jpeg",
                     AltText = "Wireless Charging Pad",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                // Samsung Galaxy A Series Accessory Images
+                new ProductImage 
+                { 
+                    Id = 26, 
+                    ProductId = 14, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "magsafecaseA56.jpg") ?? new byte[0],
+                    FileName = "magsafecaseA56.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A56 MagSafe Case",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 27, 
+                    ProductId = 15, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "Glass9Da56.jpg") ?? new byte[0],
+                    FileName = "Glass9Da56.jpg",
+                    ContentType = "image/jpeg",
+                    AltText = "Samsung Galaxy A56 Glass Protector",
+                    IsPrimary = true,
+                    DisplayOrder = 1,
+                    CreatedAt = fixedDate 
+                },
+                new ProductImage 
+                { 
+                    Id = 28, 
+                    ProductId = 16, 
+                    ImageData = ImageConversion.ConvertImageToByteArray("Assets", "caseblackA56.jpg") ?? new byte[0],
+                    FileName = "caseblackA56.jpg",
+                    ContentType = "image/webp",
+                    AltText = "Samsung Galaxy A56 Black Case",
                     IsPrimary = true,
                     DisplayOrder = 1,
                     CreatedAt = fixedDate 
@@ -457,11 +712,18 @@ namespace SmartPhone.Services.Database
             // Seed Phone Models
             modelBuilder.Entity<PhoneModel>().HasData(
                 new PhoneModel { Id = 1, Brand = "Apple", Model = "iPhone 15 Pro", Series = "Pro", Year = "2024", Storage = "128GB", RAM = "8GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
-                new PhoneModel { Id = 2, Brand = "Apple", Model = "iPhone 15 Pro", Series = "Pro", Year = "2024", Storage = "256GB", RAM = "8GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                new PhoneModel { Id = 2, Brand = "Apple", Model = "iPhone 14 Pro", Series = "Pro", Year = "2023", Storage = "256GB", RAM = "8GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
                 new PhoneModel { Id = 3, Brand = "Samsung", Model = "Galaxy S24 Ultra", Series = "Ultra", Year = "2024", Storage = "256GB", RAM = "12GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
-                new PhoneModel { Id = 4, Brand = "Samsung", Model = "Galaxy S24 Ultra", Series = "Ultra", Year = "2024", Storage = "512GB", RAM = "12GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
-                new PhoneModel { Id = 5, Brand = "Apple", Model = "iPhone 14 Pro", Series = "Pro", Year = "2023", Storage = "128GB", RAM = "6GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
-                new PhoneModel { Id = 6, Brand = "Samsung", Model = "Galaxy S23 Ultra", Series = "Ultra", Year = "2023", Storage = "256GB", RAM = "12GB", Network = "5G", IsActive = true, CreatedAt = fixedDate }
+                new PhoneModel { Id = 4, Brand = "Samsung", Model = "Galaxy S23 Ultra", Series = "Ultra", Year = "2023", Storage = "256GB", RAM = "12GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                // Xiaomi Note Series
+                new PhoneModel { Id = 5, Brand = "Xiaomi", Model = "Redmi Note 11 Pro", Series = "Note", Year = "2023", Storage = "128GB", RAM = "8GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                new PhoneModel { Id = 6, Brand = "Xiaomi", Model = "Redmi Note 12 Pro", Series = "Note", Year = "2023", Storage = "128GB", RAM = "8GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                new PhoneModel { Id = 7, Brand = "Xiaomi", Model = "Redmi Note 10 Pro", Series = "Note", Year = "2022", Storage = "128GB", RAM = "8GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                // Samsung Galaxy A Series
+                new PhoneModel { Id = 8, Brand = "Samsung", Model = "Galaxy A36", Series = "A", Year = "2023", Storage = "128GB", RAM = "6GB", Network = "4G", IsActive = true, CreatedAt = fixedDate },
+                new PhoneModel { Id = 9, Brand = "Samsung", Model = "Galaxy A56", Series = "A", Year = "2024", Storage = "128GB", RAM = "6GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                new PhoneModel { Id = 10, Brand = "Samsung", Model = "Galaxy A25", Series = "A", Year = "2024", Storage = "128GB", RAM = "6GB", Network = "5G", IsActive = true, CreatedAt = fixedDate },
+                new PhoneModel { Id = 11, Brand = "Samsung", Model = "Galaxy A15", Series = "A", Year = "2024", Storage = "128GB", RAM = "6GB", Network = "5G", IsActive = true, CreatedAt = fixedDate }
             );
 
             // Seed Parts
@@ -565,21 +827,104 @@ namespace SmartPhone.Services.Database
                     IsOEM = true, 
                     PartCategoryId = 4, 
                     CreatedAt = fixedDate 
+                },
+                // Xiaomi Redmi Note Series Parts
+                new Part 
+                { 
+                    Id = 6, 
+                    Name = "Xiaomi Redmi Note 11 Pro Battery", 
+                    Description = "High-capacity battery for Redmi Note 11 Pro", 
+                    Price = 69.99m, 
+                    CostPrice = 35.00m, 
+                    StockQuantity = 30, 
+                    MinimumStockLevel = 8, 
+                    SKU = "XIAOMI-NOTE11PRO-BAT", 
+                    PartNumber = "RN11PRO-BAT", 
+                    Brand = "Xiaomi", 
+                    Model = "Redmi Note 11 Pro", 
+                    Condition = "OEM", 
+                    Grade = "A", 
+                    IsActive = true, 
+                    IsOEM = true, 
+                    PartCategoryId = 2, 
+                    CreatedAt = fixedDate 
+                },
+                new Part 
+                { 
+                    Id = 7, 
+                    Name = "Xiaomi Redmi Note 12 Pro Screen Assembly", 
+                    Description = "Complete screen assembly for Redmi Note 12 Pro", 
+                    Price = 149.99m, 
+                    CostPrice = 90.00m, 
+                    StockQuantity = 20, 
+                    MinimumStockLevel = 5, 
+                    SKU = "XIAOMI-NOTE12PRO-SCR", 
+                    PartNumber = "RN12PRO-SCR", 
+                    Brand = "Xiaomi", 
+                    Model = "Redmi Note 12 Pro", 
+                    Condition = "OEM", 
+                    Grade = "A", 
+                    IsActive = true, 
+                    IsOEM = true, 
+                    PartCategoryId = 10, 
+                    CreatedAt = fixedDate 
+                },
+                // Samsung Galaxy A Series Parts
+                new Part 
+                { 
+                    Id = 8, 
+                    Name = "Samsung Galaxy A36 LCD Screen", 
+                    Description = "Original LCD screen for Galaxy A36", 
+                    Price = 89.99m, 
+                    CostPrice = 55.00m, 
+                    StockQuantity = 35, 
+                    MinimumStockLevel = 10, 
+                    SKU = "SAMSUNG-A36-LCD", 
+                    PartNumber = "SM-A365-LCD", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A36", 
+                    Condition = "OEM", 
+                    Grade = "A", 
+                    IsActive = true, 
+                    IsOEM = true, 
+                    PartCategoryId = 8, 
+                    CreatedAt = fixedDate 
+                },
+                new Part 
+                { 
+                    Id = 9, 
+                    Name = "Samsung Galaxy A56 Charging Port", 
+                    Description = "USB-C charging port for Galaxy A56", 
+                    Price = 39.99m, 
+                    CostPrice = 20.00m, 
+                    StockQuantity = 40, 
+                    MinimumStockLevel = 12, 
+                    SKU = "SAMSUNG-A56-USB", 
+                    PartNumber = "SM-A565-USB", 
+                    Brand = "Samsung", 
+                    Model = "Galaxy A56", 
+                    Condition = "OEM", 
+                    Grade = "A", 
+                    IsActive = true, 
+                    IsOEM = true, 
+                    PartCategoryId = 3, 
+                    CreatedAt = fixedDate 
                 }
             );
 
             // Seed Part Compatibilities
             modelBuilder.Entity<PartCompatibility>().HasData(
                 new PartCompatibility { Id = 1, PartId = 1, PhoneModelId = 1, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 2, PartId = 1, PhoneModelId = 2, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 3, PartId = 2, PhoneModelId = 1, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 4, PartId = 2, PhoneModelId = 2, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 5, PartId = 3, PhoneModelId = 3, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 6, PartId = 3, PhoneModelId = 4, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 7, PartId = 4, PhoneModelId = 1, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 8, PartId = 4, PhoneModelId = 2, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 9, PartId = 5, PhoneModelId = 3, IsVerified = true, CreatedAt = fixedDate },
-                new PartCompatibility { Id = 10, PartId = 5, PhoneModelId = 4, IsVerified = true, CreatedAt = fixedDate }
+                new PartCompatibility { Id = 2, PartId = 2, PhoneModelId = 1, IsVerified = true, CreatedAt = fixedDate },
+                new PartCompatibility { Id = 3, PartId = 3, PhoneModelId = 3, IsVerified = true, CreatedAt = fixedDate },
+                new PartCompatibility { Id = 4, PartId = 4, PhoneModelId = 1, IsVerified = true, CreatedAt = fixedDate },
+                new PartCompatibility { Id = 5, PartId = 5, PhoneModelId = 3, IsVerified = true, CreatedAt = fixedDate },
+                // Xiaomi Redmi Note Series Part Compatibilities
+                new PartCompatibility { Id = 6, PartId = 6, PhoneModelId = 5, IsVerified = true, CreatedAt = fixedDate },
+                new PartCompatibility { Id = 7, PartId = 7, PhoneModelId = 6, IsVerified = true, CreatedAt = fixedDate },
+                // Samsung Galaxy A Series Part Compatibilities
+                new PartCompatibility { Id = 8, PartId = 8, PhoneModelId = 8, IsVerified = true, CreatedAt = fixedDate },
+                new PartCompatibility { Id = 9, PartId = 9, PhoneModelId = 9, IsVerified = true, CreatedAt = fixedDate }
             );
 
             // Seed Services
@@ -593,7 +938,7 @@ namespace SmartPhone.Services.Database
                     EstimatedDuration = 2.0m, 
                     Status = "Pending", 
                     UserId = 1, 
-                    PhoneModelId = 6, 
+                    PhoneModelId = 4, 
                     CreatedAt = fixedDate 
                 },
                 new Service 
@@ -611,12 +956,13 @@ namespace SmartPhone.Services.Database
                 new Service 
                 { 
                     Id = 3, 
-                    Name = "Xiaomi 13 Pro Plus - Slow", 
-                    Description = "Performance optimization and battery replacement", 
+                    Name = "Xiaomi Redmi Note 11 Pro - Battery Replacement", 
+                    Description = "Battery replacement for Redmi Note 11 Pro", 
                     ServiceFee = 120.00m, 
                     EstimatedDuration = 1.5m, 
                     Status = "Pending", 
                     UserId = 1, 
+                    PhoneModelId = 5, 
                     CreatedAt = fixedDate 
                 }
             );

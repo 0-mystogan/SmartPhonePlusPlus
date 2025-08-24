@@ -39,25 +39,35 @@ class AuthProvider extends BaseProvider<User> {
     notifyListeners();
 
     try {
+      print('AuthProvider: Starting authentication for username: $username');
+      
+      // Set credentials first (like the working desktop version)
       AuthProvider.username = username;
       AuthProvider.password = password;
 
       // Initialize base URL first
+      print('AuthProvider: Initializing base URL...');
       await initBaseUrl();
+      print('AuthProvider: Base URL initialized successfully');
       
-      // Use the custom endpoint to get current user info
+      // Now call the /me endpoint with the credentials set (like desktop version)
+      print('AuthProvider: Making request to /api/Users/me');
       final response = await getCustom('me');
+      
+      print('AuthProvider: /me response received: $response');
       
       if (response != null) {
         _currentUser = User.fromJson(response);
         _isAuthenticated = true;
         _isLoading = false;
+        print('AuthProvider: Authentication successful for user: ${_currentUser?.username}');
         notifyListeners();
         return true;
       } else {
         _error = 'Authentication failed: No user data received';
         _isAuthenticated = false;
         _isLoading = false;
+        print('AuthProvider: Authentication failed - no user data received');
         notifyListeners();
         return false;
       }
@@ -65,6 +75,7 @@ class AuthProvider extends BaseProvider<User> {
       _error = 'Authentication error: $e';
       _isAuthenticated = false;
       _isLoading = false;
+      print('AuthProvider: Authentication error: $e');
       notifyListeners();
       return false;
     }

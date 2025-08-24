@@ -7417,23 +7417,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Yasir\\.nuget\\packages\\": {},
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
       "projectName": "SmartPhone.WebAPI",
-      "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
-      "packagesPath": "C:\\Users\\Yasir\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\obj\\",
+      "projectPath": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Yasir\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7449,11 +7449,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj": {
-              "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj"
+            "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Model\\SmartPhone.Model.csproj"
             },
-            "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj": {
-              "projectPath": "C:\\Users\\Yasir\\Desktop\\rs2\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj"
+            "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone++\\SmartPhone.Services\\SmartPhone.Services.csproj"
             }
           }
         }
@@ -7512,7 +7512,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

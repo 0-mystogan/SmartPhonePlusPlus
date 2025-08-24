@@ -51,8 +51,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
     _maxPrice = 1000.0;
     _priceRange = RangeValues(_minPrice, _maxPrice);
     
+    print('ProductsScreen initialized with price range: $_minPrice - $_maxPrice');
+    
     _loadProducts();
     _loadCategories();
+    
+    // Ensure filters are applied after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _applyFilters();
+        _validateFilterState();
+      }
+    });
   }
 
   @override
@@ -78,44 +88,49 @@ class _ProductsScreenState extends State<ProductsScreen> {
       // Get all products
       final allProducts = await productProvider.get();
       
-             setState(() {
-         _allProducts = allProducts.items ?? [];
-         _filteredProducts = _allProducts;
-         _isLoading = false;
-       });
-       
-       // Calculate price range from actual products
-       if (_allProducts.isNotEmpty) {
-         final prices = _allProducts
-             .where((p) => p.currentPrice != null)
-             .map((p) => p.currentPrice!)
-             .toList();
-         if (prices.isNotEmpty) {
-           _minPrice = prices.reduce((a, b) => a < b ? a : b);
-           _maxPrice = prices.reduce((a, b) => a > b ? a : b);
-           // Ensure min and max are different to avoid RangeSlider error
-           if (_minPrice == _maxPrice) {
-             _maxPrice = _minPrice + 100.0; // Add some range if min == max
-           }
-           // Ensure the current price range is within the new bounds
-           _priceRange = RangeValues(
-             _priceRange.start.clamp(_minPrice, _maxPrice),
-             _priceRange.end.clamp(_minPrice, _maxPrice),
-           );
-         } else {
-           // Fallback values if no products have prices
-           _minPrice = 0.0;
-           _maxPrice = 1000.0;
-           _priceRange = RangeValues(_minPrice, _maxPrice);
-         }
-       } else {
-         // Fallback values if no products
-         _minPrice = 0.0;
-         _maxPrice = 1000.0;
-         _priceRange = RangeValues(_minPrice, _maxPrice);
-       }
-       
-       _applyFilters();
+      setState(() {
+        _allProducts = allProducts.items ?? [];
+        _filteredProducts = _allProducts;
+        _isLoading = false;
+      });
+      
+      // Calculate price range from actual products
+      if (_allProducts.isNotEmpty) {
+        final prices = _allProducts
+            .where((p) => p.currentPrice != null && p.currentPrice! > 0)
+            .map((p) => p.currentPrice!)
+            .toList();
+        if (prices.isNotEmpty) {
+          _minPrice = prices.reduce((a, b) => a < b ? a : b);
+          _maxPrice = prices.reduce((a, b) => a > b ? a : b);
+          // Ensure min and max are different to avoid RangeSlider error
+          if (_minPrice == _maxPrice) {
+            _maxPrice = _minPrice + 100.0; // Add some range if min == max
+          }
+          // Ensure the current price range is within the new bounds
+          _priceRange = RangeValues(
+            _priceRange.start.clamp(_minPrice, _maxPrice),
+            _priceRange.end.clamp(_minPrice, _maxPrice),
+          );
+          print('Price range updated: $_minPrice - $_maxPrice, current: ${_priceRange.start} - ${_priceRange.end}');
+        } else {
+          // Fallback values if no products have prices
+          _minPrice = 0.0;
+          _maxPrice = 1000.0;
+          _priceRange = RangeValues(_minPrice, _maxPrice);
+          print('Using fallback price range: $_minPrice - $_maxPrice');
+        }
+      } else {
+        // Fallback values if no products
+        _minPrice = 0.0;
+        _maxPrice = 1000.0;
+        _priceRange = RangeValues(_minPrice, _maxPrice);
+        print('No products available, using fallback price range: $_minPrice - $_maxPrice');
+      }
+      
+      // Apply filters after loading products
+      _applyFilters();
+      _validateFilterState();
     } catch (e) {
       setState(() {
         _error = e.toString();
@@ -150,70 +165,117 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
-           void _applyFilters() {
-      print('Applying filters: Category: $_selectedCategoryId, Price: ${_priceRange.start.round()}-${_priceRange.end.round()}, Search: "$_searchQuery"');
+  void _applyFilters() {
+    print('Applying filters: Category: $_selectedCategoryId, Price: ${_priceRange.start.round()}-${_priceRange.end.round()}, Search: "$_searchQuery"');
+    
+    // Safety check: ensure price range is valid before filtering
+    if (_minPrice >= _maxPrice || 
+        _priceRange.start < _minPrice || 
+        _priceRange.end > _maxPrice) {
+      print('Invalid price range detected, resetting to safe values');
+      _minPrice = 0.0;
+      _maxPrice = 1000.0;
+      _priceRange = RangeValues(_minPrice, _maxPrice);
+    }
+    
+    final filtered = _allProducts.where((product) {
+      // Category filter
+      if (_selectedCategoryId != null && product.categoryId != _selectedCategoryId) {
+        return false;
+      }
       
-      // Safety check: ensure price range is valid before filtering
-      if (_minPrice >= _maxPrice || 
-          _priceRange.start < _minPrice || 
-          _priceRange.end > _maxPrice) {
-        print('Invalid price range detected, resetting to safe values');
+      // Price range filter
+      final price = product.currentPrice ?? 0;
+      if (price < _priceRange.start || price > _priceRange.end) {
+        return false;
+      }
+      
+      // Search filter
+      if (_searchQuery.isNotEmpty) {
+        final query = _searchQuery.toLowerCase();
+        final name = product.name.toLowerCase();
+        final description = product.description?.toLowerCase() ?? '';
+        final brand = product.brand?.toLowerCase() ?? '';
+        
+        if (!name.contains(query) && 
+            !description.contains(query) && 
+            !brand.contains(query)) {
+          return false;
+        }
+      }
+      
+      return true;
+    }).toList();
+    
+    print('Filtered products: ${filtered.length} out of ${_allProducts.length}');
+    
+    // Update state with filtered results and force rebuild
+    if (mounted) {
+      setState(() {
+        _filteredProducts = filtered;
+      });
+      
+      // Force a rebuild of the filters section
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {});
+          _validateFilterState();
+        }
+      });
+    }
+  }
+
+  void _forceRefresh() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  bool _hasActiveFilters() {
+    return _selectedCategoryId != null || 
+           _searchQuery.isNotEmpty || 
+           (_priceRange.start > _minPrice || _priceRange.end < _maxPrice);
+  }
+
+  void _validateFilterState() {
+    print('Validating filter state:');
+    print('  Category: $_selectedCategoryId');
+    print('  Search: "$_searchQuery"');
+    print('  Price range: ${_priceRange.start.round()}-${_priceRange.end.round()}');
+    print('  Price limits: ${_minPrice.round()}-${_maxPrice.round()}');
+    print('  Has active filters: ${_hasActiveFilters()}');
+    print('  Filtered products: ${_filteredProducts.length} out of ${_allProducts.length}');
+  }
+
+  void _rebuildScreen() {
+    if (mounted) {
+      setState(() {});
+      print('Screen rebuilt');
+    }
+  }
+
+  void _resetFilters() {
+    print('Resetting all filters');
+    setState(() {
+      _selectedCategoryId = null;
+      // Ensure we have valid price range values
+      if (_minPrice < _maxPrice) {
+        _priceRange = RangeValues(_minPrice, _maxPrice);
+      } else {
+        // Fallback to safe values
         _minPrice = 0.0;
         _maxPrice = 1000.0;
         _priceRange = RangeValues(_minPrice, _maxPrice);
       }
-      
-      _filteredProducts = _allProducts.where((product) {
-        // Category filter
-        if (_selectedCategoryId != null && product.categoryId != _selectedCategoryId) {
-          return false;
-        }
-        
-        // Price range filter
-        final price = product.currentPrice ?? 0;
-        if (price < _priceRange.start || price > _priceRange.end) {
-          return false;
-        }
-        
-        // Search filter
-        if (_searchQuery.isNotEmpty) {
-          final query = _searchQuery.toLowerCase();
-          final name = product.name.toLowerCase();
-          final description = product.description?.toLowerCase() ?? '';
-          final brand = product.brand?.toLowerCase() ?? '';
-          
-          if (!name.contains(query) && 
-              !description.contains(query) && 
-              !brand.contains(query)) {
-            return false;
-          }
-        }
-        
-        return true;
-      }).toList();
-      
-      print('Filtered products: ${_filteredProducts.length} out of ${_allProducts.length}');
-    }
-
-     void _resetFilters() {
-     print('Resetting all filters');
-     setState(() {
-       _selectedCategoryId = null;
-       // Ensure we have valid price range values
-       if (_minPrice < _maxPrice) {
-         _priceRange = RangeValues(_minPrice, _maxPrice);
-       } else {
-         // Fallback to safe values
-         _minPrice = 0.0;
-         _maxPrice = 1000.0;
-         _priceRange = RangeValues(_minPrice, _maxPrice);
-       }
-       _searchQuery = '';
-       _searchController.clear();
-       _showSearchBox = false;
-       _applyFilters();
-     });
-   }
+      _searchQuery = '';
+      _searchController.clear();
+      _showSearchBox = false;
+    });
+    
+    // Apply filters after resetting state
+    _applyFilters();
+    _forceRefresh();
+  }
 
   void _toggleSearchBox() {
     setState(() {
@@ -224,6 +286,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         _searchQuery = '';
         _searchController.clear();
         _applyFilters();
+        _forceRefresh();
       }
     });
   }
@@ -239,9 +302,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
     // Set new timer for debounced search
     _searchDebounceTimer = Timer(const Duration(milliseconds: 300), () {
       print('Search query applied: "$_searchQuery"');
-      setState(() {
-        _applyFilters();
-      });
+      _applyFilters();
+      _forceRefresh();
     });
   }
 
@@ -292,80 +354,104 @@ class _ProductsScreenState extends State<ProductsScreen> {
         onRefresh: _loadProducts,
         child: CustomScrollView(
           slivers: [
-          // App Bar
-          SliverAppBar(
-            title: const Text('Webshop'),
-            backgroundColor: Colors.purple,
-            foregroundColor: Colors.white,
-            elevation: 0,
-            pinned: true,
-            floating: false,
-            actions: [
-              // Search button
-              IconButton(
-                icon: Icon(_showSearchBox ? Icons.close : Icons.search),
-                onPressed: _toggleSearchBox,
-                tooltip: _showSearchBox ? 'Close search' : 'Search products',
-              ),
-              const CartIcon(),
-            ],
-          ),
-          
-          // Search box (conditional)
-          if (_showSearchBox)
-            SliverToBoxAdapter(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                color: Colors.grey[50],
-                child: TextField(
-                  controller: _searchController,
-                  focusNode: _searchFocusNode,
-                  onChanged: _onSearchChanged,
-                  decoration: InputDecoration(
-                    hintText: 'Search by name, description, or brand...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        _onSearchChanged('');
-                      },
+            // App Bar
+            SliverAppBar(
+              title: const Text('Webshop'),
+              backgroundColor: Colors.purple,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              pinned: true,
+              floating: false,
+              actions: [
+                // Search button
+                IconButton(
+                  icon: Icon(_showSearchBox ? Icons.close : Icons.search),
+                  onPressed: _toggleSearchBox,
+                  tooltip: _showSearchBox ? 'Close search' : 'Search products',
+                ),
+                const CartIcon(),
+              ],
+            ),
+            
+            // Search box (conditional)
+            if (_showSearchBox)
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.grey[50],
+                  child: TextField(
+                    controller: _searchController,
+                    focusNode: _searchFocusNode,
+                    onChanged: _onSearchChanged,
+                    decoration: InputDecoration(
+                      hintText: 'Search by name, description, or brand...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          _onSearchChanged('');
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.purple[300]!),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.purple[600]!, width: 2),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.purple[300]!),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.purple[600]!, width: 2),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
                   ),
                 ),
               ),
-            ),
-          
-          // Filters section - collapsible
-          SliverPersistentHeader(
-            pinned: false,
-            delegate: _FiltersSliverHeaderDelegate(
-                             child: Container(
-                 padding: const EdgeInsets.all(12),
-                 color: Colors.white,
-                                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                                           // Filter header with reset button
+            
+            // Filters section - collapsible
+            SliverPersistentHeader(
+              pinned: true, // Changed from false to true to keep filters visible
+              delegate: _FiltersSliverHeaderDelegate(
+                child: Container(
+                  key: ValueKey('filters_section_${_selectedCategoryId}_${_searchQuery}_${_priceRange.start.round()}_${_priceRange.end.round()}'),
+                  padding: const EdgeInsets.all(12),
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Filter header with reset button
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Filters',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Row(
+                            children: [
+                              const Text(
+                                'Filters',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              // Show active filters indicator
+                              if (_hasActiveFilters())
+                                Container(
+                                  margin: const EdgeInsets.only(left: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange[100],
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: Colors.orange[300]!),
+                                  ),
+                                  child: Text(
+                                    'Active',
+                                    style: TextStyle(
+                                      color: Colors.orange[700],
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                           TextButton.icon(
                             onPressed: _resetFilters,
@@ -378,32 +464,31 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         ],
                       ),
                       
-                    
-                    // Category filter
-                    if (_isLoadingCategories) ...[
-                      const Row(
-                        children: [
-                          SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.purple,
+                      // Category filter
+                      if (_isLoadingCategories) ...[
+                        const Row(
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.purple,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Loading categories...',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                            SizedBox(width: 8),
+                            Text(
+                              'Loading categories...',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ],
-                                             ),
-                       const SizedBox(height: 12),
-                     ] else if (_categories.isNotEmpty) ...[
-                                               Row(
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                      ] else if (_categories.isNotEmpty) ...[
+                        Row(
                           children: [
                             const Text(
                               'Category',
@@ -434,91 +519,93 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             ],
                           ],
                         ),
-                       const SizedBox(height: 6),
-                       SizedBox(
-                         height: 36,
-                         child: ListView.builder(
-                           scrollDirection: Axis.horizontal,
-                           itemCount: _categories.length + 1, // +1 for "All" option
-                           itemBuilder: (context, index) {
-                             if (index == 0) {
-                               // "All" option
-                               return Padding(
-                                 padding: const EdgeInsets.only(right: 6),
-                                 child: FilterChip(
-                                   key: ValueKey('category_all_${_selectedCategoryId == null}'),
-                                   label: const Text('All'),
-                                   selected: _selectedCategoryId == null,
-                                   onSelected: (selected) {
-                                     print('Category "All" selected');
-                                     setState(() {
-                                       _selectedCategoryId = null;
-                                       _applyFilters();
-                                     });
-                                   },
-                                   selectedColor: Colors.purple[100],
-                                   checkmarkColor: Colors.purple[700],
-                                   backgroundColor: Colors.grey[200],
-                                   labelStyle: TextStyle(
-                                     color: _selectedCategoryId == null ? Colors.purple[700] : Colors.grey[700],
-                                     fontWeight: _selectedCategoryId == null ? FontWeight.bold : FontWeight.normal,
-                                   ),
-                                   elevation: _selectedCategoryId == null ? 4 : 1,
-                                   shadowColor: Colors.purple.withOpacity(0.3),
-                                 ),
-                               );
-                             }
-                             
-                             final category = _categories[index - 1];
-                             return Padding(
-                               padding: const EdgeInsets.only(right: 6),
-                               child: FilterChip(
-                                 key: ValueKey('category_${category.id}_${_selectedCategoryId == category.id}'),
-                                 label: Text(category.name),
-                                 selected: _selectedCategoryId == category.id,
-                                 onSelected: (selected) {
-                                   print('Category "${category.name}" selected: $selected');
-                                   setState(() {
-                                     _selectedCategoryId = selected ? category.id : null;
-                                     _applyFilters();
-                                   });
-                                 },
-                                 selectedColor: Colors.purple[100],
-                                 checkmarkColor: Colors.purple[700],
-                                 backgroundColor: Colors.grey[200],
-                                 labelStyle: TextStyle(
-                                   color: _selectedCategoryId == category.id ? Colors.purple[700] : Colors.grey[700],
-                                   fontWeight: _selectedCategoryId == category.id ? FontWeight.bold : FontWeight.normal,
-                                 ),
-                                 elevation: _selectedCategoryId == category.id ? 4 : 1,
-                                   shadowColor: Colors.purple.withOpacity(0.3),
-                               ),
-                             );
-                           },
-                         ),
-                       ),
-                       const SizedBox(height: 12),
-                     ],
-                    
-                                         // Price range filter
-                     const Text(
-                       'Price Range (BAM)',
-                       style: TextStyle(
-                         fontSize: 16,
-                         fontWeight: FontWeight.w600,
-                       ),
-                     ),
-                     const SizedBox(height: 6),
-                                         Container(
-                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                       decoration: BoxDecoration(
-                         color: Colors.grey[50],
-                         borderRadius: BorderRadius.circular(8),
-                         border: Border.all(color: Colors.grey[300]!),
-                       ),
-                       child: Column(
-                         children: [
-                                                       // Current price range display
+                        const SizedBox(height: 6),
+                        SizedBox(
+                          height: 36,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _categories.length + 1, // +1 for "All" option
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                // "All" option
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 6),
+                                  child: FilterChip(
+                                    key: ValueKey('category_all_${_selectedCategoryId == null}'),
+                                    label: const Text('All'),
+                                    selected: _selectedCategoryId == null,
+                                    onSelected: (selected) {
+                                      print('Category "All" selected');
+                                      setState(() {
+                                        _selectedCategoryId = null;
+                                      });
+                                      _applyFilters();
+                                      _forceRefresh();
+                                    },
+                                    selectedColor: Colors.purple[100],
+                                    checkmarkColor: Colors.purple[700],
+                                    backgroundColor: Colors.grey[200],
+                                    labelStyle: TextStyle(
+                                      color: _selectedCategoryId == null ? Colors.purple[700] : Colors.grey[700],
+                                      fontWeight: _selectedCategoryId == null ? FontWeight.bold : FontWeight.normal,
+                                    ),
+                                    elevation: _selectedCategoryId == null ? 4 : 1,
+                                    shadowColor: Colors.purple.withOpacity(0.3),
+                                  ),
+                                );
+                              }
+                              
+                              final category = _categories[index - 1];
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                child: FilterChip(
+                                  key: ValueKey('category_${category.id}_${_selectedCategoryId == category.id}'),
+                                  label: Text(category.name),
+                                  selected: _selectedCategoryId == category.id,
+                                  onSelected: (selected) {
+                                    print('Category "${category.name}" selected: $selected');
+                                    setState(() {
+                                      _selectedCategoryId = selected ? category.id : null;
+                                    });
+                                    _applyFilters();
+                                    _forceRefresh();
+                                  },
+                                  selectedColor: Colors.purple[100],
+                                  checkmarkColor: Colors.purple[700],
+                                  backgroundColor: Colors.grey[200],
+                                  labelStyle: TextStyle(
+                                    color: _selectedCategoryId == category.id ? Colors.purple[700] : Colors.grey[700],
+                                    fontWeight: _selectedCategoryId == category.id ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                  elevation: _selectedCategoryId == category.id ? 4 : 1,
+                                  shadowColor: Colors.purple.withOpacity(0.3),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      
+                      // Price range filter
+                      const Text(
+                        'Price Range (BAM)',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: Column(
+                          children: [
+                            // Current price range display
                             if (_minPrice < _maxPrice && 
                                 _priceRange.start >= _minPrice && 
                                 _priceRange.end <= _maxPrice)
@@ -552,11 +639,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   ],
                                 ),
                               ),
-                           const SizedBox(height: 8),
-                                                                                                               // Range slider
-                                                        if (_minPrice < _maxPrice && 
-                                                            _priceRange.start >= _minPrice && 
-                                                            _priceRange.end <= _maxPrice)
+                            const SizedBox(height: 8),
+                            // Range slider
+                            if (_minPrice < _maxPrice && 
+                                _priceRange.start >= _minPrice && 
+                                _priceRange.end <= _maxPrice)
                               RangeSlider(
                                 key: ValueKey('slider_${_priceRange.start.round()}_${_priceRange.end.round()}'),
                                 values: _priceRange,
@@ -577,8 +664,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   
                                   setState(() {
                                     _priceRange = RangeValues(clampedStart, clampedEnd);
-                                    _applyFilters();
                                   });
+                                  _applyFilters();
+                                  _forceRefresh();
                                 },
                               )
                             else
@@ -592,51 +680,51 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   ),
                                 ),
                               ),
-                         ],
-                       ),
-                                          ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            
+            // Results count
+            SliverToBoxAdapter(
+              child: Container(
+                key: ValueKey('results_count_${_filteredProducts.length}_${_allProducts.length}'),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                color: Colors.grey[50],
+                child: Row(
+                  children: [
+                    Text(
+                      '${_filteredProducts.length} product${_filteredProducts.length != 1 ? 's' : ''} found',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                      ),
+                    ),
+                    if (_filteredProducts.length != _allProducts.length)
+                      Text(
+                        ' (filtered from ${_allProducts.length})',
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 12,
+                        ),
+                      ),
                   ],
                 ),
               ),
             ),
-          ),
-          
-          // Results count
-          SliverToBoxAdapter(
-            child: Container(
-              key: ValueKey('results_count_${_filteredProducts.length}_${_allProducts.length}'),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              color: Colors.grey[50],
-              child: Row(
-                children: [
-                  Text(
-                    '${_filteredProducts.length} product${_filteredProducts.length != 1 ? 's' : ''} found',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
-                  if (_filteredProducts.length != _allProducts.length)
-                    Text(
-                      ' (filtered from ${_allProducts.length})',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 12,
-                      ),
-                    ),
-                ],
-              ),
+            
+            // Products grid
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: _buildProductsSliver(),
             ),
-          ),
-          
-          // Products grid
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: _buildProductsSliver(),
-          ),
-        ],
-      ),
+          ],
         ),
+      ),
       floatingActionButton: const CartFAB(),
     );
   }
@@ -1028,11 +1116,11 @@ class _FiltersSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   
   _FiltersSliverHeaderDelegate({required this.child});
   
-     @override
-   double get minExtent => 380.0; // Increased minimum height to prevent overflow
+  @override
+  double get minExtent => 380.0; // Increased minimum height to prevent overflow
    
-   @override
-   double get maxExtent => 380.0; // Increased maximum height to prevent overflow
+  @override
+  double get maxExtent => 380.0; // Increased maximum height to prevent overflow
   
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -1044,6 +1132,7 @@ class _FiltersSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+    // Always rebuild to ensure filters update visually
+    return true;
   }
 }

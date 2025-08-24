@@ -30,3 +30,14 @@ C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.sourcelink.json
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.dll
 C:\Users\Yasir\Desktop\rs2\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.pdb
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\bin\Debug\netstandard2.1\SmartPhone.Model.deps.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\bin\Debug\netstandard2.1\SmartPhone.Model.dll
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\bin\Debug\netstandard2.1\SmartPhone.Model.pdb
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.csproj.AssemblyReference.cache
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.AssemblyInfoInputs.cache
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.AssemblyInfo.cs
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.csproj.CoreCompileInputs.cache
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.sourcelink.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.dll
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.Model\obj\Debug\netstandard2.1\SmartPhone.Model.pdb

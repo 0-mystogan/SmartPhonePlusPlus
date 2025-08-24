@@ -23,16 +23,19 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (baseFromEnv.isNotEmpty) {
       baseUrl = baseFromEnv;
+      print('BaseProvider: Using base URL from environment: $baseUrl');
       return;
     }
 
     if (Platform.isAndroid) {
       // Android emulator
       baseUrl = "http://10.0.2.2:7074/";
+      print('BaseProvider: Using Android emulator base URL: $baseUrl');
       
     } else if (Platform.isIOS) {
       // iOS simulator
       baseUrl = "http://localhost:7074/";
+      print('BaseProvider: Using iOS simulator base URL: $baseUrl');
     } else {
       // Physical device or other
       final info = NetworkInfo();
@@ -42,10 +45,13 @@ abstract class BaseProvider<T> with ChangeNotifier {
       }
       if (ip != null) {
         baseUrl = "http://$ip:7074/";
+        print('BaseProvider: Using physical device base URL: $baseUrl');
       } else {
         throw Exception("Unable to determine local IP address");
       }
     }
+    
+    print('BaseProvider: Final base URL set to: $baseUrl');
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -260,9 +266,15 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
+    print('BaseProvider: Making GET request to: $url');
+    print('BaseProvider: Headers: $headers');
+
     var response = await http
         .get(uri, headers: headers)
         .timeout(const Duration(seconds: 10));
+
+    print('BaseProvider: Response status: ${response.statusCode}');
+    print('BaseProvider: Response body: ${response.body}');
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -285,9 +297,15 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       print('BaseProvider: Authentication failed - 401 Unauthorized');
       throw Exception("Please check your credentials and try again.");
+    } else if (response.statusCode == 404) {
+      print('BaseProvider: Endpoint not found - 404 Not Found');
+      throw Exception("The requested endpoint was not found. Please check the API configuration.");
+    } else if (response.statusCode >= 500) {
+      print('BaseProvider: Server error - ${response.statusCode}');
+      throw Exception("Server error occurred. Please try again later.");
     } else {
       print('BaseProvider: Request failed with status ${response.statusCode}');
-      throw Exception("Something went wrong, please try again later!");
+      throw Exception("Request failed with status ${response.statusCode}: ${response.body}");
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:smartphone_mobile_client/model/product.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/product_provider.dart';
-import 'package:smartphone_mobile_client/services/recommendation_service.dart';
+import 'package:smartphone_mobile_client/providers/recommendation_provider.dart';
 import 'package:smartphone_mobile_client/screens/stripe_payment_screen.dart';
 
 class CartScreen extends StatefulWidget {
@@ -17,10 +17,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Product> _recommendations = [];
-  bool _isLoadingRecommendations = false;
   bool _hasLoadedRecommendations = false; // Track if recommendations have been loaded
-  RecommendationService? _recommendationService;
   bool _mounted = true; // Track if widget is still mounted
 
   @override
@@ -515,7 +512,7 @@ class _CartScreenState extends State<CartScreen> {
     }
 
     // Load recommendations only once when this section is built, but only if widget is mounted
-    if (_mounted && !_hasLoadedRecommendations && !_isLoadingRecommendations) {
+    if (_mounted && !_hasLoadedRecommendations) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_mounted && !_hasLoadedRecommendations) { // Double-check mounted state
           _loadRecommendations(cartItems);
@@ -545,41 +542,45 @@ class _CartScreenState extends State<CartScreen> {
           ],
         ),
         const SizedBox(height: 16),
-        if (_isLoadingRecommendations)
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: CircularProgressIndicator(
-                color: Colors.purple,
-                strokeWidth: 2,
-              ),
-            ),
-          )
-        else if (_recommendations.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: Center(
-              child: Text(
-                'No recommendations available',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
+        Consumer<RecommendationProvider>(
+          builder: (context, recommendationProvider, child) {
+            if (recommendationProvider.isLoading)
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: CircularProgressIndicator(
+                    color: Colors.purple,
+                    strokeWidth: 2,
+                  ),
                 ),
-              ),
-            ),
-          )
-        else
-          SizedBox(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _recommendations.length,
-              itemBuilder: (context, index) {
-                final product = _recommendations[index];
-                return _buildRecommendationCard(product, cartItems);
-              },
-            ),
-          ),
+              );
+            else if (recommendationProvider.recommendations.isEmpty)
+              return Container(
+                padding: const EdgeInsets.all(20),
+                child: Center(
+                  child: Text(
+                    'No recommendations available',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              );
+            else
+              return SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: recommendationProvider.recommendations.length,
+                  itemBuilder: (context, index) {
+                    final product = recommendationProvider.recommendations[index];
+                    return _buildRecommendationCard(product, cartItems);
+                  },
+                ),
+              );
+          },
+        )
       ],
     );
   }
@@ -680,41 +681,34 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _loadRecommendations(List<CartItem> cartItems) async {
-    if (_isLoadingRecommendations || !_mounted) return;
-
-    setState(() {
-      _isLoadingRecommendations = true;
-    });
+    if (!_mounted) return;
 
     try {
-      // Initialize recommendation service if not already done
-      if (_recommendationService == null) {
-        _recommendationService = RecommendationService();
-      }
+      print('CartScreen: Starting to load recommendations');
+      
+      // Get recommendation provider from context
+      final recommendationProvider = context.read<RecommendationProvider>();
+      print('CartScreen: Got recommendation provider: ${recommendationProvider.runtimeType}');
 
       // Get current user ID from auth provider
       final authProvider = context.read<AuthProvider>();
       final userId = authProvider.currentUser?.id ?? 1; // Fallback to user 1 for demo
+      print('CartScreen: Using user ID: $userId');
 
       // Use the new user-based recommendation method that fetches cart from database
-      final recommendations = await _recommendationService!.getUserRecommendations(userId);
+      print('CartScreen: Calling getUserRecommendations...');
+      final recommendations = await recommendationProvider.getUserRecommendations(userId);
+      print('CartScreen: Received ${recommendations.length} recommendations');
       
-      // Check if widget is still mounted before updating state
+      // Mark recommendations as loaded
       if (_mounted) {
         setState(() {
-          _recommendations = recommendations;
-          _isLoadingRecommendations = false;
-          _hasLoadedRecommendations = true; // Mark recommendations as loaded
+          _hasLoadedRecommendations = true;
         });
       }
     } catch (e) {
-      print('Error loading recommendations: $e');
-      // Only update state if widget is still mounted
-      if (_mounted) {
-        setState(() {
-          _isLoadingRecommendations = false;
-        });
-      }
+      print('CartScreen: Error loading recommendations: $e');
+      print('CartScreen: Error stack trace: ${StackTrace.current}');
     }
   }
 
