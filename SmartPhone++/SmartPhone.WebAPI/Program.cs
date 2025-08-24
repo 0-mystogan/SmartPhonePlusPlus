@@ -36,6 +36,7 @@ builder.Services.AddTransient<IServicePartService, ServicePartService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IProductRecommendationService, ProductRecommendationService>();
 //builder.Services.AddTransient<IChatService, ChatService>();
 

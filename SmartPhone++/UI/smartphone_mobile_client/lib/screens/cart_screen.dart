@@ -5,7 +5,6 @@ import 'package:smartphone_mobile_client/model/cart_item.dart';
 import 'package:smartphone_mobile_client/model/product.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
-import 'package:smartphone_mobile_client/providers/product_provider.dart';
 import 'package:smartphone_mobile_client/providers/recommendation_provider.dart';
 import 'package:smartphone_mobile_client/screens/stripe_payment_screen.dart';
 
@@ -16,36 +15,112 @@ class CartScreen extends StatefulWidget {
   State<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _CartScreenState extends State<CartScreen> with WidgetsBindingObserver {
   bool _hasLoadedRecommendations = false; // Track if recommendations have been loaded
   bool _mounted = true; // Track if widget is still mounted
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    
     // Initialize cart for current user
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        final cartManager = context.read<CartManagerProvider>();
-        final authProvider = context.read<AuthProvider>();
-        
-        if (cartManager != null && authProvider.currentUser != null) {
-          print('CartScreen: Initializing cart for user ID ${authProvider.currentUser!.id}');
-          cartManager.loadOrCreateCart(authProvider.currentUser!.id);
-        } else {
-          // For demo purposes, use user ID 1 if no auth user
-          print('CartScreen: No auth user, using demo user ID 1');
-          cartManager.loadOrCreateCart(1);
-        }
-      } catch (e) {
-        print('CartScreen: CartManagerProvider not available: $e');
-      }
+      _initializeCart();
     });
+  }
+
+  Future<void> _initializeCart() async {
+    try {
+      print('CartScreen: Initializing cart...');
+      final cartManager = context.read<CartManagerProvider>();
+      
+      // Initialize base URL first
+      await cartManager.initBaseUrl();
+      print('CartScreen: Base URL initialized');
+      
+      // Then refresh cart
+      await _refreshCart();
+    } catch (e) {
+      print('CartScreen: Error initializing cart: $e');
+      // Fallback to just refresh
+      _refreshCart();
+    }
+  }
+
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Refresh cart when app becomes active again
+    if (state == AppLifecycleState.resumed && _mounted) {
+      _refreshCart();
+    }
+  }
+
+
+
+  Future<void> _refreshCart() async {
+    try {
+      print('CartScreen: Starting cart refresh...');
+      final cartManager = context.read<CartManagerProvider>();
+      final authProvider = context.read<AuthProvider>();
+      
+      print('CartScreen: CartManager available: ${cartManager != null}');
+      print('CartScreen: Current user: ${authProvider.currentUser?.id}');
+      print('CartScreen: Current user username: ${authProvider.currentUser?.username}');
+      print('CartScreen: Current user email: ${authProvider.currentUser?.email}');
+      print('CartScreen: Is authenticated: ${authProvider.isAuthenticated}');
+      print('CartScreen: Auth username: ${AuthProvider.username}');
+      print('CartScreen: Auth password length: ${AuthProvider.password?.length ?? 0}');
+      
+      if (!authProvider.isAuthenticated) {
+        print('CartScreen: User is not authenticated, cannot access cart');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please log in to view your cart'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+        return;
+      }
+      
+      if (cartManager != null && authProvider.currentUser != null) {
+        print('CartScreen: Refreshing cart for authenticated user ID ${authProvider.currentUser!.id}');
+        await cartManager.loadOrCreateCart(authProvider.currentUser!.id);
+        print('CartScreen: Cart refresh completed. Items count: ${cartManager.cartItems.length}');
+      } else {
+        print('CartScreen: Authentication issue - cartManager or currentUser is null');
+      }
+      
+      // Force a rebuild
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      print('CartScreen: Error refreshing cart: $e');
+      print('CartScreen: Stack trace: ${StackTrace.current}');
+      
+      if (e.toString().contains('401') || e.toString().contains('Unauthorized')) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Authentication failed. Please log in again.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override
   void dispose() {
     _mounted = false; // Mark widget as disposed
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -122,15 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      final authProvider = context.read<AuthProvider>();
-                      if (cartManager != null && authProvider.currentUser != null) {
-                        cartManager.loadOrCreateCart(authProvider.currentUser!.id);
-                      } else {
-                        // For demo purposes, use user ID 1 if no auth user
-                        cartManager.loadOrCreateCart(1);
-                      }
-                    },
+                    onPressed: _refreshCart,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,
                       foregroundColor: Colors.white,
@@ -142,29 +209,70 @@ class _CartScreenState extends State<CartScreen> {
             );
           }
 
+          print('CartScreen: Build - CartManager: ${cartManager != null}, Loading: ${cartManager?.isLoading}, Error: ${cartManager?.error}, Items: ${cartManager?.cartItems.length}');
+          
           if (cartManager == null || cartManager.cartItems.isEmpty) {
-            print('CartScreen: Cart is empty or null. Cart: ${cartManager?.currentCart?.id}, Items: ${cartManager?.cartItems.length}');
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 64,
-                    color: Colors.grey,
+            print('CartScreen: Showing empty cart. Cart: ${cartManager?.currentCart?.id}, Items: ${cartManager?.cartItems.length}');
+            
+            return Consumer<AuthProvider>(
+              builder: (context, authProvider, child) {
+                if (!authProvider.isAuthenticated) {
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.lock_outline,
+                          size: 64,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Please log in to view your cart',
+                          style: TextStyle(fontSize: 18, color: Colors.orange),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Authentication is required to access cart data',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.shopping_cart_outlined,
+                        size: 64,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Your cart is empty',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Add some products to get started!',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 16),
+                                        ElevatedButton(
+                    onPressed: _refreshCart,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Refresh Cart'),
                   ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Your cart is empty',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ],
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Add some products to get started!',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
+                );
+              },
             );
           }
 
@@ -172,15 +280,7 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               Expanded(
                 child: RefreshIndicator(
-                  onRefresh: () async {
-                    final authProvider = context.read<AuthProvider>();
-                    if (cartManager != null && authProvider.currentUser != null) {
-                      return cartManager.loadOrCreateCart(authProvider.currentUser!.id);
-                    } else {
-                      // For demo purposes, use user ID 1 if no auth user
-                      return cartManager.loadOrCreateCart(1);
-                    }
-                  },
+                  onRefresh: _refreshCart,
                   child: ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
@@ -277,12 +377,24 @@ class _CartScreenState extends State<CartScreen> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (cartItem.quantity > 1 && cartManager != null) {
-                            cartManager.updateItemQuantity(
-                              cartItem.id,
-                              cartItem.quantity - 1,
-                            );
+                            try {
+                              await cartManager.updateItemQuantity(
+                                cartItem.id,
+                                cartItem.quantity - 1,
+                              );
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error updating quantity: ${e.toString()}'),
+                                    backgroundColor: Colors.orange,
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              }
+                            }
                           }
                         },
                         icon: const Icon(Icons.remove_circle_outline),
@@ -307,12 +419,24 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (cartManager != null) {
-                            cartManager.updateItemQuantity(
-                              cartItem.id,
-                              cartItem.quantity + 1,
-                            );
+                            try {
+                              await cartManager.updateItemQuantity(
+                                cartItem.id,
+                                cartItem.quantity + 1,
+                              );
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error updating quantity: ${e.toString()}'),
+                                    backgroundColor: Colors.orange,
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              }
+                            }
                           }
                         },
                         icon: const Icon(Icons.add_circle_outline),
@@ -445,9 +569,21 @@ class _CartScreenState extends State<CartScreen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                cartManager.removeFromCart(cartItem.id);
-                Navigator.of(context).pop();
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close dialog first
+                try {
+                  await cartManager.removeFromCart(cartItem.id);
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error removing item: ${e.toString()}'),
+                        backgroundColor: Colors.orange,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
               },
               child: const Text(
                 'Remove',
@@ -473,9 +609,21 @@ class _CartScreenState extends State<CartScreen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                context.read<CartManagerProvider>().clearCart();
-                Navigator.of(context).pop();
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close dialog first
+                try {
+                  await context.read<CartManagerProvider>().clearCart();
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error clearing cart: ${e.toString()}'),
+                        backgroundColor: Colors.orange,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
               },
               child: const Text(
                 'Clear All',
@@ -488,10 +636,11 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  void _showCheckoutDialog(BuildContext context) {
+  void _showCheckoutDialog(BuildContext context) async {
     final cartManager = context.read<CartManagerProvider>();
     if (cartManager != null && cartManager.cartItems.isNotEmpty) {
-      Navigator.push(
+      // Navigate to payment screen and wait for result
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => StripePaymentScreen(
@@ -500,6 +649,22 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
       );
+      
+      // Refresh cart when returning from payment screen
+      // This ensures the cart is updated if it was cleared after successful payment
+      print('CartScreen: Returning from payment screen, refreshing cart...');
+      
+      // Add a small delay to ensure backend operations are complete
+      await Future.delayed(const Duration(milliseconds: 1000));
+      
+      // Force refresh the cart
+      await _refreshCart();
+      
+      // Double-check cart state after refresh
+      if (mounted) {
+        setState(() {});
+        print('CartScreen: Cart refresh completed after payment return');
+      }
     }
   }
 

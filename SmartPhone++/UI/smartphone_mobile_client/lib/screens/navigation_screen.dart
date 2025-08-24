@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartphone_mobile_client/screens/home_screen.dart';
 import 'package:smartphone_mobile_client/screens/profile_screen.dart';
 import 'package:smartphone_mobile_client/screens/products_screen.dart';
+import 'package:smartphone_mobile_client/screens/order_list_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -16,6 +17,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const ProductsScreen(),
+    const OrderListScreen(),
     const ProfileScreen(),
   ];
 
@@ -38,6 +40,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
             label: 'Webshop',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_basket),
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

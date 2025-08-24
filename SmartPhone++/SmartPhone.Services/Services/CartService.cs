@@ -149,41 +149,46 @@ namespace SmartPhone.Services.Services
             return response;
         }
 
+        /// <summary>
+        /// Get all carts for a user (for debugging - should always return 0 or 1 cart)
+        /// </summary>
+        public async Task<List<CartResponse>> GetAllCartsForUserAsync(int userId)
+        {
+            var carts = await _context.Carts
+                .Include(c => c.User)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.ProductImages)
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+
+            System.Diagnostics.Debug.WriteLine($"Found {carts.Count} carts for user {userId}");
+            foreach (var cart in carts)
+            {
+                System.Diagnostics.Debug.WriteLine($"Cart ID: {cart.Id}, IsActive: {cart.IsActive}, Items: {cart.CartItems?.Count ?? 0}");
+            }
+
+            return carts.Select(MapToResponse).ToList();
+        }
+
         public async Task<CartResponse?> GetByUserIdAsync(int userId)
         {
             try
             {
                 System.Diagnostics.Debug.WriteLine($"GetByUserIdAsync called for user {userId}");
                 
-                // First, let's check if there are any carts at all for this user
-                var allCartsForUser = await _context.Carts
-                    .Where(c => c.UserId == userId)
-                    .ToListAsync();
-                
-                System.Diagnostics.Debug.WriteLine($"Total carts found for user {userId}: {allCartsForUser.Count}");
-                foreach (var c in allCartsForUser)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Cart ID: {c.Id}, UserId: {c.UserId}, IsActive: {c.IsActive}, CreatedAt: {c.CreatedAt}");
-                }
-                
-                // Now check for active carts
-                var activeCartsForUser = await _context.Carts
-                    .Where(c => c.UserId == userId && c.IsActive)
-                    .ToListAsync();
-                
-                System.Diagnostics.Debug.WriteLine($"Active carts found for user {userId}: {activeCartsForUser.Count}");
-                
+                // Get ANY cart for this user (active or inactive) - each user should have only one cart
                 var cart = await _context.Carts
                     .Include(c => c.User)
                     .Include(c => c.CartItems)
                         .ThenInclude(ci => ci.Product)
                             .ThenInclude(p => p.ProductImages)
-                    .FirstOrDefaultAsync(c => c.UserId == userId && c.IsActive);
+                    .FirstOrDefaultAsync(c => c.UserId == userId);
 
                 System.Diagnostics.Debug.WriteLine($"Cart found: {cart != null}");
                 if (cart != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Cart ID: {cart.Id}, User ID: {cart.UserId}");
+                    System.Diagnostics.Debug.WriteLine($"Cart ID: {cart.Id}, User ID: {cart.UserId}, IsActive: {cart.IsActive}");
                     System.Diagnostics.Debug.WriteLine($"CartItems count: {cart.CartItems?.Count ?? 0}");
                     if (cart.CartItems != null)
                     {
@@ -207,14 +212,34 @@ namespace SmartPhone.Services.Services
 
         /// <summary>
         /// Get or create a cart for a specific user
+        /// IMPORTANT: Each user must have only ONE cart, even when empty
         /// </summary>
         public async Task<CartResponse> GetOrCreateCartForUserAsync(int userId)
         {
-            var existingCart = await GetByUserIdAsync(userId);
-            if (existingCart != null)
-                return existingCart;
+            // First, try to get any existing cart (active or inactive) for this user
+            var anyExistingCart = await _context.Carts
+                .Include(c => c.User)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.ProductImages)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            // Create new cart for user
+            if (anyExistingCart != null)
+            {
+                // If cart exists but is inactive, reactivate it
+                if (!anyExistingCart.IsActive)
+                {
+                    anyExistingCart.IsActive = true;
+                    anyExistingCart.UpdatedAt = System.DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+                    System.Diagnostics.Debug.WriteLine($"Reactivated existing cart {anyExistingCart.Id} for user {userId}");
+                }
+                
+                return MapToResponse(anyExistingCart);
+            }
+
+            // Only create a new cart if no cart exists at all for this user
+            System.Diagnostics.Debug.WriteLine($"Creating first cart for user {userId}");
             var cartRequest = new CartUpsertRequest { UserId = userId };
             var newCart = await CreateAsync(cartRequest);
             return newCart;
@@ -222,6 +247,8 @@ namespace SmartPhone.Services.Services
 
         /// <summary>
         /// Deactivate a cart (soft delete)
+        /// WARNING: This should only be used when a user account is deleted or deactivated.
+        /// For normal cart operations, carts should remain active even when empty.
         /// </summary>
         public async Task<bool> DeactivateCartAsync(int cartId, int userId)
         {
@@ -235,6 +262,7 @@ namespace SmartPhone.Services.Services
             cart.UpdatedAt = System.DateTime.UtcNow;
             
             await _context.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine($"Deactivated cart {cartId} for user {userId} - this should only happen when user account is deleted");
             return true;
         }
 
@@ -369,12 +397,13 @@ namespace SmartPhone.Services.Services
 
         /// <summary>
         /// Clear all items from user's cart efficiently
+        /// IMPORTANT: Cart remains active even when empty - each user must have only ONE cart
         /// </summary>
         public async Task<CartResponse> ClearCartAsync(int userId)
         {
             var cart = await GetByUserIdAsync(userId);
             if (cart == null)
-                throw new System.ArgumentException("No active cart found for user");
+                throw new System.ArgumentException("No cart found for user");
 
             // Remove all cart items in a single operation
             var cartItems = await _context.CartItems
@@ -385,6 +414,20 @@ namespace SmartPhone.Services.Services
             {
                 _context.CartItems.RemoveRange(cartItems);
                 await _context.SaveChangesAsync();
+                System.Diagnostics.Debug.WriteLine($"Cleared {cartItems.Count} items from cart {cart.Id} for user {userId}");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Cart {cart.Id} for user {userId} was already empty");
+            }
+            
+            // Ensure cart remains active even when empty
+            if (!cart.IsActive)
+            {
+                cart.IsActive = true;
+                cart.UpdatedAt = System.DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                System.Diagnostics.Debug.WriteLine($"Reactivated cart {cart.Id} for user {userId} after clearing");
             }
             
             return await GetByUserIdAsync(userId);

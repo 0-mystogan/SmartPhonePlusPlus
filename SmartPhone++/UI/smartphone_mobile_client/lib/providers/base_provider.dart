@@ -23,14 +23,12 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (baseFromEnv.isNotEmpty) {
       baseUrl = baseFromEnv;
-      print('BaseProvider: Using base URL from environment: $baseUrl');
       return;
     }
 
     if (Platform.isAndroid) {
       // Android emulator
       baseUrl = "http://10.0.2.2:7074/";
-      print('BaseProvider: Using Android emulator base URL: $baseUrl');
       
     } else if (Platform.isIOS) {
       // iOS simulator
@@ -62,6 +60,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       url = "$url?$queryString";
     }
 
+    print('BaseProvider: Making GET request to: $url');
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -69,8 +68,12 @@ abstract class BaseProvider<T> with ChangeNotifier {
         .get(uri, headers: headers)
         .timeout(const Duration(seconds: 10));
 
+    print('BaseProvider: Response status: ${response.statusCode}');
+    print('BaseProvider: Response body: ${response.body}');
+
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
+      print('BaseProvider: Parsed JSON data: $data');
 
       var result = SearchResult<T>();
       result.totalCount = data['totalCount'];
@@ -78,6 +81,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
           ? List<T>.from(data["items"].map((e) => fromJson(e)))
           : <T>[];
 
+      print('BaseProvider: Created ${result.items?.length ?? 0} items from response');
       return result;
     } else {
       throw Exception("Unknown error");

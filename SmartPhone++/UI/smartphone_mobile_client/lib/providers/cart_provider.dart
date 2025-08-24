@@ -15,13 +15,49 @@ class CartProvider extends BaseProvider<Cart> {
   /// Get the current user's cart
   Future<Cart?> getMyCart(int userId) async {
     try {
-      final response = await get(filter: {'userId': userId});
-      if (response.items != null && response.items!.isNotEmpty) {
-        return response.items!.first;
+      print('CartProvider: Fetching cart for user $userId');
+      
+      // Try different cart endpoints that might include items
+      final endpointsToTry = [
+        'user/$userId',
+        'my-cart',
+        '$userId/items',
+        'with-items/$userId'
+      ];
+      
+      for (String endpoint in endpointsToTry) {
+        try {
+          print('CartProvider: Trying endpoint: $endpoint');
+          final directResponse = await getCustom(endpoint);
+          if (directResponse != null) {
+            final cart = Cart.fromJson(directResponse);
+            print('CartProvider: Cart found via $endpoint - ID: ${cart.id}, Items: ${cart.cartItems?.length ?? 0}');
+            if (cart.cartItems != null && cart.cartItems!.isNotEmpty) {
+              print('CartProvider: Found cart with items via $endpoint');
+              return cart;
+            }
+          }
+        } catch (endpointError) {
+          print('CartProvider: Endpoint $endpoint failed: $endpointError');
+        }
       }
+      
+      // Fallback to filtered search
+      print('CartProvider: Using filtered search as fallback...');
+      final response = await get(filter: {'userId': userId});
+      print('CartProvider: Response received - Items count: ${response.items?.length ?? 0}');
+      
+      if (response.items != null && response.items!.isNotEmpty) {
+        final cart = response.items!.first;
+        print('CartProvider: Cart found - ID: ${cart.id}, Items: ${cart.cartItems?.length ?? 0}');
+        print('CartProvider: Raw cart JSON: ${cart.toJson()}');
+        return cart;
+      }
+      
+      print('CartProvider: No cart found for user $userId');
       return null;
     } catch (e) {
-      print('Error getting my cart: $e');
+      print('CartProvider: Error getting my cart: $e');
       rethrow;
     }
   }

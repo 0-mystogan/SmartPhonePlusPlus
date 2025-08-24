@@ -29,27 +29,52 @@ class CartManagerProvider with ChangeNotifier {
   // Load or create cart for a user
   Future<void> loadOrCreateCart(int userId) async {
     try {
+      print('CartManagerProvider: Starting loadOrCreateCart for user $userId');
       setLoading(true);
       clearError();
       
+      // Ensure base URL is initialized
+      await _cartProvider.initBaseUrl();
+      print('CartManagerProvider: Base URL initialized');
+      
       // Try to get existing cart using the user ID
+      print('CartManagerProvider: Fetching cart from backend...');
       _currentCart = await _cartProvider.getMyCart(userId);
       
       if (_currentCart == null) {
-        print('No existing cart found for user $userId');
+        print('CartManagerProvider: No existing cart found for user $userId');
         // Cart will be created automatically when adding first item
         _cartItems = [];
       } else {
-        print('Found existing cart with ID: ${_currentCart!.id}');
+        print('CartManagerProvider: Found existing cart with ID: ${_currentCart!.id}');
+        print('CartManagerProvider: Raw cart data: ${_currentCart!.toJson()}');
+        print('CartManagerProvider: Cart has ${_currentCart!.cartItems?.length ?? 0} items');
+        print('CartManagerProvider: Cart.cartItems is null: ${_currentCart!.cartItems == null}');
+        
         // Load cart items from the cart response
         _cartItems = _currentCart!.cartItems ?? [];
+        print('CartManagerProvider: Loaded ${_cartItems.length} cart items into local list');
+        
+        // Debug: Print cart items
+        if (_cartItems.isNotEmpty) {
+          for (int i = 0; i < _cartItems.length; i++) {
+            final item = _cartItems[i];
+            print('CartManagerProvider: Item $i: ${item.productName} (ID: ${item.id}, Qty: ${item.quantity})');
+          }
+        } else {
+          print('CartManagerProvider: Cart items list is empty after loading');
+        }
       }
       
       setLoading(false);
+      notifyListeners();
+      print('CartManagerProvider: loadOrCreateCart completed successfully');
     } catch (e) {
-      print('Error in loadOrCreateCart: $e');
+      print('CartManagerProvider: Error in loadOrCreateCart: $e');
+      print('CartManagerProvider: Stack trace: ${StackTrace.current}');
       setError('Failed to load cart: $e');
       setLoading(false);
+      notifyListeners();
     }
   }
 
@@ -60,7 +85,7 @@ class CartManagerProvider with ChangeNotifier {
       clearError();
 
       // Get current user ID from auth (you should implement this)
-      final userId = await _getCurrentUserId();
+      await _getCurrentUserId();
       
       // Create request for the new unified endpoint
       final request = CartItemOperationRequest(
@@ -80,6 +105,13 @@ class CartManagerProvider with ChangeNotifier {
       
     } catch (e) {
       print('Error adding to cart: $e');
+      
+      // If there's an error, refresh the cart to ensure sync
+      if (e.toString().contains('400') || e.toString().contains('500')) {
+        print('Cart might be out of sync, refreshing from backend');
+        await _refreshCartFromBackend();
+      }
+      
       setError('Failed to add to cart: $e');
       setLoading(false);
     }
@@ -96,9 +128,26 @@ class CartManagerProvider with ChangeNotifier {
       setLoading(true);
       clearError();
 
+      // Check if we have any cart items
+      if (_cartItems.isEmpty) {
+        print('No cart items found, refreshing cart state');
+        await _refreshCartFromBackend();
+        setLoading(false);
+        setError('Cart is empty. Please add items to your cart.');
+        return;
+      }
+
       // Get the existing cart item first to preserve other properties
-      final existingItem = _cartItems.firstWhere((item) => item.id == cartItemId);
-      final userId = await _getCurrentUserId();
+      final existingItemIndex = _cartItems.indexWhere((item) => item.id == cartItemId);
+      if (existingItemIndex == -1) {
+        print('Cart item with ID $cartItemId not found in local cache, refreshing cart');
+        await _refreshCartFromBackend();
+        setLoading(false);
+        return;
+      }
+      
+      final existingItem = _cartItems[existingItemIndex];
+      await _getCurrentUserId();
       
       final request = CartItemOperationRequest(
         productId: existingItem.productId,
@@ -116,7 +165,17 @@ class CartManagerProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error updating quantity: $e');
-      setError('Failed to update quantity: $e');
+      
+      // If we get a "not found" error, the cart might be out of sync
+      if (e.toString().contains('Product not found in cart') || 
+          e.toString().contains('No active cart found') ||
+          e.toString().contains('400')) {
+        print('Cart appears to be out of sync, refreshing from backend');
+        await _refreshCartFromBackend();
+        setError('Cart was updated. Please try again.');
+      } else {
+        setError('Failed to update quantity: $e');
+      }
       setLoading(false);
     }
   }
@@ -127,9 +186,26 @@ class CartManagerProvider with ChangeNotifier {
       setLoading(true);
       clearError();
 
+      // Check if we have any cart items
+      if (_cartItems.isEmpty) {
+        print('No cart items found, refreshing cart state');
+        await _refreshCartFromBackend();
+        setLoading(false);
+        setError('Cart is empty. Nothing to remove.');
+        return;
+      }
+
       // Get the existing cart item first to get product ID
-      final existingItem = _cartItems.firstWhere((item) => item.id == cartItemId);
-      final userId = await _getCurrentUserId();
+      final existingItemIndex = _cartItems.indexWhere((item) => item.id == cartItemId);
+      if (existingItemIndex == -1) {
+        print('Cart item with ID $cartItemId not found in local cache, refreshing cart');
+        await _refreshCartFromBackend();
+        setLoading(false);
+        return;
+      }
+      
+      final existingItem = _cartItems[existingItemIndex];
+      await _getCurrentUserId();
       
       final request = CartItemOperationRequest(
         productId: existingItem.productId,
@@ -147,7 +223,17 @@ class CartManagerProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error removing item: $e');
-      setError('Failed to remove item: $e');
+      
+      // If we get a "not found" error, the cart might be out of sync
+      if (e.toString().contains('Product not found in cart') || 
+          e.toString().contains('No active cart found') ||
+          e.toString().contains('400')) {
+        print('Cart appears to be out of sync, refreshing from backend');
+        await _refreshCartFromBackend();
+        setError('Cart was updated. Please try again.');
+      } else {
+        setError('Failed to remove item: $e');
+      }
       setLoading(false);
     }
   }
@@ -159,20 +245,79 @@ class CartManagerProvider with ChangeNotifier {
       clearError();
 
       // Get current user ID
-      final userId = await _getCurrentUserId();
+      await _getCurrentUserId();
       
-      // Clear cart using the existing clear endpoint
-      await _cartProvider.clearCart();
+      try {
+        // Clear cart using the existing clear endpoint
+        await _cartProvider.clearCart();
+        print('CartManagerProvider: Cart cleared successfully on backend');
+      } catch (backendError) {
+        print('CartManagerProvider: Backend cart clearing failed: $backendError');
+        
+        // If backend clearing fails, we still clear local data
+        // This handles cases where the cart might already be empty on backend
+        // or there's a temporary server issue
+        if (backendError.toString().contains('500') || 
+            backendError.toString().contains('Internal server error') ||
+            backendError.toString().contains('No active cart found')) {
+          print('CartManagerProvider: Server error or no active cart detected, clearing local cart data anyway');
+        } else {
+          // For other errors, re-throw to let caller handle
+          rethrow;
+        }
+      }
       
-      // Clear local data
+      // Clear local data regardless of backend result
       _cartItems.clear();
       _currentCart = null;
       
       setLoading(false);
       notifyListeners();
+      
+      print('CartManagerProvider: Local cart data cleared successfully');
     } catch (e) {
       print('Error clearing cart: $e');
       setError('Failed to clear cart: $e');
+      setLoading(false);
+      rethrow; // Re-throw so caller can handle appropriately
+    }
+  }
+
+  // Helper method to refresh cart from backend
+  Future<void> _refreshCartFromBackend() async {
+    try {
+      final userId = await _getCurrentUserId();
+      _currentCart = await _cartProvider.getMyCart(userId);
+      
+      if (_currentCart == null) {
+        print('No cart found for user $userId after refresh');
+        _cartItems = [];
+      } else {
+        print('Refreshed cart with ID: ${_currentCart!.id}');
+        _cartItems = _currentCart!.cartItems ?? [];
+      }
+      
+      notifyListeners();
+    } catch (e) {
+      print('Error refreshing cart from backend: $e');
+      // Don't set error here as it's called from error handlers
+    }
+  }
+
+  // Public method to force refresh cart state (useful after order creation)
+  Future<void> forceRefreshCart() async {
+    try {
+      setLoading(true);
+      clearError();
+      
+      final userId = await _getCurrentUserId();
+      await loadOrCreateCart(userId);
+      
+      setLoading(false);
+      print('CartManagerProvider: Cart force refreshed successfully');
+    } catch (e) {
+      print('CartManagerProvider: Error force refreshing cart: $e');
+      setError('Failed to refresh cart: $e');
       setLoading(false);
     }
   }

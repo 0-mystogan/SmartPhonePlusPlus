@@ -7,6 +7,7 @@ namespace SmartPhone.Services.Interfaces
 {
     public interface ICartService : ICRUDService<CartResponse, CartSearchObject, CartUpsertRequest, CartUpsertRequest>
     {
+        Task<List<CartResponse>> GetAllCartsForUserAsync(int userId);
         Task<CartResponse?> GetByUserIdAsync(int userId);
         Task<CartResponse> GetOrCreateCartForUserAsync(int userId);
         Task<bool> DeactivateCartAsync(int cartId, int userId);

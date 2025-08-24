@@ -410,7 +410,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             
             // Filters section - collapsible
             SliverPersistentHeader(
-              pinned: true, // Changed from false to true to keep filters visible
+              pinned: false, // Set to false to allow filters to hide when scrolling
               delegate: _FiltersSliverHeaderDelegate(
                 child: Container(
                   key: ValueKey('filters_section_${_selectedCategoryId}_${_searchQuery}_${_priceRange.start.round()}_${_priceRange.end.round()}'),

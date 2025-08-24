@@ -148,27 +148,32 @@ namespace SmartPhone.WebAPI.Controllers
             }
         }
 
-        private int? GetCurrentUserId()
+        /// <summary>
+        /// Debug endpoint to check all carts for current user
+        /// </summary>
+        [HttpGet("debug/all-carts")]
+        public async Task<ActionResult<List<CartResponse>>> GetAllCartsForCurrentUser()
         {
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                _logger.LogInformation("User ID claim found: {UserIdClaim}", userIdClaim);
+                var userId = GetCurrentUserId();
+                if (userId == null)
+                    return Unauthorized("User ID not found in authentication token");
+
+                _logger.LogInformation("GetAllCartsForCurrentUser called for user {UserId}", userId.Value);
+
+                var carts = await _cartService.GetAllCartsForUserAsync(userId.Value);
                 
-                if (int.TryParse(userIdClaim, out int userId))
-                {
-                    _logger.LogInformation("Successfully parsed user ID: {UserId}", userId);
-                    return userId;
-                }
-                
-                _logger.LogWarning("Failed to parse user ID from claim: {UserIdClaim}", userIdClaim);
-                return null;
+                _logger.LogInformation("Found {CartCount} carts for user {UserId}", carts.Count, userId.Value);
+                return Ok(carts);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting current user ID from claims");
-                return null;
+                _logger.LogError(ex, "Error in GetAllCartsForCurrentUser for user");
+                return StatusCode(500, "Internal server error occurred while getting carts");
             }
         }
+
+
     }
 }

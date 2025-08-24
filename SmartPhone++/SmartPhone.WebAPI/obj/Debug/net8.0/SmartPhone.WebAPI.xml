@@ -24,6 +24,26 @@
             Clear current user's cart
             </summary>
         </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.CartController.GetAllCartsForCurrentUser">
+            <summary>
+            Debug endpoint to check all carts for current user
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.OrderController.GetMyOrders">
+            <summary>
+            Get current user's orders
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.OrderController.GetOrderByNumber(System.String)">
+            <summary>
+            Get order by order number
+            </summary>
+        </member>
+        <member name="M:SmartPhone.WebAPI.Controllers.OrderController.CreateOrderFromCart(SmartPhone.Model.Requests.CreateOrderFromCartRequest)">
+            <summary>
+            Create order from cart
+            </summary>
+        </member>
         <member name="M:SmartPhone.WebAPI.Controllers.ProductRecommendationController.GetUserRecommendations(System.Int32,System.Int32)">
             <summary>
             Get product recommendations for the current user based on their cart

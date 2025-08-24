@@ -1,12 +1,105 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\services\\serviceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\services\\serviceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{40D773A7-8BF1-40A9-8CA3-CFA6ADE6F19F}|SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.subscriber\\services\\backgroundworkerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40D773A7-8BF1-40A9-8CA3-CFA6ADE6F19F}|SmartPhone.Subscriber\\SmartPhone.Subscriber.csproj|solutionrelative:smartphone.subscriber\\services\\backgroundworkerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Service.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\Service.cs",
+              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\Service.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\Service.cs",
+              "RelativeToolTip": "SmartPhone.Services\\Database\\Service.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAMwDAAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-24T18:44:27.407Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ServiceService.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\ServiceService.cs",
+              "RelativeDocumentMoniker": "SmartPhone.Services\\Services\\ServiceService.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\ServiceService.cs",
+              "RelativeToolTip": "SmartPhone.Services\\Services\\ServiceService.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAkwEAAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-24T18:43:37.396Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BackgroundWorkerService.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Subscriber\\Services\\BackgroundWorkerService.cs",
+              "RelativeDocumentMoniker": "SmartPhone.Subscriber\\Services\\BackgroundWorkerService.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Subscriber\\Services\\BackgroundWorkerService.cs",
+              "RelativeToolTip": "SmartPhone.Subscriber\\Services\\BackgroundWorkerService.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-24T18:42:52.372Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CartItem.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\CartItem.cs",
+              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\CartItem.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\CartItem.cs",
+              "RelativeToolTip": "SmartPhone.Services\\Database\\CartItem.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBgAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-24T18:23:44.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\OrderService.cs",
+              "RelativeDocumentMoniker": "SmartPhone.Services\\Services\\OrderService.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\OrderService.cs",
+              "RelativeToolTip": "SmartPhone.Services\\Services\\OrderService.cs",
+              "ViewState": "AgIAAO8AAAAAAAAAAAAUwPwAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-24T18:16:42.327Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -5,15 +5,16 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:http/http.dart' as http;
 import 'package:smartphone_mobile_client/model/cart_item.dart';
-import 'package:smartphone_mobile_client/model/product.dart';
 import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
+import 'package:smartphone_mobile_client/providers/order_provider.dart';
+import 'package:smartphone_mobile_client/model/create_order_from_cart_request.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 class StripePaymentScreen extends StatefulWidget {
   final List<CartItem> cartItems;
-  final double totalAmount;
+  final num totalAmount;
 
   const StripePaymentScreen({
     super.key,
@@ -179,26 +180,56 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
 
           const SizedBox(height: 32),
 
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 4,
+                    ),
+                    child: const Text(
+                      'Continue Shopping',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
-                elevation: 4,
               ),
-              child: const Text(
-                'Continue Shopping',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              const SizedBox(width: 16),
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                                         onPressed: () {
+                       Navigator.of(context).popUntil((route) => route.isFirst);
+                       // User can manually tap the Orders tab
+                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.purple,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: const BorderSide(color: Colors.purple, width: 2),
+                      ),
+                      elevation: 4,
+                    ),
+                    child: const Text(
+                      'View Orders',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -449,6 +480,13 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
             'Email',
             initialValue: _getUserEmail(),
             keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: 16),
+          _buildTextField(
+            'phone',
+            'Phone Number',
+            initialValue: '+387 33 123 456',
+            keyboardType: TextInputType.phone,
           ),
           const SizedBox(height: 16),
           _buildTextField(
@@ -741,18 +779,100 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
       // Generate order number
       final orderNumber = 'ORD${DateTime.now().millisecondsSinceEpoch}';
       
-      // Clear the cart after successful payment
+      // Create order from cart
+      final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      
+      if (authProvider.currentUser == null) {
+        throw Exception('User not authenticated');
+      }
+      
+      await orderProvider.initBaseUrl();
+      
+      final createOrderRequest = CreateOrderFromCartRequest(
+        orderNumber: orderNumber,
+        totalAmount: widget.totalAmount,
+        shippingFirstName: formData['name'].split(' ').first,
+        shippingLastName: formData['name'].split(' ').length > 1 ? formData['name'].split(' ').skip(1).join(' ') : '',
+        shippingAddress: formData['address'],
+        shippingCity: formData['city'],
+        shippingPostalCode: formData['pincode'],
+        shippingCountry: formData['country'],
+        shippingPhone: formData['phone'],
+        shippingEmail: formData['email'],
+        billingFirstName: formData['name'].split(' ').first,
+        billingLastName: formData['name'].split(' ').length > 1 ? formData['name'].split(' ').skip(1).join(' ') : '',
+        billingAddress: formData['address'],
+        billingCity: formData['city'],
+        billingPostalCode: formData['pincode'],
+        billingCountry: formData['country'],
+        billingPhone: formData['phone'],
+        billingEmail: formData['email'],
+      );
+      
+      final order = await orderProvider.createOrderFromCart(createOrderRequest);
+      
+      // Clear the cart after successful order creation
       final cartManager = Provider.of<CartManagerProvider>(context, listen: false);
-      await cartManager.clearCart();
+      print('Starting cart clearing process after successful order creation...');
+      
+      try {
+        // First, try to clear the cart using the backend API
+        await cartManager.clearCart();
+        print('Cart cleared successfully after order creation');
+        
+        // Force a refresh to ensure UI is updated
+        await cartManager.forceRefreshCart();
+        print('Cart state refreshed after clearing');
+        
+      } catch (cartError) {
+        print('Warning: Failed to clear cart after successful order creation: $cartError');
+        
+        // Try alternative approach - force refresh cart state
+        try {
+          print('Attempting to force refresh cart state...');
+          await cartManager.forceRefreshCart();
+          print('Cart state force refreshed after order creation');
+        } catch (refreshError) {
+          print('Warning: Failed to force refresh cart state: $refreshError');
+          
+          // As a last resort, manually clear local cart data
+          print('Manually clearing local cart data as fallback...');
+          cartManager.clearError();
+          cartManager.setLoading(false);
+          
+          // Force notify listeners to update UI
+          cartManager.notifyListeners();
+        }
+      }
+      
+      // Double-check that cart is actually empty
+      try {
+        await Future.delayed(const Duration(milliseconds: 500)); // Small delay to ensure backend sync
+        await cartManager.forceRefreshCart();
+        print('Final cart verification completed');
+        
+        // Log final cart state
+        print('Final cart state - Items: ${cartManager.cartItems.length}, Cart ID: ${cartManager.currentCart?.id}');
+        
+      } catch (e) {
+        print('Final cart verification failed: $e');
+      }
+      
+      // Ensure UI is updated
+      if (mounted) {
+        setState(() {});
+        print('Payment screen UI updated after cart clearing');
+      }
 
       setState(() {
         _paymentCompleted = true;
-        _orderNumber = orderNumber;
+        _orderNumber = order.orderNumber;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Payment successful! Your cart has been cleared.'),
+          content: Text('Payment successful! Order #${order.orderNumber} has been created.'),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

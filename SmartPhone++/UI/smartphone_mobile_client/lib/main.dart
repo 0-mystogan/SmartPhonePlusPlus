@@ -13,6 +13,7 @@ import 'package:smartphone_mobile_client/providers/service_provider.dart';
 import 'package:smartphone_mobile_client/providers/cart_manager_provider.dart';
 import 'package:smartphone_mobile_client/providers/user_provider.dart';
 import 'package:smartphone_mobile_client/providers/recommendation_provider.dart';
+import 'package:smartphone_mobile_client/providers/order_provider.dart';
 import 'package:smartphone_mobile_client/screens/navigation_screen.dart';
 import 'package:smartphone_mobile_client/screens/register_screen.dart';
 import 'package:smartphone_mobile_client/screens/products_screen.dart';
@@ -44,6 +45,7 @@ void main() async {
             ChangeNotifierProvider<CartManagerProvider>(create: (_) => CartManagerProvider()),
             ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
             ChangeNotifierProvider<RecommendationProvider>(create: (_) => RecommendationProvider()),
+            ChangeNotifierProvider<OrderProvider>(create: (_) => OrderProvider()),
           ],
           child: const MyApp(),
         ),

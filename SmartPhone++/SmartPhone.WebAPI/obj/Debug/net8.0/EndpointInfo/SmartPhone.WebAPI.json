@@ -165,6 +165,45 @@
         }
       }
     },
+    "/Cart/debug/all-carts": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Debug endpoint to check all carts for current user",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Cart": {
       "post": {
         "tags": [
@@ -1389,6 +1428,465 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Order/my-orders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Get current user's orders",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Order/by-number/{orderNumber}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Get order by order number",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Order/create-from-cart": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Create order from cart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderFromCartRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderFromCartRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderFromCartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Order": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpsertRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpsertRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpsertRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "name": "OrderNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "OrderDateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "OrderDateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "MinTotalAmount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "MaxTotalAmount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "ShippingFirstName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ShippingLastName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BillingFirstName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "BillingLastName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "FTS",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "IncludeTotalCount",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "RetrieveAll",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponsePagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponsePagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponsePagedResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Order/{id}": {
+      "put": {
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpsertRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpsertRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpsertRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
                 }
               }
             }
@@ -6343,6 +6841,124 @@
         },
         "additionalProperties": false
       },
+      "CreateOrderFromCartRequest": {
+        "required": [
+          "billingAddress",
+          "billingCity",
+          "billingCountry",
+          "billingFirstName",
+          "billingLastName",
+          "billingPhone",
+          "billingPostalCode",
+          "orderNumber",
+          "shippingAddress",
+          "shippingCity",
+          "shippingCountry",
+          "shippingFirstName",
+          "shippingLastName",
+          "shippingPhone",
+          "shippingPostalCode",
+          "totalAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "orderNumber": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "totalAmount": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "shippingFirstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingLastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingAddress": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingCity": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingPostalCode": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingCountry": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingPhone": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "format": "tel"
+          },
+          "shippingEmail": {
+            "maxLength": 100,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "billingFirstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingLastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingAddress": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingCity": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingPostalCode": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingCountry": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingPhone": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "format": "tel"
+          },
+          "billingEmail": {
+            "maxLength": 100,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GenderResponse": {
         "type": "object",
         "properties": {
@@ -6385,6 +7001,319 @@
             "maxLength": 50,
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "shippedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deliveredDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "subtotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "trackingNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingFirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingLastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingPostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingFirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingLastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingPostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderResponsePagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderResponse"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderUpsertRequest": {
+        "required": [
+          "billingAddress",
+          "billingCity",
+          "billingCountry",
+          "billingFirstName",
+          "billingLastName",
+          "billingPhone",
+          "billingPostalCode",
+          "orderNumber",
+          "shippingAddress",
+          "shippingCity",
+          "shippingCountry",
+          "shippingFirstName",
+          "shippingLastName",
+          "shippingPhone",
+          "shippingPostalCode",
+          "subtotal",
+          "totalAmount",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "orderNumber": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "subtotal": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "taxAmount": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "shippingAmount": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "discountAmount": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true
+          },
+          "trackingNumber": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "shippingFirstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingLastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingAddress": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingCity": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingPostalCode": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingCountry": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shippingPhone": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "format": "tel"
+          },
+          "shippingEmail": {
+            "maxLength": 100,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "billingFirstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingLastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingAddress": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingCity": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingPostalCode": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingCountry": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "billingPhone": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string",
+            "format": "tel"
+          },
+          "billingEmail": {
+            "maxLength": 100,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
