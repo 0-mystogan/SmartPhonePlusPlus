@@ -32,7 +32,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
       final orderProvider = Provider.of<OrderProvider>(context, listen: false);
       await orderProvider.initBaseUrl();
-      
+
       final orders = await orderProvider.getMyOrders();
       setState(() {
         _orders = orders;
@@ -59,10 +59,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
         foregroundColor: Colors.white,
         centerTitle: false,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadOrders,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadOrders),
         ],
       ),
       body: Container(
@@ -76,9 +73,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
             ],
           ),
         ),
-        child: SafeArea(
-          child: _buildBody(),
-        ),
+        child: SafeArea(child: _buildBody()),
       ),
     );
   }
@@ -95,18 +90,11 @@ class _OrderListScreenState extends State<OrderListScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               _error!,
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Colors.grey[600], fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -153,10 +141,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
             const SizedBox(height: 12),
             Text(
               'Start shopping to see your orders here',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -165,7 +150,10 @@ class _OrderListScreenState extends State<OrderListScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
               ),
               child: const Text('Start Shopping'),
             ),
@@ -235,9 +223,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     _buildStatusChip(order.status),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Order details
                 Row(
                   children: [
@@ -249,30 +237,13 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     const SizedBox(width: 8),
                     Text(
                       order.formattedOrderDate,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                    Icon(
-                      Icons.shopping_bag,
-                      size: 16,
-                      color: Colors.grey[600],
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${order.orderItems?.length ?? 0} item${(order.orderItems?.length ?? 0) != 1 ? 's' : ''}',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Total amount
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,19 +266,16 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Shipping info preview
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.grey[200]!,
-                      width: 1,
-                    ),
+                    border: Border.all(color: Colors.grey[200]!, width: 1),
                   ),
                   child: Row(
                     children: [
@@ -329,9 +297,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // View details button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -364,7 +332,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
     Color chipColor;
     Color textColor;
     String displayText;
-    
+
     switch (status.toLowerCase()) {
       case 'pending':
         chipColor = Colors.orange[100]!;
@@ -396,7 +364,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
         textColor = Colors.grey[800]!;
         displayText = status;
     }
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(

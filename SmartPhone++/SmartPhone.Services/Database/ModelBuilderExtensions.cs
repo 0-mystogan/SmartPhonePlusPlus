@@ -68,15 +68,32 @@ namespace SmartPhone.Services.Database
                     FirstName = "Amel", 
                     LastName = "Musić",
                     Email = "example1@gmail.com",
-                    Username = "ameltech", 
-                    PasswordHash = "n9yGhSv6sNNKNNMG3uAVpN0YWDZGeVRz2Te3MsESj0I=", //ameltech123
-                    PasswordSalt = "E2d9m5yJ2+VWXK1FF4NTOw==", 
+                    Username = "technician", 
+                    PasswordHash = "Z9izBc6S+rCDs7d+v0TtUdEoTagMmz0YC/zwP1Ngjjo=", //test
+                    PasswordSalt = "R0PxjNB3r4MZsApQ4B/j5w==", 
                     IsActive = true, 
                     CreatedAt = fixedDate,
                     PhoneNumber = DefaultPhoneNumber,
                     GenderId = 1, // Male
                     CityId = 5, // Banja Luka
                     Picture = ImageConversion.ConvertImageToByteArray("Assets", "11.png")
+                }
+                ,
+                new User
+                {
+                    Id = 3,
+                    FirstName = "Adil",
+                    LastName = "Joldić",
+                    Email = "smartphoneplusplus.receiver@gmail.com",
+                    Username = "user",
+                    PasswordHash = "kDPVcZaikiII7vXJbMEw6B0xZ245I29ocaxBjLaoAC0=",
+                    PasswordSalt = "O5R9WmM6IPCCMci/BCG/eg==",
+                    IsActive = true,
+                    CreatedAt = fixedDate,
+                    PhoneNumber = DefaultPhoneNumber,
+                    GenderId = 1, 
+                    CityId = 15, 
+                    Picture = ImageConversion.ConvertImageToByteArray("Assets", "13.png")
                 }
             );
 
@@ -87,14 +104,22 @@ namespace SmartPhone.Services.Database
                     Id = 1, 
                     UserId = 1, 
                     RoleId = 1, 
-                    DateAssigned = fixedDate // Admin user with Administrator role
+                    DateAssigned = fixedDate 
                 },
                 new UserRole 
                 { 
                     Id = 2, 
                     UserId = 2, 
                     RoleId = 3, 
-                    DateAssigned = fixedDate // Driver One with Driver role
+                    DateAssigned = fixedDate 
+                }
+                ,
+                new UserRole
+                {
+                    Id = 3,
+                    UserId = 3,
+                    RoleId = 2,
+                    DateAssigned = fixedDate
                 }
             );
 

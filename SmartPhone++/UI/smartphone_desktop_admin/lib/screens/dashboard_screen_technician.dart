@@ -8,7 +8,7 @@ import 'package:smartphone_desktop_admin/model/search_result.dart';
 import 'package:smartphone_desktop_admin/model/service.dart';
 import 'package:smartphone_desktop_admin/model/phone_model.dart';
 import 'package:smartphone_desktop_admin/model/part.dart';
-import 'package:smartphone_desktop_admin/screens/service_details_screen.dart';
+import 'package:smartphone_desktop_admin/screens/service_details_technician_screen.dart';
 import 'package:smartphone_desktop_admin/screens/phone_model_details_screen.dart';
 import 'package:smartphone_desktop_admin/screens/part_details_screen.dart';
 
@@ -340,7 +340,7 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ServiceDetailsScreen(service: defaultService),
+                          builder: (context) => ServiceDetailsTechnicianScreen(service: defaultService),
                         ),
                       );
                     },

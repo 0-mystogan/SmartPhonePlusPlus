@@ -600,7 +600,6 @@ C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debu
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.Subscriber.deps.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.Subscriber.runtimeconfig.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.Subscriber.exe
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.WebAPI.staticwebassets.endpoints.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.WebAPI.exe
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.WebAPI.deps.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.WebAPI.runtimeconfig.json
@@ -803,7 +802,6 @@ C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debu
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.Services.pdb
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.Subscriber.pdb
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.csproj.AssemblyReference.cache
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rpswa.dswa.cache.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.AssemblyInfoInputs.cache
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.AssemblyInfo.cs
@@ -811,14 +809,9 @@ C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debu
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.sourcelink.json
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rjimswa.dswa.cache.json
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\scopedcss\bundle\SmartPhone.WebAPI.styles.css
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.development.json
-C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPho.33D2E80E.Up2Date
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.dll
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\refint\SmartPhone.WebAPI.dll
@@ -826,4 +819,11 @@ C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debu
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.pdb
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\SmartPhone.WebAPI.genruntimeconfig.cache
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\ref\SmartPhone.WebAPI.dll
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\bin\Debug\net8.0\SmartPhone.WebAPI.staticwebassets.endpoints.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\ASUS\Desktop\SmartPhonePlusPlus\SmartPhone++\SmartPhone.WebAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

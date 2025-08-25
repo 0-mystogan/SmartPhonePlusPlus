@@ -17,10 +17,13 @@ class RecommendationProvider extends BaseProvider<Product> {
   String? get error => _error;
 
   /// Get product recommendations for a specific user based on their cart
-  /// 
+  ///
   /// This method gets recommendations directly from the backend by user ID,
   /// which fetches the user's cart from the database and provides intelligent recommendations.
-  Future<List<Product>> getUserRecommendations(int userId, {int maxRecommendations = 10}) async {
+  Future<List<Product>> getUserRecommendations(
+    int userId, {
+    int maxRecommendations = 3,
+  }) async {
     try {
       _isLoading = true;
       _error = null;
@@ -32,14 +35,16 @@ class RecommendationProvider extends BaseProvider<Product> {
       print('RecommendationProvider: Getting recommendations for user $userId');
       print('RecommendationProvider: Base URL: ${BaseProvider.baseUrl}');
       print('RecommendationProvider: Endpoint: $endpoint');
-      
+
       // Construct the full URL for debugging
-      final fullUrl = '${BaseProvider.baseUrl}$endpoint/user/$userId?maxRecommendations=$maxRecommendations';
+      final fullUrl =
+          '${BaseProvider.baseUrl}$endpoint/user/$userId?maxRecommendations=$maxRecommendations';
       print('RecommendationProvider: Full URL: $fullUrl');
-      
-      final response = await getCustom('user/$userId', queryParameters: {
-        'maxRecommendations': maxRecommendations.toString(),
-      });
+
+      final response = await getCustom(
+        'user/$userId',
+        queryParameters: {'maxRecommendations': maxRecommendations.toString()},
+      );
 
       print('RecommendationProvider: Response received: $response');
       print('RecommendationProvider: Response type: ${response.runtimeType}');
@@ -51,7 +56,9 @@ class RecommendationProvider extends BaseProvider<Product> {
             .cast<Product>()
             .toList();
 
-        print('RecommendationProvider: Parsed ${recommendations.length} recommendations');
+        print(
+          'RecommendationProvider: Parsed ${recommendations.length} recommendations',
+        );
 
         _recommendations = recommendations;
         _isLoading = false;
@@ -75,12 +82,15 @@ class RecommendationProvider extends BaseProvider<Product> {
   }
 
   /// Get product recommendations based on cart items (for backward compatibility)
-  /// 
+  ///
   /// This method implements association-based recommendations:
   /// 1. Name-based: Finds products with similar names (cases, glass, accessories)
   /// 2. Category-based: Finds complementary products from different categories
   /// 3. Featured: Falls back to featured products if needed
-  Future<List<Product>> getCartBasedRecommendations(List<CartItem> cartItems, {int maxRecommendations = 10}) async {
+  Future<List<Product>> getCartBasedRecommendations(
+    List<CartItem> cartItems, {
+    int maxRecommendations = 3,
+  }) async {
     try {
       if (cartItems.isEmpty) {
         _recommendations = [];
@@ -98,7 +108,11 @@ class RecommendationProvider extends BaseProvider<Product> {
       // Extract data from cart items for recommendation
       final productIds = cartItems.map((item) => item.productId).toList();
       final productNames = cartItems.map((item) => item.productName).toList();
-      final categoryIds = cartItems.map((item) => item.productCategoryId).where((id) => id != null).cast<int>().toList();
+      final categoryIds = cartItems
+          .map((item) => item.productCategoryId)
+          .where((id) => id != null)
+          .cast<int>()
+          .toList();
 
       // Build query parameters
       final queryParams = <String, String>{
@@ -108,7 +122,10 @@ class RecommendationProvider extends BaseProvider<Product> {
         'maxRecommendations': maxRecommendations.toString(),
       };
 
-      final response = await getCustom('cart-based', queryParameters: queryParams);
+      final response = await getCustom(
+        'cart-based',
+        queryParameters: queryParams,
+      );
 
       if (response != null && response is List) {
         final recommendations = response
@@ -142,7 +159,12 @@ class RecommendationProvider extends BaseProvider<Product> {
   }
 
   /// Get recommendations for a specific product (for product detail pages)
-  Future<List<Product>> getProductRecommendations(int productId, String productName, int categoryId, {int maxRecommendations = 6}) async {
+  Future<List<Product>> getProductRecommendations(
+    int productId,
+    String productName,
+    int categoryId, {
+    int maxRecommendations = 3,
+  }) async {
     try {
       _isLoading = true;
       _error = null;
@@ -158,7 +180,10 @@ class RecommendationProvider extends BaseProvider<Product> {
         'maxRecommendations': maxRecommendations.toString(),
       };
 
-      final response = await getCustom('cart-based', queryParameters: queryParams);
+      final response = await getCustom(
+        'cart-based',
+        queryParameters: queryParams,
+      );
 
       if (response != null && response is List) {
         final recommendations = response

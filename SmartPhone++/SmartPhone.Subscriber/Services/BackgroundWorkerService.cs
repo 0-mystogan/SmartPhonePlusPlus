@@ -84,25 +84,52 @@ namespace SmartPhone.Subscriber.Services
         private async Task HandleServiceMessage(ServiceNotification notification)
         {
             var service = notification.Service;
-            if (service?.AdminEmails == null || !service.AdminEmails.Any())
+            if (service?.CustomerEmail == null || string.IsNullOrEmpty(service.CustomerEmail))
             {
-                _logger.LogWarning("No admin emails provided in the service notification");
+                _logger.LogWarning("No customer email provided in the service notification");
                 return;
             }
-            var subject = $"Service Completed: {service.ServiceName}";
-            var message = $"The service '{service.ServiceName}' has been completed and can be picked up.";
-            foreach (var email in service.AdminEmails)
+
+            var subject = $"Your Phone Service is Ready for Pickup - {service.ServiceName}";
+            var message = BuildCustomerNotificationMessage(service);
+            
+            try
             {
-                try
-                {
-                    await _emailSender.SendEmailAsync(email, subject, message);
-                    _logger.LogInformation($"Service completion notification sent to admin: {email}");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Failed to send service completion email to {email}: {ex.Message}");
-                }
+                await _emailSender.SendEmailAsync(service.CustomerEmail, subject, message);
+                _logger.LogInformation($"Service completion notification sent to customer: {service.CustomerEmail} for service: {service.ServiceName}");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to send service completion email to customer {service.CustomerEmail}: {ex.Message}");
+            }
+        }
+
+        private string BuildCustomerNotificationMessage(ServiceNotificationDto service)
+        {
+            var message = $@"Dear {service.CustomerName},
+
+We're pleased to inform you that your phone service has been completed!
+
+Service Details:
+- Service: {service.ServiceName}
+- Status: {service.Status}";
+
+            if (!string.IsNullOrEmpty(service.PhoneModel))
+            {
+                message += $@"
+- Phone Model: {service.PhoneModel}";
+            }
+
+            message += $@"
+
+Your device is now ready for pickup. Please visit our service center during business hours to collect your phone.
+
+Thank you for choosing SmartPhone++ for your device repair needs!
+
+Best regards,
+SmartPhone++ Service Team";
+
+            return message;
         }
     }
 }

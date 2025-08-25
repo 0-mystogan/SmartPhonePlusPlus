@@ -1,10 +1,10 @@
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/service.dart';
 import 'package:smartphone_desktop_admin/model/user.dart';
-import 'package:smartphone_desktop_admin/model/phone_model.dart';
 import 'package:smartphone_desktop_admin/providers/user_provider.dart';
-import 'package:smartphone_desktop_admin/providers/phone_model_provider.dart';
+import 'package:smartphone_desktop_admin/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
   final Service service;
@@ -17,17 +17,26 @@ class ServiceDetailsScreen extends StatefulWidget {
 class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   User? customer;
   User? technician;
-  PhoneModel? phoneModel;
   bool isLoading = true;
   String? errorMessage;
 
-  final UserProvider _userProvider = UserProvider();
-  final PhoneModelProvider _phoneModelProvider = PhoneModelProvider();
+  late UserProvider _userProvider;
+  late AuthProvider _authProvider;
 
   @override
   void initState() {
     super.initState();
-    _loadRelatedData();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print("ServiceDetailsScreen: Initializing providers...");
+      _userProvider = context.read<UserProvider>();
+      _authProvider = context.read<AuthProvider>();
+
+      print(
+        "ServiceDetailsScreen: Auth status - isAuthenticated: ${_authProvider.isAuthenticated}, currentUser: ${_authProvider.currentUser?.firstName}",
+      );
+
+      await _loadRelatedData();
+    });
   }
 
   Future<void> _loadRelatedData() async {
@@ -37,19 +46,20 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         errorMessage = null;
       });
 
+      // Check if authentication is ready
+      if (!_authProvider.isAuthenticated) {
+        throw Exception("Authentication not ready. Please log in again.");
+      }
+
       // Load customer data
       if (widget.service.userId > 0) {
         customer = await _userProvider.getById(widget.service.userId);
       }
 
       // Load technician data
-      if (widget.service.technicianId != null && widget.service.technicianId! > 0) {
+      if (widget.service.technicianId != null &&
+          widget.service.technicianId! > 0) {
         technician = await _userProvider.getById(widget.service.technicianId!);
-      }
-
-      // Load phone model data
-      if (widget.service.phoneModelId != null && widget.service.phoneModelId! > 0) {
-        phoneModel = await _phoneModelProvider.getById(widget.service.phoneModelId!);
       }
 
       setState(() {
@@ -60,6 +70,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         isLoading = false;
         errorMessage = "Failed to load related data: $e";
       });
+      print("Error loading related data: $e");
     }
   }
 
@@ -71,11 +82,6 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   String _getTechnicianName() {
     if (technician == null) return "Loading...";
     return "${technician!.firstName} ${technician!.lastName}";
-  }
-
-  String _getPhoneModelName() {
-    if (phoneModel == null) return "Loading...";
-    return "${phoneModel!.brand} ${phoneModel!.model}";
   }
 
   Widget _buildInfoRow(String label, String value, {IconData? icon}) {
@@ -192,7 +198,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     ),
                     _buildInfoRowWithNull(
                       "Estimated Duration",
-                      widget.service.estimatedDuration != null 
+                      widget.service.estimatedDuration != null
                           ? "${widget.service.estimatedDuration} hours"
                           : null,
                       icon: Icons.schedule,
@@ -219,17 +225,23 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     ),
                     _buildInfoRowWithNull(
                       "Updated At",
-                      widget.service.updatedAt != null ? _formatDateTime(widget.service.updatedAt) : null,
+                      widget.service.updatedAt != null
+                          ? _formatDateTime(widget.service.updatedAt)
+                          : null,
                       icon: Icons.update,
                     ),
                     _buildInfoRowWithNull(
                       "Started At",
-                      widget.service.startedAt != null ? _formatDateTime(widget.service.startedAt) : null,
+                      widget.service.startedAt != null
+                          ? _formatDateTime(widget.service.startedAt)
+                          : null,
                       icon: Icons.play_arrow,
                     ),
                     _buildInfoRowWithNull(
                       "Completed At",
-                      widget.service.completedAt != null ? _formatDateTime(widget.service.completedAt) : null,
+                      widget.service.completedAt != null
+                          ? _formatDateTime(widget.service.completedAt)
+                          : null,
                       icon: Icons.check_circle,
                     ),
                     _buildInfoRow(
@@ -239,13 +251,10 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     ),
                     _buildInfoRowWithNull(
                       "Technician",
-                      widget.service.technicianId != null ? _getTechnicianName() : null,
+                      widget.service.technicianId != null
+                          ? _getTechnicianName()
+                          : null,
                       icon: Icons.engineering,
-                    ),
-                    _buildInfoRowWithNull(
-                      "Phone Model",
-                      widget.service.phoneModelId != null ? _getPhoneModelName() : null,
-                      icon: Icons.phone_android,
                     ),
                   ],
                 ),

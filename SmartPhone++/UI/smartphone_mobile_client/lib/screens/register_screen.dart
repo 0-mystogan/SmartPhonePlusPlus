@@ -27,11 +27,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-  
+
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  
+  bool _isLoadingCities = true;
+  bool _isLoadingGenders = true;
+
   List<City> _cities = [];
   List<Gender> _genders = [];
   City? _selectedCity;
@@ -47,26 +49,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _loadData() async {
     try {
       final cityProvider = Provider.of<CityProvider>(context, listen: false);
-      final genderProvider = Provider.of<GenderProvider>(context, listen: false);
-      
+      final genderProvider = Provider.of<GenderProvider>(
+        context,
+        listen: false,
+      );
+
       await cityProvider.initBaseUrl();
       await genderProvider.initBaseUrl();
-      
-      final cityResult = await cityProvider.get();
-      final genderResult = await genderProvider.get();
-      
-      setState(() {
-        _cities = cityResult.items ?? [];
-        _genders = genderResult.items ?? [];
-        
-        // Set default selections if available
-        if (_cities.isNotEmpty) _selectedCity = _cities.first;
-        if (_genders.isNotEmpty) _selectedGender = _genders.first;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading data: $e')),
+
+      // Use the same pattern as ManiFest project with filter parameters
+      final cityResult = await cityProvider.get(
+        filter: {
+          'page': 0,
+          'pageSize': 1000, // Get all cities
+          'includeTotalCount': false,
+        },
       );
+      final genderResult = await genderProvider.get(
+        filter: {
+          'page': 0,
+          'pageSize': 1000, // Get all genders
+          'includeTotalCount': false,
+        },
+      );
+
+      if (mounted) {
+        setState(() {
+          _cities = cityResult.items ?? [];
+          _genders = genderResult.items ?? [];
+          _isLoadingCities = false;
+          _isLoadingGenders = false;
+
+          // Set default selections if available
+          if (_cities.isNotEmpty) _selectedCity = _cities.first;
+          if (_genders.isNotEmpty) _selectedGender = _genders.first;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingCities = false;
+          _isLoadingGenders = false;
+        });
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error loading data: $e')));
+      }
     }
   }
 
@@ -81,16 +109,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         final file = File(result.files.first.path!);
         final bytes = await file.readAsBytes();
         final base64String = base64Encode(bytes);
-        
+
         setState(() {
           _selectedPictureBase64 = base64String;
         });
       }
     } catch (e) {
       print("Error picking image: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
     }
   }
 
@@ -115,8 +143,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: _emailController.text.trim(),
         username: _usernameController.text.trim(),
         password: _passwordController.text,
-        phoneNumber: _phoneNumberController.text.trim().isEmpty 
-            ? null 
+        phoneNumber: _phoneNumberController.text.trim().isEmpty
+            ? null
             : _phoneNumberController.text.trim(),
         picture: _selectedPictureBase64,
         genderId: _selectedGender!.id,
@@ -127,16 +155,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await userProvider.insert(request);
 
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registration successful!')),
+        const SnackBar(
+          content: Text('Registration successful!'),
+          backgroundColor: Colors.green,
+        ),
       );
-      
+
       Navigator.of(context).pop(); // Go back to login screen
     } catch (e) {
       if (!mounted) return;
+
+      String errorMessage = 'Registration failed';
+
+      // Parse error message to provide better user feedback
+      if (e.toString().contains('email already exists')) {
+        errorMessage = 'An account with this email already exists';
+      } else if (e.toString().contains('username already exists')) {
+        errorMessage = 'This username is already taken';
+      } else if (e.toString().contains('validation')) {
+        errorMessage = 'Please check all fields and try again';
+      } else if (e.toString().contains('network') ||
+          e.toString().contains('connection')) {
+        errorMessage = 'Network error. Please check your connection';
+      } else {
+        errorMessage = 'Registration failed: ${e.toString()}';
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed: $e')),
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -183,7 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Profile Picture Picker
                   Center(
                     child: Column(
@@ -230,11 +282,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ElevatedButton.icon(
                               onPressed: _pickImage,
                               icon: Icon(Icons.camera_alt, size: 18),
-                              label: Text("Add Photo", style: TextStyle(fontSize: 14)),
+                              label: Text(
+                                "Add Photo",
+                                style: TextStyle(fontSize: 14),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.purple,
                                 foregroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -249,11 +307,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   });
                                 },
                                 icon: Icon(Icons.delete, size: 18),
-                                label: Text("Remove", style: TextStyle(fontSize: 14)),
+                                label: Text(
+                                  "Remove",
+                                  style: TextStyle(fontSize: 14),
+                                ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red[600],
                                   foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -266,7 +330,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // First Name
                   TextFormField(
                     controller: _firstNameController,
@@ -285,7 +349,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Last Name
                   TextFormField(
                     controller: _lastNameController,
@@ -304,7 +368,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Email
                   TextFormField(
                     controller: _emailController,
@@ -317,14 +381,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (value == null || value.trim().isEmpty) {
                         return 'Email is required';
                       }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                      if (!RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      ).hasMatch(value)) {
                         return 'Please enter a valid email';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Username
                   TextFormField(
                     controller: _usernameController,
@@ -343,7 +409,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Password
                   TextFormField(
                     controller: _passwordController,
@@ -353,7 +419,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       prefixIcon: Icons.lock,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -373,7 +441,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Confirm Password
                   TextFormField(
                     controller: _confirmPasswordController,
@@ -383,7 +451,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       prefixIcon: Icons.lock,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                          _obscureConfirmPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -403,7 +473,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Phone Number (Optional)
                   TextFormField(
                     controller: _phoneNumberController,
@@ -422,25 +492,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Gender Dropdown
                   DropdownButtonFormField<Gender>(
                     value: _selectedGender,
                     decoration: customTextFieldDecoration(
-                      "Gender",
+                      _isLoadingGenders ? "Loading genders..." : "Gender",
                       prefixIcon: Icons.person_outline,
                     ),
-                    items: _genders.map((gender) {
-                      return DropdownMenuItem(
-                        value: gender,
-                        child: Text(gender.name),
-                      );
-                    }).toList(),
-                    onChanged: (Gender? value) {
-                      setState(() {
-                        _selectedGender = value;
-                      });
-                    },
+                    items: _isLoadingGenders
+                        ? []
+                        : _genders.map((gender) {
+                            return DropdownMenuItem(
+                              value: gender,
+                              child: Text(gender.name),
+                            );
+                          }).toList(),
+                    onChanged: _isLoadingGenders
+                        ? null
+                        : (Gender? value) {
+                            setState(() {
+                              _selectedGender = value;
+                            });
+                          },
                     validator: (value) {
                       if (value == null) {
                         return 'Please select a gender';
@@ -449,25 +523,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // City Dropdown
                   DropdownButtonFormField<City>(
                     value: _selectedCity,
                     decoration: customTextFieldDecoration(
-                      "City",
+                      _isLoadingCities ? "Loading cities..." : "City",
                       prefixIcon: Icons.location_city,
                     ),
-                    items: _cities.map((city) {
-                      return DropdownMenuItem(
-                        value: city,
-                        child: Text(city.name),
-                      );
-                    }).toList(),
-                    onChanged: (City? value) {
-                      setState(() {
-                        _selectedCity = value;
-                      });
-                    },
+                    items: _isLoadingCities
+                        ? []
+                        : _cities.map((city) {
+                            return DropdownMenuItem(
+                              value: city,
+                              child: Text(city.name),
+                            );
+                          }).toList(),
+                    onChanged: _isLoadingCities
+                        ? null
+                        : (City? value) {
+                            setState(() {
+                              _selectedCity = value;
+                            });
+                          },
                     validator: (value) {
                       if (value == null) {
                         return 'Please select a city';
@@ -476,12 +554,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Register Button
                   SizedBox(
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _handleRegister,
+                      onPressed:
+                          (_isLoading || _isLoadingCities || _isLoadingGenders)
+                          ? null
+                          : _handleRegister,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple,
                         foregroundColor: Colors.white,
@@ -508,17 +589,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Login Link
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
                         'Already have an account? ',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),

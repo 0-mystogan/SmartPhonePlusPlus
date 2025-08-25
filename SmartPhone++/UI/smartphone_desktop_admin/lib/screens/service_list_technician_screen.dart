@@ -211,7 +211,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => technician.ServiceDetailsScreen(service: service),
+                builder: (context) => technician.ServiceDetailsTechnicianScreen(service: service),
               ),
             ).then((result) {
               if (result == true) {
@@ -326,7 +326,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => technician.ServiceDetailsScreen(service: defaultService),
+                          builder: (context) => technician.ServiceDetailsTechnicianScreen(service: defaultService),
                         ),
                       ).then((result) {
                         if (result == true) {

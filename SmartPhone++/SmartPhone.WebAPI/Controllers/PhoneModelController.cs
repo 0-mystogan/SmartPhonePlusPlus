@@ -11,7 +11,7 @@ namespace SmartPhone.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Roles = "Technician")]
+    [Authorize(Roles = "Technician,Administrator")]
     public class PhoneModelController : BaseCRUDController<PhoneModelResponse, PhoneModelSearchObject, PhoneModelUpsertRequest, PhoneModelUpsertRequest>
     {
         private readonly IPhoneModelService _phoneModelService;

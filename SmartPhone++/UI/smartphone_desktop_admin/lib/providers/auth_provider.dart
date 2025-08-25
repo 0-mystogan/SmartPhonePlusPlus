@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class AuthProvider extends ChangeNotifier {
   static String? username;
   static String? password;
-  
+
   User? _currentUser;
   bool _isAuthenticated = false;
   bool _isLoading = false;
@@ -22,14 +22,24 @@ class AuthProvider extends ChangeNotifier {
   // Check if user has a specific role
   bool hasRole(String roleName) {
     if (_currentUser == null || _currentUser!.roles.isEmpty) return false;
-    return _currentUser!.roles.any((role) => role.name.toLowerCase() == roleName.toLowerCase());
+    return _currentUser!.roles.any(
+      (role) => role.name.toLowerCase() == roleName.toLowerCase(),
+    );
   }
 
   // Check if user is a technician
   bool get isTechnician => hasRole('Technician');
-  
+
   // Check if user is an administrator
   bool get isAdministrator => hasRole('Administrator');
+
+  // Get base URL from environment
+  String get baseUrl {
+    return const String.fromEnvironment(
+      "baseUrl",
+      defaultValue: "http://localhost:5130/",
+    );
+  }
 
   // Authenticate user
   Future<bool> authenticate(String username, String password) async {
@@ -42,11 +52,12 @@ class AuthProvider extends ChangeNotifier {
       AuthProvider.password = password;
 
       // Create basic auth header
-      String basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
-      
-      // Make authentication request to get user info
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+
+      // Make authentication request to get user info using environment-based URL
       final response = await http.get(
-        Uri.parse('http://localhost:7074/Users/me'),
+        Uri.parse('${baseUrl}Users/me'),
         headers: {
           'Authorization': basicAuth,
           'Content-Type': 'application/json',

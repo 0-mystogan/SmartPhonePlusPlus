@@ -23,16 +23,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (baseFromEnv.isNotEmpty) {
       baseUrl = baseFromEnv;
+      print('BaseProvider: Using base URL from environment: $baseUrl');
       return;
     }
 
     if (Platform.isAndroid) {
       // Android emulator
-      baseUrl = "http://10.0.2.2:7074/";
-      
+      baseUrl = "http://10.0.2.2:5130/";
+      print('BaseProvider: Using Android emulator base URL: $baseUrl');
     } else if (Platform.isIOS) {
       // iOS simulator
-      baseUrl = "http://localhost:7074/";
+      baseUrl = "http://localhost:5130/";
       print('BaseProvider: Using iOS simulator base URL: $baseUrl');
     } else {
       // Physical device or other
@@ -42,13 +43,13 @@ abstract class BaseProvider<T> with ChangeNotifier {
         ip = await info.getWifiIP(); // Device's IP
       }
       if (ip != null) {
-        baseUrl = "http://$ip:7074/";
+        baseUrl = "http://$ip:5130/";
         print('BaseProvider: Using physical device base URL: $baseUrl');
       } else {
         throw Exception("Unable to determine local IP address");
       }
     }
-    
+
     print('BaseProvider: Final base URL set to: $baseUrl');
   }
 
@@ -60,7 +61,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
       url = "$url?$queryString";
     }
 
-    print('BaseProvider: Making GET request to: $url');
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -68,12 +68,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
         .get(uri, headers: headers)
         .timeout(const Duration(seconds: 10));
 
-    print('BaseProvider: Response status: ${response.statusCode}');
-    print('BaseProvider: Response body: ${response.body}');
-
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
-      print('BaseProvider: Parsed JSON data: $data');
 
       var result = SearchResult<T>();
       result.totalCount = data['totalCount'];
@@ -81,7 +77,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
           ? List<T>.from(data["items"].map((e) => fromJson(e)))
           : <T>[];
 
-      print('BaseProvider: Created ${result.items?.length ?? 0} items from response');
       return result;
     } else {
       throw Exception("Unknown error");
@@ -295,7 +290,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   bool isValidResponse(Response response) {
     print('BaseProvider: HTTP Response Status: ${response.statusCode}');
     print('BaseProvider: HTTP Response Body: ${response.body}');
-    
+
     if (response.statusCode < 299) {
       return true;
     } else if (response.statusCode == 401) {
@@ -303,13 +298,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw Exception("Please check your credentials and try again.");
     } else if (response.statusCode == 404) {
       print('BaseProvider: Endpoint not found - 404 Not Found');
-      throw Exception("The requested endpoint was not found. Please check the API configuration.");
+      throw Exception(
+        "The requested endpoint was not found. Please check the API configuration.",
+      );
     } else if (response.statusCode >= 500) {
       print('BaseProvider: Server error - ${response.statusCode}');
       throw Exception("Server error occurred. Please try again later.");
     } else {
       print('BaseProvider: Request failed with status ${response.statusCode}');
-      throw Exception("Request failed with status ${response.statusCode}: ${response.body}");
+      throw Exception(
+        "Request failed with status ${response.statusCode}: ${response.body}",
+      );
     }
   }
 
@@ -320,11 +319,16 @@ abstract class BaseProvider<T> with ChangeNotifier {
     String basicAuth =
         "Basic ${base64Encode(utf8.encode('$username:$password'))}";
 
-    var headers = {"Content-Type": "application/json", "Authorization": basicAuth};
-    
-    print('BaseProvider: Creating headers with username: $username, password length: ${password.length}');
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": basicAuth,
+    };
+
+    print(
+      'BaseProvider: Creating headers with username: $username, password length: ${password.length}',
+    );
     print('BaseProvider: Authorization header: $basicAuth');
-    
+
     return headers;
   }
 

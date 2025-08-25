@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:smartphone_mobile_client/model/order.dart';
-import 'package:smartphone_mobile_client/model/order_item.dart';
 
 class OrderScreen extends StatelessWidget {
   final Order order;
 
-  const OrderScreen({
-    super.key,
-    required this.order,
-  });
+  const OrderScreen({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +40,6 @@ class OrderScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 _buildOrderSummary(),
                 const SizedBox(height: 24),
-                _buildOrderItems(),
-                const SizedBox(height: 24),
                 _buildShippingInfo(),
                 const SizedBox(height: 24),
                 _buildBillingInfo(),
@@ -75,29 +69,31 @@ class OrderScreen extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Order #${order.orderNumber}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple[800],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Order #${order.orderNumber}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple[800],
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    order.formattedOrderDate,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
+                    const SizedBox(height: 4),
+                    Text(
+                      order.formattedOrderDate,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 12),
               _buildStatusChip(order.status),
             ],
           ),
@@ -112,11 +108,7 @@ class OrderScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.local_shipping,
-                    color: Colors.blue[600],
-                    size: 20,
-                  ),
+                  Icon(Icons.local_shipping, color: Colors.blue[600], size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -137,6 +129,8 @@ class OrderScreen extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ],
                     ),
@@ -176,19 +170,27 @@ class OrderScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          _buildSummaryRow('Subtotal', '${order.subtotal.toStringAsFixed(2)} BAM'),
-          if (order.taxAmount > 0)
-            _buildSummaryRow('Tax', '${order.taxAmount.toStringAsFixed(2)} BAM'),
-          if (order.shippingAmount > 0)
-            _buildSummaryRow('Shipping', '${order.shippingAmount.toStringAsFixed(2)} BAM'),
-          if (order.discountAmount > 0)
-            _buildSummaryRow('Discount', '-${order.discountAmount.toStringAsFixed(2)} BAM'),
-          const Divider(height: 24),
           _buildSummaryRow(
-            'Total',
-            order.formattedTotalAmount,
-            isTotal: true,
+            'Subtotal',
+            '${order.subtotal.toStringAsFixed(2)} BAM',
           ),
+          if (order.taxAmount > 0)
+            _buildSummaryRow(
+              'Tax',
+              '${order.taxAmount.toStringAsFixed(2)} BAM',
+            ),
+          if (order.shippingAmount > 0)
+            _buildSummaryRow(
+              'Shipping',
+              '${order.shippingAmount.toStringAsFixed(2)} BAM',
+            ),
+          if (order.discountAmount > 0)
+            _buildSummaryRow(
+              'Discount',
+              '-${order.discountAmount.toStringAsFixed(2)} BAM',
+            ),
+          const Divider(height: 24),
+          _buildSummaryRow('Total', order.formattedTotalAmount, isTotal: true),
         ],
       ),
     );
@@ -221,123 +223,6 @@ class OrderScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderItems() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.purple.withOpacity(0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Order Items (${order.orderItems?.length ?? 0})',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.purple[800],
-            ),
-          ),
-          const SizedBox(height: 16),
-          ...(order.orderItems ?? []).map((item) => _buildOrderItemCard(item)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOrderItemCard(OrderItem item) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.purple.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.phone_android,
-              color: Colors.purple[600],
-              size: 30,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.productName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'SKU: ${item.productSKU}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(
-                      'Qty: ${item.quantity}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      '${item.unitPrice.toStringAsFixed(2)} BAM each',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                item.formattedTotalPrice,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.purple[700],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildShippingInfo() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -357,11 +242,7 @@ class OrderScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.local_shipping,
-                color: Colors.purple[600],
-                size: 20,
-              ),
+              Icon(Icons.local_shipping, color: Colors.purple[600], size: 20),
               const SizedBox(width: 12),
               Text(
                 'Shipping Information',
@@ -406,11 +287,7 @@ class OrderScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.payment,
-                color: Colors.purple[600],
-                size: 20,
-              ),
+              Icon(Icons.payment, color: Colors.purple[600], size: 20),
               const SizedBox(width: 12),
               Text(
                 'Billing Information',
@@ -456,10 +333,7 @@ class OrderScreen extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.black87),
             ),
           ),
         ],
@@ -471,7 +345,7 @@ class OrderScreen extends StatelessWidget {
     Color chipColor;
     Color textColor;
     String displayText;
-    
+
     switch (status.toLowerCase()) {
       case 'pending':
         chipColor = Colors.orange[100]!;
@@ -503,7 +377,7 @@ class OrderScreen extends StatelessWidget {
         textColor = Colors.grey[800]!;
         displayText = status;
     }
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(

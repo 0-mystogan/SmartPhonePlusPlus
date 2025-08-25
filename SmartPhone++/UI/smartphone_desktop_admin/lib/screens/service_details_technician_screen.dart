@@ -10,15 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
 
-class ServiceDetailsScreen extends StatefulWidget {
+class ServiceDetailsTechnicianScreen extends StatefulWidget {
   final Service service;
-  const ServiceDetailsScreen({super.key, required this.service});
+  const ServiceDetailsTechnicianScreen({super.key, required this.service});
 
   @override
-  State<ServiceDetailsScreen> createState() => _ServiceDetailsScreenState();
+  State<ServiceDetailsTechnicianScreen> createState() => _ServiceDetailsTechnicianScreenState();
 }
 
-class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
+class _ServiceDetailsTechnicianScreenState extends State<ServiceDetailsTechnicianScreen> {
   late ServiceProvider serviceProvider;
   late UserProvider userProvider;
   late PhoneModelProvider phoneModelProvider;

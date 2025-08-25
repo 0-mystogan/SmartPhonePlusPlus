@@ -15,13 +15,23 @@ class ServiceVerificationViewerScreen extends StatefulWidget {
   final int serviceId;
 
   @override
-  State<ServiceVerificationViewerScreen> createState() => _ServiceVerificationViewerScreenState();
+  State<ServiceVerificationViewerScreen> createState() =>
+      _ServiceVerificationViewerScreenState();
 }
 
-class _ServiceVerificationViewerScreenState extends State<ServiceVerificationViewerScreen> {
+class _ServiceVerificationViewerScreenState
+    extends State<ServiceVerificationViewerScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   File? _pdfFile;
+
+  // Get base URL from environment
+  String get baseUrl {
+    return const String.fromEnvironment(
+      "baseUrl",
+      defaultValue: "http://localhost:5130/",
+    );
+  }
 
   @override
   void initState() {
@@ -31,12 +41,14 @@ class _ServiceVerificationViewerScreenState extends State<ServiceVerificationVie
 
   Future<void> _downloadAndSavePdf() async {
     try {
-      final String baseUrl = BaseProvider.baseUrl ?? 'http://localhost:7074/';
-      final uri = Uri.parse('${baseUrl}api/ServiceVerification/${widget.serviceId}');
+      final uri = Uri.parse(
+        '${baseUrl}api/ServiceVerification/${widget.serviceId}',
+      );
 
       final String username = AuthProvider.username ?? '';
       final String password = AuthProvider.password ?? '';
-      final String basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+      final String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$password'))}';
 
       final headers = <String, String>{
         'Authorization': basicAuth,
@@ -50,7 +62,8 @@ class _ServiceVerificationViewerScreenState extends State<ServiceVerificationVie
       if (response.statusCode == 200) {
         final bytes = response.bodyBytes;
         final tempDir = await getTemporaryDirectory();
-        final filePath = '${tempDir.path}/service_verification_${widget.serviceId}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+        final filePath =
+            '${tempDir.path}/service_verification_${widget.serviceId}_${DateTime.now().millisecondsSinceEpoch}.pdf';
         final file = File(filePath);
         await file.writeAsBytes(bytes, flush: true);
         setState(() {
@@ -92,7 +105,9 @@ class _ServiceVerificationViewerScreenState extends State<ServiceVerificationVie
                     if (_pdfFile == null) {
                       if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('No verification to print')),
+                        const SnackBar(
+                          content: Text('No verification to print'),
+                        ),
                       );
                       return;
                     }
@@ -104,22 +119,22 @@ class _ServiceVerificationViewerScreenState extends State<ServiceVerificationVie
                     } catch (e) {
                       if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Failed to print verification')),
+                        const SnackBar(
+                          content: Text('Failed to print verification'),
+                        ),
                       );
                     }
                   },
-          )
+          ),
         ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null
-              ? Center(child: Text(_errorMessage!))
-              : _pdfFile != null
-                  ? SfPdfViewer.file(_pdfFile!)
-                  : const Center(child: Text('Failed to load verification')),
+          ? Center(child: Text(_errorMessage!))
+          : _pdfFile != null
+          ? SfPdfViewer.file(_pdfFile!)
+          : const Center(child: Text('Failed to load verification')),
     );
   }
 }
-
-

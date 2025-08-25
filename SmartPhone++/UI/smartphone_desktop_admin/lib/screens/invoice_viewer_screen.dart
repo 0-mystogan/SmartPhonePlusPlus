@@ -23,6 +23,14 @@ class _InvoiceViewerScreenState extends State<InvoiceViewerScreen> {
   String? _errorMessage;
   File? _pdfFile;
 
+  // Get base URL from environment
+  String get baseUrl {
+    return const String.fromEnvironment(
+      "baseUrl",
+      defaultValue: "http://localhost:5130/",
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -31,12 +39,12 @@ class _InvoiceViewerScreenState extends State<InvoiceViewerScreen> {
 
   Future<void> _downloadAndSavePdf() async {
     try {
-      final String baseUrl = BaseProvider.baseUrl ?? 'http://localhost:7074/';
       final uri = Uri.parse('${baseUrl}api/ServiceInvoice/${widget.serviceId}');
 
       final String username = AuthProvider.username ?? '';
       final String password = AuthProvider.password ?? '';
-      final String basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+      final String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$password'))}';
 
       final headers = <String, String>{
         'Authorization': basicAuth,
@@ -105,22 +113,22 @@ class _InvoiceViewerScreenState extends State<InvoiceViewerScreen> {
                     } catch (e) {
                       if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Failed to print invoice')),
+                        const SnackBar(
+                          content: Text('Failed to print invoice'),
+                        ),
                       );
                     }
                   },
-          )
+          ),
         ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null
-              ? Center(child: Text(_errorMessage!))
-              : _pdfFile != null
-                  ? SfPdfViewer.file(_pdfFile!)
-                  : const Center(child: Text('Failed to load invoice')),
+          ? Center(child: Text(_errorMessage!))
+          : _pdfFile != null
+          ? SfPdfViewer.file(_pdfFile!)
+          : const Center(child: Text('Failed to load invoice')),
     );
   }
 }
-
-

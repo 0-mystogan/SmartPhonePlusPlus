@@ -17,7 +17,7 @@ namespace SmartPhone.Services.Services
             _mapper = mapper;
         }
 
-            public async Task<List<ProductResponse>> GetRecommendationsForUserAsync(int userId, int maxRecommendations = 10)
+            public async Task<List<ProductResponse>> GetRecommendationsForUserAsync(int userId, int maxRecommendations = 3)
     {
         try
         {
@@ -56,7 +56,7 @@ namespace SmartPhone.Services.Services
         List<int> cartItemProductIds,
         List<string> cartItemProductNames,
         List<int> cartItemCategoryIds,
-        int maxRecommendations = 10)
+        int maxRecommendations = 3)
     {
         var recommendations = new List<ProductResponse>();
 
@@ -158,6 +158,38 @@ namespace SmartPhone.Services.Services
 
             var recommendations = new List<ProductResponse>();
 
+            // Get cart items to analyze their brands and names for smarter recommendations
+            var cartItems = await _context.CartItems
+                .Include(ci => ci.Product)
+                .Where(ci => cartItemProductIds.Contains(ci.ProductId))
+                .ToListAsync();
+
+            // If no cart items found, try getting products directly
+            if (!cartItems.Any())
+            {
+                var products = await _context.Products
+                    .Where(p => cartItemProductIds.Contains(p.Id))
+                    .ToListAsync();
+                
+                // Create pseudo cart items for compatibility
+                cartItems = products.Select(p => new Database.CartItem 
+                { 
+                    Product = p, 
+                    ProductId = p.Id 
+                }).ToList();
+            }
+
+            // Extract brands and key product information from cart items
+            var cartBrands = cartItems
+                .Select(ci => ci.Product.Brand)
+                .Where(brand => !string.IsNullOrEmpty(brand))
+                .Distinct()
+                .ToList();
+
+            var cartProductNames = cartItems
+                .Select(ci => ci.Product.Name)
+                .ToList();
+
             // Define complementary category mappings
             var complementaryCategories = GetComplementaryCategories();
 
@@ -171,6 +203,7 @@ namespace SmartPhone.Services.Services
                     {
                         if (recommendations.Count >= maxCount) break;
 
+                        // Get products from complementary categories
                         var complementaryProducts = await _context.Products
                             .Include(p => p.Category)
                             .Include(p => p.ProductImages)
@@ -178,12 +211,17 @@ namespace SmartPhone.Services.Services
                                        p.StockQuantity > 0 &&
                                        p.CategoryId == complementaryCategoryId &&
                                        !cartItemProductIds.Contains(p.Id))
+                            .ToListAsync();
+
+                        // Filter products to match brands or product compatibility
+                        var compatibleProducts = complementaryProducts
+                            .Where(p => IsProductCompatibleWithCart(p, cartBrands, cartProductNames))
                             .OrderByDescending(p => p.IsFeatured)
                             .ThenByDescending(p => p.StockQuantity)
                             .Take(maxCount - recommendations.Count)
-                            .ToListAsync();
+                            .ToList();
 
-                        foreach (var product in complementaryProducts)
+                        foreach (var product in compatibleProducts)
                         {
                             if (recommendations.Count >= maxCount) break;
                             
@@ -237,6 +275,65 @@ namespace SmartPhone.Services.Services
                 .ToList();
 
             return words;
+        }
+
+        private bool IsProductCompatibleWithCart(Database.Product product, List<string> cartBrands, List<string> cartProductNames)
+        {
+            // If no brands in cart, allow any product (fallback behavior)
+            if (!cartBrands.Any())
+                return true;
+
+            // Check if product brand matches any cart item brand
+            if (!string.IsNullOrEmpty(product.Brand))
+            {
+                foreach (var cartBrand in cartBrands)
+                {
+                    if (product.Brand.Contains(cartBrand, StringComparison.OrdinalIgnoreCase) ||
+                        cartBrand.Contains(product.Brand, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // Check if product name contains any brand from cart items
+            if (!string.IsNullOrEmpty(product.Name))
+            {
+                foreach (var cartBrand in cartBrands)
+                {
+                    if (product.Name.Contains(cartBrand, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // Check for model compatibility (e.g., "S24" in cart, recommend "S24" accessories)
+            foreach (var cartProductName in cartProductNames)
+            {
+                var cartKeyWords = ExtractKeyWords(cartProductName);
+                var productKeyWords = ExtractKeyWords(product.Name);
+
+                // Check if they share significant keywords (models, series, etc.)
+                var commonKeywords = cartKeyWords.Intersect(productKeyWords, StringComparer.OrdinalIgnoreCase).ToList();
+                
+                // If they share at least one meaningful keyword, consider them compatible
+                if (commonKeywords.Any())
+                {
+                    return true;
+                }
+            }
+
+            // For universal accessories (like generic chargers, screen protectors), check if they mention "universal" or "compatible"
+            if (!string.IsNullOrEmpty(product.Name) && 
+                (product.Name.Contains("universal", StringComparison.OrdinalIgnoreCase) ||
+                 product.Name.Contains("compatible", StringComparison.OrdinalIgnoreCase) ||
+                 product.Name.Contains("all phones", StringComparison.OrdinalIgnoreCase)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private Dictionary<int, List<int>> GetComplementaryCategories()

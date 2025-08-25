@@ -16,11 +16,26 @@ abstract class BaseProvider<T> with ChangeNotifier {
     this.endpoint = endpoint;
     baseUrl = const String.fromEnvironment(
       "baseUrl",
-      defaultValue: "http://localhost:7074/",
+      defaultValue: "http://localhost:5130/",
+    );
+
+    print(
+      "BaseProvider: Created for endpoint '$endpoint' with baseUrl: $baseUrl",
+    );
+    print(
+      "BaseProvider: Auth status - username: ${AuthProvider.username != null ? 'set' : 'null'}, password: ${AuthProvider.password != null ? 'set' : 'null'}",
     );
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
+    // Check if authentication is ready before making the request
+    if (!isAuthenticated) {
+      print(
+        "ERROR: Authentication not ready. Username: ${AuthProvider.username}, Password: ${AuthProvider.password != null ? '***' : 'null'}",
+      );
+      throw new Exception("Authentication not ready. Please log in again.");
+    }
+
     var url = "$baseUrl$endpoint";
 
     if (filter != null) {
@@ -31,6 +46,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
+    print(
+      "Making GET request to: $url with auth: ${headers['Authorization']?.substring(0, 20)}...",
+    );
+
     var response = await http.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
@@ -39,7 +58,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var result = SearchResult<T>();
 
       result.totalCount = data['totalCount'];
-      result.items = data["items"] != null 
+      result.items = data["items"] != null
           ? List<T>.from(data["items"].map((e) => fromJson(e)))
           : <T>[];
 
@@ -51,9 +70,21 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T?> getById(int id) async {
+    // Check if authentication is ready before making the request
+    if (!isAuthenticated) {
+      print(
+        "ERROR: Authentication not ready. Username: ${AuthProvider.username}, Password: ${AuthProvider.password != null ? '***' : 'null'}",
+      );
+      throw new Exception("Authentication not ready. Please log in again.");
+    }
+
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
+
+    print(
+      "Making GET request to: $url with auth: ${headers['Authorization']?.substring(0, 20)}...",
+    );
 
     var response = await http.get(uri, headers: headers);
 
@@ -191,14 +222,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<dynamic> getCustom(String subEndpoint, {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> getCustom(
+    String subEndpoint, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     var url = "$baseUrl$endpoint/$subEndpoint";
-    
+
     if (queryParameters != null) {
       var queryString = getQueryString(queryParameters);
       url = "$url?$queryString";
     }
-    
+
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -226,11 +260,36 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  // Check if authentication is ready
+  bool get isAuthenticated {
+    return AuthProvider.username != null &&
+        AuthProvider.username!.isNotEmpty &&
+        AuthProvider.password != null &&
+        AuthProvider.password!.isNotEmpty;
+  }
+
   Map<String, String> createHeaders() {
-    String username = AuthProvider.username ?? "";
-    String password = AuthProvider.password ?? "";
+    // Get credentials from AuthProvider instance if available
+    String username = "";
+    String password = "";
+
+    try {
+      // Try to get credentials from static properties first
+      if (AuthProvider.username != null && AuthProvider.password != null) {
+        username = AuthProvider.username!;
+        password = AuthProvider.password!;
+      }
+    } catch (e) {
+      print("Warning: Could not access AuthProvider credentials: $e");
+    }
 
     print("passed creds: $username, $password");
+
+    if (username.isEmpty || password.isEmpty) {
+      throw Exception(
+        "Authentication credentials not available. Please log in again.",
+      );
+    }
 
     String basicAuth =
         "Basic ${base64Encode(utf8.encode('$username:$password'))}";

@@ -55,19 +55,19 @@ namespace SmartPhone.Services.Services
 
         public async Task<ServiceResponse> CompleteAsync(int id)
         {
-            var entity = await _context.Services.FindAsync(id);
+            var entity = await _context.Services
+                .Include(s => s.User) // Include customer information
+                .Include(s => s.PhoneModel) // Include phone model information
+                .FirstOrDefaultAsync(s => s.Id == id);
+            
             if (entity == null)
                 throw new Exception("Service not found");
+            
             entity.Status = "Complete";
+            entity.CompletedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
-            // Get admin emails
-            var adminEmails = await _context.Users
-                .Where(u => u.UserRoles.Any(ur => ur.Role.Name == "Administrator"))
-                .Select(u => u.Email)
-                .ToListAsync();
-
-            // Send RabbitMQ notification
+            // Send RabbitMQ notification to customer
             var host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
             var username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
             var password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
@@ -78,7 +78,11 @@ namespace SmartPhone.Services.Services
             {
                 ServiceName = entity.Name,
                 Status = entity.Status,
-                AdminEmails = adminEmails
+                CustomerEmail = entity.User.Email,
+                CustomerName = $"{entity.User.FirstName} {entity.User.LastName}".Trim(),
+                PhoneModel = entity.PhoneModel != null 
+                    ? $"{entity.PhoneModel.Brand} {entity.PhoneModel.Model}".Trim()
+                    : null
             };
             var serviceNotification = new SmartPhone.Subscriber.Models.ServiceNotification
             {

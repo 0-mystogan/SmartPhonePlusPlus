@@ -6,7 +6,7 @@ import 'dart:convert';
 class AuthProvider extends BaseProvider<User> {
   static String? username;
   static String? password;
-  
+
   User? _currentUser;
   bool _isAuthenticated = false;
   bool _isLoading = false;
@@ -23,12 +23,14 @@ class AuthProvider extends BaseProvider<User> {
   // Check if user has a specific role
   bool hasRole(String roleName) {
     if (_currentUser == null || _currentUser!.roles.isEmpty) return false;
-    return _currentUser!.roles.any((role) => role.name.toLowerCase() == roleName.toLowerCase());
+    return _currentUser!.roles.any(
+      (role) => role.name.toLowerCase() == roleName.toLowerCase(),
+    );
   }
 
   // Check if user is a technician
   bool get isTechnician => hasRole('Technician');
-  
+
   // Check if user is an administrator
   bool get isAdministrator => hasRole('Administrator');
 
@@ -40,7 +42,7 @@ class AuthProvider extends BaseProvider<User> {
 
     try {
       print('AuthProvider: Starting authentication for username: $username');
-      
+
       // Set credentials first (like the working desktop version)
       AuthProvider.username = username;
       AuthProvider.password = password;
@@ -49,18 +51,20 @@ class AuthProvider extends BaseProvider<User> {
       print('AuthProvider: Initializing base URL...');
       await initBaseUrl();
       print('AuthProvider: Base URL initialized successfully');
-      
+
       // Now call the /me endpoint with the credentials set (like desktop version)
       print('AuthProvider: Making request to /api/Users/me');
       final response = await getCustom('me');
-      
+
       print('AuthProvider: /me response received: $response');
-      
+
       if (response != null) {
         _currentUser = User.fromJson(response);
         _isAuthenticated = true;
         _isLoading = false;
-        print('AuthProvider: Authentication successful for user: ${_currentUser?.username}');
+        print(
+          'AuthProvider: Authentication successful for user: ${_currentUser?.username}',
+        );
         notifyListeners();
         return true;
       } else {
