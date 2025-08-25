@@ -1,102 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\phonemodelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\phonemodelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.webapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E75E6BF-66D2-44D2-A5C5-20CCF13C57E7}|SmartPhone.WebAPI\\SmartPhone.WebAPI.csproj|solutionrelative:smartphone.webapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\database\\modelbuilderextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\database\\modelbuilderextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|c:\\users\\asus\\desktop\\smartphoneplusplus\\smartphone\u002B\u002B\\smartphone.services\\services\\serviceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3CD97ADE-EFCC-4EEC-8BE5-3D89C15CA0F4}|SmartPhone.Services\\SmartPhone.Services.csproj|solutionrelative:smartphone.services\\services\\serviceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "OrderItem.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\OrderItem.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\OrderItem.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\OrderItem.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Database\\OrderItem.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-25T01:19:44.632Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PhoneModelController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PhoneModelController.cs",
-              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\PhoneModelController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\PhoneModelController.cs",
-              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\PhoneModelController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-25T00:21:12.017Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ServiceController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
-              "RelativeDocumentMoniker": "SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
-              "RelativeToolTip": "SmartPhone.WebAPI\\Controllers\\ServiceController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAwAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-25T00:20:27.702Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ServiceService.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\ServiceService.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Services\\ServiceService.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Services\\ServiceService.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Services\\ServiceService.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAzwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-25T00:20:20.388Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ModelBuilderExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "RelativeDocumentMoniker": "SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\SmartPhonePlusPlus\\SmartPhone\u002B\u002B\\SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "RelativeToolTip": "SmartPhone.Services\\Database\\ModelBuilderExtensions.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBcAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-25T00:01:34.825Z"
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
