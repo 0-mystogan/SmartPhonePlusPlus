@@ -1,135 +1,146 @@
-# CallTaxi - Complete Taxi Booking System
+# 📱 SmartPhone++ — Next-Gen Mobile Device Ecosystem
 
-A comprehensive taxi booking system with .NET Web API backend and Flutter mobile applications.
+> **A comprehensive smartphone management platform combining e-commerce, repair services, and intelligent recommendations**
 
-## 🏗️ Project Structure
+SmartPhone++ is a full-stack solution that bridges the gap between smartphone retail, professional repair services, and customer experience through advanced technology integration.
+
+## 🏗️ **System Architecture**
 
 ```
-CallTaxi/
-├── CallTaxi.WebAPI/          # Main API project
-├── CallTaxi.Services/        # Business logic and data access
-├── CallTaxi.Model/           # Data models and DTOs
-├── CallTaxi.Subscriber/      # Background notification service
-├── UI/
-│   ├── calltaxi_desktop_admin/    # Admin dashboard (Flutter)
-│   ├── calltaxi_mobile_client/    # Customer mobile app (Flutter)
-│   └── calltaxi_mobile_driver/    # Driver mobile app (Flutter)
-├── docker-compose.yml
-├── Dockerfile
-└── Dockerfile.notifications
+SmartPhone++/
+├── 🌐 SmartPhone.WebAPI/         → RESTful API Gateway (Port 5130)
+├── ⚙️  SmartPhone.Services/       → Business Logic & Data Access Layer
+├── 📊 SmartPhone.Model/          → Data Transfer Objects & Request Models
+├── 📨 SmartPhone.Subscriber/     → Background Notification Service (Port 7111)
+└── 🖥️  UI/                       → Multi-Platform Client Applications
+    ├── 📱 smartphone_mobile_client/    → Customer Mobile App (Flutter)
+    └── 🖥️  smartphone_desktop_admin/   → Admin Dashboard (Flutter Desktop)
 ```
 
-## Desktop Admin Dashboard
-- **Location**: `UI/calltaxi_desktop_admin/`
-- **Purpose**: Administrative interface for managing vehicles, drivers, and business operations
-- **Features**: Brand management, vehicle monitoring, business reports
+---
 
-### Admin
-- **Username:** admin
-- **Password:** test
+## 👥 **Access Control System**
 
-## Mobile Driver App
-- **Location**: `UI/calltaxi_mobile_driver/`
-- **Purpose**: Driver-facing mobile application
-- **Features**: Ride acceptance, navigation, earnings tracking
+### **Role-Based Authentication**
 
-### Driver
-- **Username:** driver
-- **Password:** test
+| **Role** | **Username** | **Password** | **Capabilities** |
+|----------|--------------|--------------|------------------|
+| 🛡️ **Administrator** | `admin` | `test` | Full system control, user management, analytics |
+| 🔧 **Technician** | `technician` | `test` | Service management, parts inventory, repair tracking |
+| 👤 **Customer** | `user` | `test` | Product browsing, purchases, service requests |
 
-## Mobile Client App
-- **Location**: `UI/calltaxi_mobile_client/`
-- **Purpose**: Customer-facing mobile application
-- **Features**: Ride booking, payment integration, real-time tracking
+---
 
-### Regular User-Client
-- **Username:** user
-- **Password:** test
+## 🛠️ **Technology Stack**
 
-## Web API
-- **Port**: 5130
-- **Features**: RESTful API endpoints, authentication, business logic
-- **Swagger**: Available at `http://localhost:5130/swagger`
+### **Backend Infrastructure**
+- **.NET 8 Web API**: High-performance REST API with Swagger documentation
+- **Entity Framework Core**: Advanced ORM with migrations and seeding
+- **SQL Server**: Robust relational database (Port 1401)
+- **RabbitMQ**: Message queue system (Ports 5672/15672)
+- **Docker Compose**: Containerized deployment orchestration
 
-## Subscriber Service
-- **Port**: 7111
-- **Features**: Background processing, email notifications, RabbitMQ integration
+### **Frontend Applications**
+- **Flutter**: Cross-platform mobile and desktop applications
+- **Dart**: Modern programming language for UI development
+- **Provider Pattern**: State management for reactive user interfaces
+- **Stripe Integration**: Secure payment processing
 
-## Database
-- **SQL Server**: Port 1401
-- **Database**: CallTaxiDb
-- **Features**: Entity Framework Core, migrations, seeding
+### **DevOps & Infrastructure**
+- **Docker**: Containerization for consistent deployment
+- **Multi-stage Builds**: Optimized container images
+- **Environment Configuration**: Flexible deployment settings
+- **Health Checks**: Automated service monitoring
 
-## Message Queue
-- **RabbitMQ**: Ports 5672 (AMQP), 15672 (Management)
-- **Features**: Asynchronous messaging, notification processing
+---
 
-## RabbitMQ Test E-mail Adresses
+## 📧 **Testing & Development**
 
-### An email is sent after a vehicle is created or modified by a driver to the system administrator to notify them that the registration needs to be approved or rejected.
+### **RabbitMQ Email Testing**
+For testing notification systems and service communications:
 
-### Sender E-mail Adress
-- **Email:** calltaxi.sender@gmail.com
-- **Password:** calltaxitest
+- **Test Email**: `smartphoneplusplus.receiver@gmail.com`
+- **Purpose**: Receives automated notifications for system events
+- **Triggers**: When Service is completed
 
-### Receiver E-mail Adress
-- **Email:** calltaxi.receiver@gmail.com
-- **Password:** calltaxitest
+### **Payment Testing**
+- **Stripe Test Cards**: 4242 4242 4242 4242
+- **Order Processing**: Complete e-commerce workflow testing
 
-## Recommender System
+---
 
-### Recommender System uses Content-Based Filtering, it suggests vehicle tier for the drive you are about to request based on a previous drives of the user and also time of the day, and day of the week.
+## 🚀 **Quick Start Guide**
 
-## Stripe Payment System
-
-### Stipe Test Card
-- **Card Number:** 4242 4242 4242 4242
-- **Rest of the data:** Can be done arbitrarily
-
-## 4 .env Files
-- **Root the of project:** For sql and rabbitmq configuration
-- **Root of the desktop-admin app:** For OpenRouteService api key 
-- **Root of the mobile-driver app:** For OpenRouteService api key 
-- **Root of the mobile-client app:** For OpenRouteService api key and Stripe keys
-
-
-
-
-# 🛠️ Development Commands
-
-# Create new migration
-dotnet ef migrations add MigrationName --project .\CallTaxi.Services --startup-project .\CallTaxi.WebAPI
-
-# Execute the migrations
-update-database
-
-# Build and start all services
+### **1. Infrastructure Setup**
+```bash
+# Launch all services with Docker
 docker-compose up --build
 
-# Navigate to Flutter project
-cd UI/calltaxi_desktop_admin
+# Services will be available at:
+# - API: http://localhost:5130
+# - RabbitMQ Management: http://localhost:15672
+# - SQL Server: localhost:1401
+```
 
-# Get dependencies
+### **2. Database Initialization**
+```bash
+# Navigate to API project
+cd SmartPhone++/SmartPhone.WebAPI
+
+# Apply database migrations
+dotnet ef database update --project ../SmartPhone.Services
+```
+
+### **3. Mobile Client**
+```bash
+# Navigate to mobile app
+cd UI/smartphone_mobile_client
+
+# Install dependencies
 flutter pub get
 
-# Generate code (after adding new models)
-dart run build_runner build
+# Run on web browser
+flutter run -d chrome
 
-# Desktop Admin
-cd UI/calltaxi_desktop_admin
+# Run on mobile device
+flutter run -d <device-id>
+```
 
+### **4. Desktop Admin**
+```bash
+# Navigate to admin dashboard
+cd UI/smartphone_desktop_admin
+
+# Install dependencies
+flutter pub get
+
+# Run desktop application
 flutter run -d windows  # or -d macos, -d linux
+```
 
-# Mobile Client
-cd UI/calltaxi_mobile_client
+---
 
-flutter run -d chrome   # for web
+## 📊 **API Documentation**
 
-flutter run -d ime-device-a  # for Android device
+Once the system is running, comprehensive API documentation is available at:
+- **Swagger UI**: `http://localhost:5130/swagger`
+- **OpenAPI Specification**: Auto-generated with detailed endpoint descriptions
+- **Authentication**: Bearer token-based security with role validation
 
-# Mobile Driver
-cd UI/calltaxi_mobile_driver
+---
 
-flutter run -d chrome   # for web
+## 🔄 **Development Workflow**
 
-flutter run -d ime-device-a  # for Android device
+### **Database Changes**
+```bash
+# Create new migration
+dotnet ef migrations add MigrationName --project ./SmartPhone.Services --startup-project ./SmartPhone.WebAPI
+
+# Apply changes
+update-database
+```
+
+### **Flutter Code Generation**
+```bash
+# Generate model classes after API changes
+dart run build_runner build
