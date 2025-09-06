@@ -51,31 +51,37 @@ class CustomDataTableCard extends StatelessWidget {
               : LayoutBuilder(
                   builder: (context, constraints) {
                     return SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight - 32,
-                        ),
-                        child: DataTable(
-                          showCheckboxColumn: showCheckboxColumn,
-                          columnSpacing: columnSpacing,
-                          headingRowColor: headingRowColor != null
-                              ? WidgetStateProperty.all(headingRowColor)
-                              : WidgetStateProperty.resolveWith<Color?>(
-                                  (states) => Colors.blue[50],
-                                ),
-                          dataRowColor: hoverRowColor != null
-                              ? WidgetStateProperty.resolveWith<Color?>(
-                                  (states) => states.contains(WidgetState.hovered)
-                                      ? hoverRowColor
-                                      : null,
-                                )
-                              : WidgetStateProperty.resolveWith<Color?>(
-                                  (states) => states.contains(WidgetState.hovered)
-                                      ? Colors.blue.withAlpha(20)
-                                      : null,
-                                ),
-                          columns: columns,
-                          rows: rows,
+                      scrollDirection: Axis.horizontal,
+                      child: SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight - 32,
+                            minWidth: width,
+                          ),
+                          child: DataTable(
+                            showCheckboxColumn: showCheckboxColumn,
+                            columnSpacing: columnSpacing,
+                            headingRowColor: headingRowColor != null
+                                ? WidgetStateProperty.all(headingRowColor)
+                                : WidgetStateProperty.resolveWith<Color?>(
+                                    (states) => Colors.blue[50],
+                                  ),
+                            dataRowColor: hoverRowColor != null
+                                ? WidgetStateProperty.resolveWith<Color?>(
+                                    (states) =>
+                                        states.contains(WidgetState.hovered)
+                                        ? hoverRowColor
+                                        : null,
+                                  )
+                                : WidgetStateProperty.resolveWith<Color?>(
+                                    (states) =>
+                                        states.contains(WidgetState.hovered)
+                                        ? Colors.blue.withAlpha(20)
+                                        : null,
+                                  ),
+                            columns: _wrapColumnsWithEllipsis(columns),
+                            rows: _wrapRowsWithEllipsis(rows),
+                          ),
                         ),
                       ),
                     );
@@ -84,6 +90,65 @@ class CustomDataTableCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<DataColumn> _wrapColumnsWithEllipsis(List<DataColumn> columns) {
+    return columns.map((column) {
+      return DataColumn(label: _wrapTextWithEllipsis(column.label));
+    }).toList();
+  }
+
+  List<DataRow> _wrapRowsWithEllipsis(List<DataRow> rows) {
+    return rows.map((row) {
+      return DataRow(
+        cells: row.cells.map((cell) {
+          return DataCell(_wrapTextWithEllipsis(cell.child));
+        }).toList(),
+      );
+    }).toList();
+  }
+
+  Widget _wrapTextWithEllipsis(Widget widget) {
+    if (widget is Text) {
+      return Text(
+        widget.data ?? '',
+        style: widget.style,
+        textAlign: widget.textAlign,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    } else if (widget is Row) {
+      return Row(
+        mainAxisSize: widget.mainAxisSize,
+        mainAxisAlignment: widget.mainAxisAlignment,
+        crossAxisAlignment: widget.crossAxisAlignment,
+        children: widget.children
+            .map((child) => _wrapTextWithEllipsis(child))
+            .toList(),
+      );
+    } else if (widget is Column) {
+      return Column(
+        mainAxisSize: widget.mainAxisSize,
+        mainAxisAlignment: widget.mainAxisAlignment,
+        crossAxisAlignment: widget.crossAxisAlignment,
+        children: widget.children
+            .map((child) => _wrapTextWithEllipsis(child))
+            .toList(),
+      );
+    } else if (widget is Container) {
+      return Container(
+        constraints: widget.constraints,
+        padding: widget.padding,
+        margin: widget.margin,
+        decoration: widget.decoration,
+        child: widget.child != null
+            ? _wrapTextWithEllipsis(widget.child!)
+            : null,
+      );
+    } else {
+      // For other widget types, return as is
+      return widget;
+    }
   }
 
   Widget _defaultEmptyState() {

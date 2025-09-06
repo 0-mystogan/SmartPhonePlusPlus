@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:smartphone_desktop_admin/layouts/master_screen.dart';
 import 'package:smartphone_desktop_admin/model/part_category.dart';
 import 'package:smartphone_desktop_admin/providers/part_category_provider.dart';
@@ -12,11 +9,12 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
 
 class PartCategoryDetailsScreen extends StatefulWidget {
-  PartCategory? partCategory;
+  final PartCategory? partCategory;
   PartCategoryDetailsScreen({super.key, this.partCategory});
 
   @override
-  State<PartCategoryDetailsScreen> createState() => _PartCategoryDetailsScreenState();
+  State<PartCategoryDetailsScreen> createState() =>
+      _PartCategoryDetailsScreenState();
 }
 
 class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
@@ -27,28 +25,58 @@ class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
   late PartCategoryProvider partCategoryProvider;
 
   bool isLoading = true;
+  List<PartCategory> parentCategories = [];
+  bool isLoadingParentCategories = true;
+  PartCategory? currentPartCategory;
 
   @override
   void initState() {
     super.initState();
-    partCategoryProvider = Provider.of<PartCategoryProvider>(context, listen: false);
+    partCategoryProvider = Provider.of<PartCategoryProvider>(
+      context,
+      listen: false,
+    );
+    currentPartCategory = widget.partCategory;
 
     _initalValue = {
-      "name": widget.partCategory?.name,
-      "description": widget.partCategory?.description,
-      "isActive": widget.partCategory?.isActive ?? true,
-      "parentCategoryId": widget.partCategory?.parentCategoryId?.toString(),
+      "name": currentPartCategory?.name,
+      "description": currentPartCategory?.description,
+      "isActive": currentPartCategory?.isActive ?? true,
+      "parentCategoryId": currentPartCategory?.parentCategoryId?.toString(),
     };
-    print("widget.partCategory");
+    print("currentPartCategory");
     print(_initalValue);
 
     initFormData();
   }
 
   initFormData() async {
+    // Load parent categories
+    await loadParentCategories();
+
     setState(() {
       isLoading = false;
     });
+  }
+
+  loadParentCategories() async {
+    try {
+      setState(() {
+        isLoadingParentCategories = true;
+      });
+
+      // Get all part categories to use as parent options
+      var result = await partCategoryProvider.get();
+      setState(() {
+        parentCategories = result.items ?? [];
+        isLoadingParentCategories = false;
+      });
+    } catch (e) {
+      print('Error loading parent categories: $e');
+      setState(() {
+        isLoadingParentCategories = false;
+      });
+    }
   }
 
   @override
@@ -83,12 +111,23 @@ class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
             if (formKey.currentState?.validate() ?? false) {
               print(formKey.currentState?.value.toString());
               var request = Map.from(formKey.currentState?.value ?? {});
+
+              // Convert parentCategoryId back to int if it's a string
+              if (request['parentCategoryId'] != null &&
+                  request['parentCategoryId'] is String) {
+                request['parentCategoryId'] = int.tryParse(
+                  request['parentCategoryId'],
+                );
+              }
+
               try {
-                if (widget.partCategory == null) {
-                  widget.partCategory = await partCategoryProvider.insert(request);
+                if (currentPartCategory == null) {
+                  currentPartCategory = await partCategoryProvider.insert(
+                    request,
+                  );
                 } else {
-                  widget.partCategory = await partCategoryProvider.update(
-                    widget.partCategory!.id,
+                  currentPartCategory = await partCategoryProvider.update(
+                    currentPartCategory!.id,
                     request,
                   );
                 }
@@ -163,7 +202,8 @@ class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
                       FormBuilderValidators.required(),
                       FormBuilderValidators.match(
                         RegExp(r'^[A-Za-z0-9\s\-_]+'),
-                        errorText: 'Only letters, numbers, spaces, hyphens and underscores allowed',
+                        errorText:
+                            'Only letters, numbers, spaces, hyphens and underscores allowed',
                       ),
                     ]),
                   ),
@@ -171,33 +211,55 @@ class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
                   FormBuilderTextField(
                     name: "description",
                     decoration: customTextFieldDecoration(
-                      "Description",
+                      "Description (optional)",
                       prefixIcon: Icons.description,
                     ),
                     maxLines: 3,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.maxLength(500, errorText: 'Description cannot exceed 500 characters'),
-                    ]),
                   ),
                   SizedBox(height: 16),
-                  FormBuilderTextField(
+                  FormBuilderDropdown<int>(
                     name: "parentCategoryId",
                     decoration: customTextFieldDecoration(
-                      "Parent Category ID (optional)",
+                      "Parent Category (optional)",
                       prefixIcon: Icons.category,
                     ),
-                    keyboardType: TextInputType.number,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.numeric(),
-                    ]),
+                    items: isLoadingParentCategories
+                        ? [
+                            DropdownMenuItem<int>(
+                              value: null,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text("Loading categories..."),
+                                ],
+                              ),
+                            ),
+                          ]
+                        : [
+                            DropdownMenuItem<int>(
+                              value: null,
+                              child: Text("No Parent Category"),
+                            ),
+                            ...parentCategories.map(
+                              (category) => DropdownMenuItem<int>(
+                                value: category.id,
+                                child: Text(category.name),
+                              ),
+                            ),
+                          ],
+                    valueTransformer: (value) => value?.toString(),
                   ),
                   SizedBox(height: 16),
                   FormBuilderCheckbox(
                     name: "isActive",
-                    title: Text(
-                      "Active",
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    title: Text("Active", style: TextStyle(fontSize: 16)),
                     controlAffinity: ListTileControlAffinity.leading,
                   ),
                   SizedBox(height: 50),
@@ -210,4 +272,4 @@ class _PartCategoryDetailsScreenState extends State<PartCategoryDetailsScreen> {
       ),
     );
   }
-} 
+}

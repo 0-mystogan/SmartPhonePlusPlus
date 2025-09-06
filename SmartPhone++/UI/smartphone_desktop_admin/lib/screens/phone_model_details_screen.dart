@@ -6,11 +6,12 @@ import 'package:provider/provider.dart';
 
 class PhoneModelDetailsScreen extends StatefulWidget {
   final PhoneModel? phoneModel;
-  
+
   const PhoneModelDetailsScreen({super.key, this.phoneModel});
 
   @override
-  State<PhoneModelDetailsScreen> createState() => _PhoneModelDetailsScreenState();
+  State<PhoneModelDetailsScreen> createState() =>
+      _PhoneModelDetailsScreenState();
 }
 
 class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
@@ -33,7 +34,7 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       phoneModelProvider = context.read<PhoneModelProvider>();
     });
-    
+
     if (widget.phoneModel != null) {
       _brandController.text = widget.phoneModel!.brand;
       _modelController.text = widget.phoneModel!.model;
@@ -49,9 +50,9 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
 
   Future<void> _savePhoneModel() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     setState(() => _isLoading = true);
-    
+
     try {
       final phoneModel = PhoneModel(
         id: widget.phoneModel?.id ?? 0,
@@ -60,15 +61,19 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
         series: _seriesController.text.isEmpty ? null : _seriesController.text,
         year: _yearController.text.isEmpty ? null : _yearController.text,
         color: _colorController.text.isEmpty ? null : _colorController.text,
-        storage: _storageController.text.isEmpty ? null : _storageController.text,
+        storage: _storageController.text.isEmpty
+            ? null
+            : _storageController.text,
         ram: _ramController.text.isEmpty ? null : _ramController.text,
-        network: _networkController.text.isEmpty ? null : _networkController.text,
+        network: _networkController.text.isEmpty
+            ? null
+            : _networkController.text,
         imageUrl: widget.phoneModel?.imageUrl,
         isActive: _isActive,
         createdAt: widget.phoneModel?.createdAt ?? DateTime.now(),
         updatedAt: DateTime.now(),
       );
-      
+
       if (widget.phoneModel == null) {
         // New phone model
         await phoneModelProvider.insert(phoneModel.toJson());
@@ -82,12 +87,12 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
           SnackBar(content: Text('Phone model updated successfully')),
         );
       }
-      
+
       Navigator.pop(context, true);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving phone model: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error saving phone model: $e')));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -186,6 +191,20 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
                                 labelText: 'Year',
                                 border: OutlineInputBorder(),
                               ),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  final year = int.tryParse(value);
+                                  if (year == null) {
+                                    return 'Please enter a valid year';
+                                  }
+                                  final currentYear = DateTime.now().year;
+                                  if (year < 1990 || year > currentYear + 1) {
+                                    return 'Year must be between 1990 and ${currentYear + 1}';
+                                  }
+                                }
+                                return null;
+                              },
                             ),
                           ),
                         ],
@@ -207,19 +226,22 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                                        Expanded(
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _savePhoneModel,
-                          child: _isLoading
-                              ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-                              : Text('Save'),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: Color(0xFF512DA8),
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _savePhoneModel,
+                      child: _isLoading
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            )
+                          : Text('Save'),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Color(0xFF512DA8),
+                        foregroundColor: Colors.white,
                       ),
+                    ),
+                  ),
                   SizedBox(width: 16),
                   Expanded(
                     child: OutlinedButton(
@@ -238,4 +260,4 @@ class _PhoneModelDetailsScreenState extends State<PhoneModelDetailsScreen> {
       ),
     );
   }
-} 
+}

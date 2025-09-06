@@ -57,7 +57,9 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete "${phoneModel.brand} ${phoneModel.model}"? This action cannot be undone.'),
+          content: Text(
+            'Are you sure you want to delete "${phoneModel.brand} ${phoneModel.model}"? This action cannot be undone.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -99,7 +101,9 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
 
   Widget _buildResultView() {
     final isEmpty =
-        phoneModels == null || phoneModels!.items == null || phoneModels!.items!.isEmpty;
+        phoneModels == null ||
+        phoneModels!.items == null ||
+        phoneModels!.items!.isEmpty;
     final int totalCount = phoneModels?.totalCount ?? 0;
     final int totalPages = (totalCount / _pageSize).ceil();
     final bool isFirstPage = _currentPage == 0;
@@ -107,7 +111,7 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
     return Column(
       children: [
         CustomDataTableCard(
-          width: 700,
+          width: 900,
           height: 400,
           columns: [
             DataColumn(
@@ -154,23 +158,54 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
                       (e) => DataRow(
                         cells: [
                           DataCell(
-                            Text(e.brand, style: TextStyle(fontSize: 15)),
-                          ),
-                          DataCell(
-                            Text(e.model, style: TextStyle(fontSize: 15)),
-                          ),
-                          DataCell(
-                            Text(e.series ?? 'N/A', style: TextStyle(fontSize: 15)),
-                          ),
-                          DataCell(
-                            Text(e.year ?? 'N/A', style: TextStyle(fontSize: 15)),
+                            Container(
+                              width: 120,
+                              child: Text(
+                                e.brand,
+                                style: TextStyle(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
                           DataCell(
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              width: 120,
+                              child: Text(
+                                e.model,
+                                style: TextStyle(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Container(
+                              width: 80,
+                              child: Text(
+                                e.series ?? 'N/A',
+                                style: TextStyle(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Container(
+                              width: 80,
+                              child: Text(
+                                e.year ?? 'N/A',
+                                style: TextStyle(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                color: e.isActive 
-                                    ? Colors.green.withOpacity(0.2) 
+                                color: e.isActive
+                                    ? Colors.green.withOpacity(0.2)
                                     : Colors.red.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -184,32 +219,46 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
                               ),
                             ),
                           ),
-                                                     DataCell(
-                             Row(
-                               mainAxisSize: MainAxisSize.min,
-                               children: [
-                                 IconButton(
-                                   icon: Icon(Icons.edit, color: Colors.blue),
-                                   onPressed: () {
-                                     Navigator.push(
-                                       context,
-                                       MaterialPageRoute(
-                                         builder: (context) => PhoneModelDetailsScreen(phoneModel: e),
-                                       ),
-                                     ).then((result) {
-                                       if (result == true) {
-                                         _performSearch();
-                                       }
-                                     });
-                                   },
-                                 ),
-                                 IconButton(
-                                   icon: Icon(Icons.delete, color: Colors.red),
-                                   onPressed: () => _showDeleteConfirmation(e),
-                                 ),
-                               ],
-                             ),
-                           ),
+                          DataCell(
+                            Container(
+                              width: 100,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.blue,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PhoneModelDetailsScreen(
+                                                phoneModel: e,
+                                              ),
+                                        ),
+                                      ).then((result) {
+                                        if (result == true) {
+                                          _performSearch();
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                      size: 20,
+                                    ),
+                                    onPressed: () => _showDeleteConfirmation(e),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )
@@ -290,9 +339,7 @@ class _PhoneModelsListScreenState extends State<PhoneModelsListScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: _buildResultView(),
-            ),
+            Expanded(child: _buildResultView()),
           ],
         ),
       ),

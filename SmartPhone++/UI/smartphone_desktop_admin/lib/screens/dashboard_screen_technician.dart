@@ -11,12 +11,14 @@ import 'package:smartphone_desktop_admin/model/part.dart';
 import 'package:smartphone_desktop_admin/screens/service_details_technician_screen.dart';
 import 'package:smartphone_desktop_admin/screens/phone_model_details_screen.dart';
 import 'package:smartphone_desktop_admin/screens/part_details_screen.dart';
+import 'package:smartphone_desktop_admin/screens/service_list_technician_screen.dart';
 
 class DashboardScreenTechnician extends StatefulWidget {
   const DashboardScreenTechnician({super.key});
 
   @override
-  State<DashboardScreenTechnician> createState() => _DashboardScreenTechnicianState();
+  State<DashboardScreenTechnician> createState() =>
+      _DashboardScreenTechnicianState();
 }
 
 class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
@@ -51,34 +53,28 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
   Future<void> _loadDashboardData() async {
     try {
       // Load services
-      var serviceResult = await serviceProvider.get(filter: {
-        "page": 0,
-        "pageSize": 1000,
-        "includeTotalCount": true,
-      });
-      
+      var serviceResult = await serviceProvider.get(
+        filter: {"page": 0, "pageSize": 1000, "includeTotalCount": true},
+      );
+
       // Load phone models
-      var phoneModelResult = await phoneModelProvider.get(filter: {
-        "page": 0,
-        "pageSize": 1000,
-        "includeTotalCount": true,
-      });
-      
+      var phoneModelResult = await phoneModelProvider.get(
+        filter: {"page": 0, "pageSize": 1000, "includeTotalCount": true},
+      );
+
       // Load parts
-      var partResult = await partProvider.get(filter: {
-        "page": 0,
-        "pageSize": 1000,
-        "includeTotalCount": true,
-      });
+      var partResult = await partProvider.get(
+        filter: {"page": 0, "pageSize": 1000, "includeTotalCount": true},
+      );
 
       setState(() {
         services = serviceResult;
         phoneModels = phoneModelResult;
         parts = partResult;
-        
+
         // Calculate service statistics
         totalServices = serviceResult.totalCount ?? 0;
-        
+
         // Calculate active services (services that are currently being worked on)
         print('=== SERVICE DEBUG INFO ===');
         print('Total services from API: ${serviceResult.items?.length ?? 0}');
@@ -86,50 +82,77 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
         if (serviceResult.items != null) {
           for (int i = 0; i < serviceResult.items!.length; i++) {
             var service = serviceResult.items![i];
-            print('Service $i: ID=${service.id}, Name="${service.name}", Status="${service.status}"');
+            print(
+              'Service $i: ID=${service.id}, Name="${service.name}", Status="${service.status}"',
+            );
           }
         }
         // Check for different possible status values
-        var allStatuses = serviceResult.items?.map((s) => s.status).toSet() ?? <String>{};
+        var allStatuses =
+            serviceResult.items?.map((s) => s.status).toSet() ?? <String>{};
         print('All unique status values: $allStatuses');
-        
+
         // Try different status values that might indicate active services
-        var pendingServices = serviceResult.items?.where((s) => s.status == 'Pending').length ?? 0;
-        var inProgressServices = serviceResult.items?.where((s) => s.status == 'In Progress').length ?? 0;
-        var activeServices = serviceResult.items?.where((s) => s.status == 'Active').length ?? 0;
-        var workingServices = serviceResult.items?.where((s) => s.status == 'Working').length ?? 0;
-        var processingServices = serviceResult.items?.where((s) => s.status == 'Processing').length ?? 0;
-        var completedServices = serviceResult.items?.where((s) => s.status == 'Completed').length ?? 0;
-        
+        var pendingServices =
+            serviceResult.items?.where((s) => s.status == 'Pending').length ??
+            0;
+        var inProgressServices =
+            serviceResult.items
+                ?.where((s) => s.status == 'In Progress')
+                .length ??
+            0;
+        var activeServices =
+            serviceResult.items?.where((s) => s.status == 'Active').length ?? 0;
+        var workingServices =
+            serviceResult.items?.where((s) => s.status == 'Working').length ??
+            0;
+        var processingServices =
+            serviceResult.items
+                ?.where((s) => s.status == 'Processing')
+                .length ??
+            0;
+        var completedServices =
+            serviceResult.items?.where((s) => s.status == 'Completed').length ??
+            0;
+
         print('Services with "Pending": $pendingServices');
         print('Services with "In Progress": $inProgressServices');
         print('Services with "Active": $activeServices');
         print('Services with "Working": $workingServices');
         print('Services with "Processing": $processingServices');
         print('Services with "Completed": $completedServices');
-        
+
         // Use the most likely status for active services (Pending seems to be the main one)
-        this.activeServices = pendingServices + inProgressServices + activeServices + workingServices + processingServices;
+        this.activeServices =
+            pendingServices +
+            inProgressServices +
+            activeServices +
+            workingServices +
+            processingServices;
         this.completedServices = completedServices;
         print('Active services count: $activeServices');
         print('=== END SERVICE DEBUG ===');
-        
+
         // Calculate phone model statistics
         totalPhoneModels = phoneModelResult.totalCount ?? 0;
-        
+
         // Calculate part statistics
         totalParts = partResult.totalCount ?? 0;
-        
+
         // Calculate low stock parts
-        lowStockParts = partResult.items?.where((p) => 
-          p.stockQuantity < (p.minimumStockLevel ?? 5)).length ?? 0;
-        
+        lowStockParts =
+            partResult.items
+                ?.where((p) => p.stockQuantity < (p.minimumStockLevel ?? 5))
+                .length ??
+            0;
+
         // Calculate OEM parts
         oemParts = partResult.items?.where((p) => p.isOEM).length ?? 0;
-        
+
         // Calculate service revenue (this would need to be calculated from service fees)
         // For now, we'll use a placeholder calculation
-        totalServiceRevenue = 0.0; // This would need to be calculated from actual service data
+        totalServiceRevenue =
+            0.0; // This would need to be calculated from actual service data
       });
     } catch (e) {
       print('Error loading dashboard data: $e');
@@ -217,10 +240,7 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                 SizedBox(width: 8),
                 Text(
                   'Service Activity',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -281,17 +301,11 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
               Text(
                 subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
           ),
@@ -314,10 +328,7 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                 SizedBox(width: 8),
                 Text(
                   'Quick Actions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -340,7 +351,9 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ServiceDetailsTechnicianScreen(service: defaultService),
+                          builder: (context) => ServiceDetailsTechnicianScreen(
+                            service: defaultService,
+                          ),
                         ),
                       );
                     },
@@ -355,7 +368,9 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PhoneModelDetailsScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => PhoneModelDetailsScreen(),
+                        ),
                       );
                     },
                   ),
@@ -373,7 +388,9 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PartDetailsScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => PartDetailsScreen(),
+                        ),
                       );
                     },
                   ),
@@ -385,10 +402,10 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
                     label: 'View Services',
                     color: Colors.purple,
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Service list screen not implemented yet'),
-                          backgroundColor: Colors.orange,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ServiceListScreen(),
                         ),
                       );
                     },
@@ -481,7 +498,7 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
               ),
             ),
             SizedBox(height: 24),
-            
+
             // Statistics Cards
             GridView.count(
               shrinkWrap: true,
@@ -522,24 +539,18 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
               ],
             ),
             SizedBox(height: 24),
-            
+
             // Additional Cards Row
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 2,
-                  child: _buildRecentActivityCard(),
-                ),
+                Expanded(flex: 2, child: _buildRecentActivityCard()),
                 SizedBox(width: 16),
-                Expanded(
-                  flex: 1,
-                  child: _buildQuickActionsCard(),
-                ),
+                Expanded(flex: 1, child: _buildQuickActionsCard()),
               ],
             ),
             SizedBox(height: 24),
-            
+
             // Bottom Row
             Row(
               children: [
@@ -569,4 +580,4 @@ class _DashboardScreenTechnicianState extends State<DashboardScreenTechnician> {
       ),
     );
   }
-} 
+}
