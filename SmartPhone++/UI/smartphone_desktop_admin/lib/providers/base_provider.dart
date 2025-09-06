@@ -137,9 +137,22 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var response = await http.delete(uri, headers: headers);
 
     if (isValidResponse(response)) {
-      // The backend returns a boolean in the response body
-      var data = jsonDecode(response.body);
-      return data == true;
+      // Handle empty response body (common for successful DELETE operations)
+      if (response.body.isEmpty) {
+        return true;
+      }
+
+      try {
+        // The backend might return a boolean in the response body
+        var data = jsonDecode(response.body);
+        return data == true;
+      } catch (e) {
+        // If JSON parsing fails but response is successful, assume deletion was successful
+        print(
+          "Warning: Could not parse delete response as JSON, but operation was successful: $e",
+        );
+        return true;
+      }
     } else {
       throw Exception("Unknown error");
     }
@@ -220,6 +233,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (!isValidResponse(response)) {
       throw new Exception("Unknown error");
     }
+    // No need to parse response body for void return type
   }
 
   Future<dynamic> getCustom(
@@ -325,7 +339,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
         }
         query += '$prefix$key=$encoded';
       } else if (value is DateTime) {
-        query += '$prefix$key=${(value as DateTime).toIso8601String()}';
+        query += '$prefix$key=${value.toIso8601String()}';
       } else if (value is List || value is Map) {
         if (value is List) value = value.asMap();
         value.forEach((k, v) {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartphone_mobile_client/model/order.dart';
-import 'package:smartphone_mobile_client/providers/auth_provider.dart';
 import 'package:smartphone_mobile_client/providers/order_provider.dart';
 import 'package:smartphone_mobile_client/screens/order_screen.dart';
+import 'package:smartphone_mobile_client/screens/products_screen.dart';
 
 class OrderListScreen extends StatefulWidget {
   const OrderListScreen({super.key});
@@ -146,7 +146,14 @@ class _OrderListScreenState extends State<OrderListScreen> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProductsScreen(),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
                 foregroundColor: Colors.white,

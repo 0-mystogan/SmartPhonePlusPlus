@@ -80,10 +80,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+              child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -118,8 +115,8 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
       );
 
       // Call delete API
-      bool success = await categoryProvider.delete(category.id!);
-      
+      bool success = await categoryProvider.delete(category.id);
+
       // Hide loading indicator
       Navigator.of(context).pop();
 
@@ -132,31 +129,64 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
             duration: Duration(seconds: 3),
           ),
         );
-        
+
         // Refresh the list
         await _performSearch();
       } else {
         // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete category. Please try again.'),
+            content: Text(
+              'Failed to delete category. This category may have related products that prevent deletion.',
+            ),
             backgroundColor: Colors.red[600],
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
           ),
         );
       }
     } catch (e) {
       // Hide loading indicator
       Navigator.of(context).pop();
-      
-      // Show error message
+
+      // Show detailed error message
+      String errorMessage = 'Error deleting category';
+      if (e.toString().contains('Something went wrong')) {
+        errorMessage =
+            'Cannot delete category. This category may have related products that prevent deletion.';
+      } else if (e.toString().contains('not found')) {
+        errorMessage =
+            'Category not found. It may have been deleted by another user.';
+      } else if (e.toString().contains('unauthorized') ||
+          e.toString().contains('forbidden')) {
+        errorMessage = 'You do not have permission to delete this category.';
+      } else {
+        errorMessage = 'Error deleting category: ${e.toString()}';
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error deleting category: ${e.toString()}'),
+          content: Text(errorMessage),
           backgroundColor: Colors.red[600],
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 6),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            textColor: Colors.white,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
         ),
       );
+
+      // Log the error for debugging
+      print('Delete error: $e');
     }
   }
 
@@ -194,7 +224,9 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CategoryDetailsScreen()),
+                MaterialPageRoute(
+                  builder: (context) => CategoryDetailsScreen(),
+                ),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -210,7 +242,9 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
 
   Widget _buildResultView() {
     final isEmpty =
-        categories == null || categories!.items == null || categories!.items!.isEmpty;
+        categories == null ||
+        categories!.items == null ||
+        categories!.items!.isEmpty;
     final int totalCount = categories?.totalCount ?? 0;
     final int totalPages = (totalCount / _pageSize).ceil();
     final bool isFirstPage = _currentPage == 0;
@@ -255,7 +289,8 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CategoryDetailsScreen(category: e),
+                              builder: (context) =>
+                                  CategoryDetailsScreen(category: e),
                             ),
                           );
                         },
@@ -271,16 +306,23 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                           ),
                           DataCell(
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                color: e.isActive ? Colors.green[100] : Colors.red[100],
+                                color: e.isActive
+                                    ? Colors.green[100]
+                                    : Colors.red[100],
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
                                 e.isActive ? 'Active' : 'Inactive',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: e.isActive ? Colors.green[800] : Colors.red[800],
+                                  color: e.isActive
+                                      ? Colors.green[800]
+                                      : Colors.red[800],
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -296,17 +338,24 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => CategoryDetailsScreen(category: e),
+                                        builder: (context) =>
+                                            CategoryDetailsScreen(category: e),
                                       ),
                                     );
                                   },
-                                  icon: Icon(Icons.edit, color: Colors.blue[600]),
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.blue[600],
+                                  ),
                                   tooltip: 'Edit Category',
                                 ),
                                 // Delete button
                                 IconButton(
                                   onPressed: () => _showDeleteConfirmation(e),
-                                  icon: Icon(Icons.delete, color: Colors.red[600]),
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red[600],
+                                  ),
                                   tooltip: 'Delete Category',
                                 ),
                               ],
@@ -342,4 +391,4 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
       ],
     );
   }
-} 
+}

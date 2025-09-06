@@ -149,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         picture: _selectedPictureBase64,
         genderId: _selectedGender!.id,
         cityId: _selectedCity!.id,
-        roleIds: [1], // Assuming role ID 1 is "User" role
+        roleIds: [2],
       );
 
       await userProvider.insert(request);

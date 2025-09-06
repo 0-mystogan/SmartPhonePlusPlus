@@ -11,6 +11,7 @@ import 'package:smartphone_mobile_client/providers/order_provider.dart';
 import 'package:smartphone_mobile_client/model/create_order_from_cart_request.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:smartphone_mobile_client/screens/navigation_screen.dart';
 
 class StripePaymentScreen extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -187,7 +188,13 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const NavigationScreen(initialIndex: 1),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,
@@ -199,7 +206,10 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
                     ),
                     child: const Text(
                       'Continue Shopping',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -209,10 +219,15 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
                 child: SizedBox(
                   height: 56,
                   child: ElevatedButton(
-                                         onPressed: () {
-                       Navigator.of(context).popUntil((route) => route.isFirst);
-                       // User can manually tap the Orders tab
-                     },
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const NavigationScreen(initialIndex: 2),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.purple,
@@ -224,7 +239,10 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
                     ),
                     child: const Text(
                       'View Orders',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -266,10 +284,7 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(
-          color: Colors.purple.withOpacity(0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.purple.withOpacity(0.1), width: 1),
       ),
       child: Column(
         children: [
@@ -384,30 +399,34 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            ...widget.cartItems.take(3).map((item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${item.productName} x${item.quantity}',
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                        fontSize: 14,
-                      ),
+            ...widget.cartItems
+                .take(3)
+                .map(
+                  (item) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${item.productName} x${item.quantity}',
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '${item.totalPrice.toStringAsFixed(2)} BAM',
+                          style: TextStyle(
+                            color: Colors.purple[700],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    '${item.totalPrice.toStringAsFixed(2)} BAM',
-                    style: TextStyle(
-                      color: Colors.purple[700],
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            )),
+                ),
             if (widget.cartItems.length > 3)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -451,11 +470,7 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
                   color: Colors.purple.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.purple,
-                  size: 20,
-                ),
+                child: Icon(Icons.person, color: Colors.purple, size: 20),
               ),
               const SizedBox(width: 12),
               Text(
@@ -659,9 +674,9 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
       rethrow;
     }
   }
@@ -778,22 +793,24 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
 
       // Generate order number
       final orderNumber = 'ORD${DateTime.now().millisecondsSinceEpoch}';
-      
+
       // Create order from cart
       final orderProvider = Provider.of<OrderProvider>(context, listen: false);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      
+
       if (authProvider.currentUser == null) {
         throw Exception('User not authenticated');
       }
-      
+
       await orderProvider.initBaseUrl();
-      
+
       final createOrderRequest = CreateOrderFromCartRequest(
         orderNumber: orderNumber,
         totalAmount: widget.totalAmount,
         shippingFirstName: formData['name'].split(' ').first,
-        shippingLastName: formData['name'].split(' ').length > 1 ? formData['name'].split(' ').skip(1).join(' ') : '',
+        shippingLastName: formData['name'].split(' ').length > 1
+            ? formData['name'].split(' ').skip(1).join(' ')
+            : '',
         shippingAddress: formData['address'],
         shippingCity: formData['city'],
         shippingPostalCode: formData['pincode'],
@@ -801,7 +818,9 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
         shippingPhone: formData['phone'],
         shippingEmail: formData['email'],
         billingFirstName: formData['name'].split(' ').first,
-        billingLastName: formData['name'].split(' ').length > 1 ? formData['name'].split(' ').skip(1).join(' ') : '',
+        billingLastName: formData['name'].split(' ').length > 1
+            ? formData['name'].split(' ').skip(1).join(' ')
+            : '',
         billingAddress: formData['address'],
         billingCity: formData['city'],
         billingPostalCode: formData['pincode'],
@@ -809,25 +828,31 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
         billingPhone: formData['phone'],
         billingEmail: formData['email'],
       );
-      
+
       final order = await orderProvider.createOrderFromCart(createOrderRequest);
-      
+
       // Clear the cart after successful order creation
-      final cartManager = Provider.of<CartManagerProvider>(context, listen: false);
-      print('Starting cart clearing process after successful order creation...');
-      
+      final cartManager = Provider.of<CartManagerProvider>(
+        context,
+        listen: false,
+      );
+      print(
+        'Starting cart clearing process after successful order creation...',
+      );
+
       try {
         // First, try to clear the cart using the backend API
         await cartManager.clearCart();
         print('Cart cleared successfully after order creation');
-        
+
         // Force a refresh to ensure UI is updated
         await cartManager.forceRefreshCart();
         print('Cart state refreshed after clearing');
-        
       } catch (cartError) {
-        print('Warning: Failed to clear cart after successful order creation: $cartError');
-        
+        print(
+          'Warning: Failed to clear cart after successful order creation: $cartError',
+        );
+
         // Try alternative approach - force refresh cart state
         try {
           print('Attempting to force refresh cart state...');
@@ -835,30 +860,33 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
           print('Cart state force refreshed after order creation');
         } catch (refreshError) {
           print('Warning: Failed to force refresh cart state: $refreshError');
-          
+
           // As a last resort, manually clear local cart data
           print('Manually clearing local cart data as fallback...');
           cartManager.clearError();
           cartManager.setLoading(false);
-          
+
           // Force notify listeners to update UI
           cartManager.notifyListeners();
         }
       }
-      
+
       // Double-check that cart is actually empty
       try {
-        await Future.delayed(const Duration(milliseconds: 500)); // Small delay to ensure backend sync
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+        ); // Small delay to ensure backend sync
         await cartManager.forceRefreshCart();
         print('Final cart verification completed');
-        
+
         // Log final cart state
-        print('Final cart state - Items: ${cartManager.cartItems.length}, Cart ID: ${cartManager.currentCart?.id}');
-        
+        print(
+          'Final cart state - Items: ${cartManager.cartItems.length}, Cart ID: ${cartManager.currentCart?.id}',
+        );
       } catch (e) {
         print('Final cart verification failed: $e');
       }
-      
+
       // Ensure UI is updated
       if (mounted) {
         setState(() {});
@@ -872,7 +900,9 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Payment successful! Order #${order.orderNumber} has been created.'),
+          content: Text(
+            'Payment successful! Order #${order.orderNumber} has been created.',
+          ),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

@@ -18,7 +18,7 @@ import 'package:smartphone_desktop_admin/utils/text_field_decoration.dart';
 import 'package:smartphone_desktop_admin/utils/custom_picture_design.dart';
 
 class UserDetailsScreen extends StatefulWidget {
-  User? user;
+  final User? user;
   UserDetailsScreen({super.key, this.user});
 
   @override
@@ -38,13 +38,17 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   List<City> cities = [];
   List<RoleResponse> roles = [];
   String? selectedPictureBase64;
+  User? _currentUser; // Local variable to track current user
 
   @override
   void initState() {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
     cityProvider = Provider.of<CityProvider>(context, listen: false);
-    
+
+    // Initialize current user
+    _currentUser = widget.user;
+
     // Try to get RoleProvider, but don't crash if it's not available
     try {
       roleProvider = Provider.of<RoleProvider>(context, listen: false);
@@ -58,7 +62,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       "lastName": widget.user?.lastName ?? '',
       "email": widget.user?.email ?? '',
       "username": widget.user?.username ?? '',
-      "password": widget.user == null ? '' : '', // Will be auto-generated for new users
+      "password": widget.user == null
+          ? ''
+          : '', // Will be auto-generated for new users
       "phoneNumber": widget.user?.phoneNumber ?? '',
       "isActive": widget.user?.isActive ?? true,
       "genderId": widget.user?.genderId ?? 1,
@@ -77,28 +83,30 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   initFormData() async {
     try {
       // Fetch cities from the database
-      var citiesResult = await cityProvider.get(filter: {
-        "page": 0,
-        "pageSize": 100, // Get all cities
-        "includeTotalCount": true,
-      });
-      
-      // Fetch roles from the database (if RoleProvider is available)
+      var citiesResult = await cityProvider.get(
+        filter: {
+          "page": 0,
+          "pageSize": 100, // Get all cities
+          "includeTotalCount": true,
+        },
+      );
+
+      // Fetch roles from the database
       List<RoleResponse> rolesResult = [];
-      
-      if (roleProvider != null) {
-        try {
-          var rolesData = await roleProvider.get(filter: {
+
+      try {
+        var rolesData = await roleProvider.get(
+          filter: {
             "page": 0,
             "pageSize": 100, // Get all roles
             "includeTotalCount": true,
-          });
-          rolesResult = rolesData.items ?? [];
-        } catch (e) {
-          rolesResult = [];
-        }
+          },
+        );
+        rolesResult = rolesData.items ?? [];
+      } catch (e) {
+        rolesResult = [];
       }
-      
+
       setState(() {
         cities = citiesResult.items ?? [];
         roles = rolesResult;
@@ -122,16 +130,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         final file = File(result.files.first.path!);
         final bytes = await file.readAsBytes();
         final base64String = base64Encode(bytes);
-        
+
         setState(() {
           selectedPictureBase64 = base64String;
         });
       }
     } catch (e) {
       print("Error picking image: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
     }
   }
 
@@ -140,7 +148,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       // Only auto-generate for new users
       final username = firstName.toLowerCase();
       final password = '${firstName.toLowerCase()}123';
-      
+
       formKey.currentState?.fields['username']?.didChange(username);
       formKey.currentState?.fields['password']?.didChange(password);
     }
@@ -155,7 +163,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     );
   }
 
-  Widget _buildDetailsView(){
+  Widget _buildDetailsView() {
     return Center(
       child: Container(
         constraints: BoxConstraints(maxWidth: 480),
@@ -170,10 +178,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Colors.grey[100]!,
-                  Colors.grey[200]!,
-                ],
+                colors: [Colors.grey[100]!, Colors.grey[200]!],
               ),
             ),
             child: Padding(
@@ -186,174 +191,206 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                  // Profile Picture with Purple Border
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.purple[400]!,
-                        width: 4,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.purple.withOpacity(0.3),
-                          blurRadius: 12,
-                          spreadRadius: 2,
+                    // Profile Picture with Purple Border
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.purple[400]!,
+                          width: 4,
                         ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: CustomPictureDesign(
-                        base64: widget.user!.picture,
-                        size: 160,
-                        fallbackIcon: Icons.account_circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.purple.withOpacity(0.3),
+                            blurRadius: 12,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: CustomPictureDesign(
+                          base64: _currentUser!.picture,
+                          size: 160,
+                          fallbackIcon: Icons.account_circle,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 24),
-                  
-                  // Name with Purple Styling
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.purple[100],
-                      borderRadius: BorderRadius.circular(20),
+                    SizedBox(height: 24),
+
+                    // Name with Purple Styling
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.purple[100],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        "${_currentUser!.firstName} ${_currentUser!.lastName}",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple[800],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    child: Text(
-                      "${widget.user!.firstName} ${widget.user!.lastName}",
+                    SizedBox(height: 8),
+
+                    // Username with Purple Accent
+                    Text(
+                      "@${_currentUser!.username}",
                       style: TextStyle(
-                        fontSize: 24, 
-                        fontWeight: FontWeight.bold,
-                        color: Colors.purple[800],
+                        fontSize: 18,
+                        color: Colors.purple[600],
+                        fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  
-                  // Username with Purple Accent
-                  Text(
-                    "@${widget.user!.username}",
-                    style: TextStyle(
-                      fontSize: 18, 
-                      color: Colors.purple[600],
-                      fontWeight: FontWeight.w500,
+                    SizedBox(height: 24),
+
+                    // Info Rows with Purple Theme
+                    _buildInfoRow(
+                      "Email",
+                      _currentUser!.email,
+                      icon: Icons.email,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 24),
-                  
-                  // Info Rows with Purple Theme
-                  _buildInfoRow("Email", widget.user!.email, icon: Icons.email),
-                  _buildInfoRow(
-                    "Phone",
-                    widget.user!.phoneNumber ?? '-',
-                    icon: Icons.phone,
-                  ),
-                  _buildInfoRow(
-                    "Gender",
-                    widget.user!.genderName,
-                    icon: Icons.person_outline,
-                  ),
-                  _buildInfoRow(
-                    "City",
-                    widget.user!.cityName,
-                    icon: Icons.location_city,
-                  ),
-                  
-                  // Active Status with Purple Theme
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 12),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: widget.user!.isActive ? Colors.green[50] : Colors.red[50],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: widget.user!.isActive ? Colors.green[300]! : Colors.red[300]!,
-                        width: 1,
+                    _buildInfoRow(
+                      "Phone",
+                      _currentUser!.phoneNumber ?? '-',
+                      icon: Icons.phone,
+                    ),
+                    _buildInfoRow(
+                      "Gender",
+                      _currentUser!.genderName,
+                      icon: Icons.person_outline,
+                    ),
+                    _buildInfoRow(
+                      "City",
+                      _currentUser!.cityName,
+                      icon: Icons.location_city,
+                    ),
+
+                    // Active Status with Purple Theme
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _currentUser!.isActive
+                            ? Colors.green[50]
+                            : Colors.red[50],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: _currentUser!.isActive
+                              ? Colors.green[300]!
+                              : Colors.red[300]!,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.verified_user,
+                            size: 20,
+                            color: _currentUser!.isActive
+                                ? Colors.green[600]
+                                : Colors.red[600],
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "Status:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: _currentUser!.isActive
+                                  ? Colors.green[700]
+                                  : Colors.red[700],
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            _currentUser!.isActive ? "Active" : "Inactive",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: _currentUser!.isActive
+                                  ? Colors.green[700]
+                                  : Colors.red[700],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+
+                    SizedBox(height: 24),
+
+                    // Action Buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Icon(
-                          Icons.verified_user,
-                          size: 20,
-                          color: widget.user!.isActive ? Colors.green[600] : Colors.red[600],
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          "Status:",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: widget.user!.isActive ? Colors.green[700] : Colors.red[700],
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          widget.user!.isActive ? "Active" : "Inactive",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: widget.user!.isActive ? Colors.green[700] : Colors.red[700],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  
-                  SizedBox(height: 24),
-                  
-                                     // Action Buttons
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                     children: [
-                       // Back Button
-                       ElevatedButton.icon(
-                         onPressed: () {
-                           // Navigate back to user list
-                           Navigator.of(context).pop();
-                         },
-                         icon: Icon(Icons.arrow_back, color: Colors.white),
-                         label: Text("Back", style: TextStyle(color: Colors.white)),
-                         style: ElevatedButton.styleFrom(
-                           backgroundColor: Colors.grey[600],
-                           foregroundColor: Colors.white,
-                           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                           shape: RoundedRectangleBorder(
-                             borderRadius: BorderRadius.circular(20),
-                           ),
-                           elevation: 4,
-                         ),
-                       ),
-                       
-                                               // Delete Button
+                        // Back Button
                         ElevatedButton.icon(
-                          onPressed: () => _showDeleteConfirmation(),
-                          icon: Icon(Icons.delete, color: Colors.white),
-                          label: Text("Delete", style: TextStyle(color: Colors.white)),
+                          onPressed: () {
+                            // Navigate back to user list
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(Icons.arrow_back, color: Colors.white),
+                          label: Text(
+                            "Back",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red[600],
+                            backgroundColor: Colors.grey[600],
                             foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                             elevation: 4,
                           ),
                         ),
-                     ],
-                   ),
-                   SizedBox(height: 20), // Add extra padding at bottom
-                 ],
-               ),
-             ),
-           ),
-         ),
-       ),
-     ),
+
+                        // Delete Button
+                        ElevatedButton.icon(
+                          onPressed: () => _showDeleteConfirmation(),
+                          icon: Icon(Icons.delete, color: Colors.white),
+                          label: Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[600],
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            elevation: 4,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20), // Add extra padding at bottom
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
-   }
+  }
 
   Widget _buildInfoRow(String label, String value, {IconData? icon}) {
     return Container(
@@ -362,10 +399,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.7),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.purple[200]!,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.purple[200]!, width: 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -377,7 +411,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           Text(
             "$label:",
             style: TextStyle(
-              fontWeight: FontWeight.bold, 
+              fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.purple[700],
             ),
@@ -386,10 +420,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           Flexible(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.purple[800],
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.purple[800]),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -420,7 +451,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ],
           ),
           content: Text(
-            'Are you sure you want to delete "${widget.user!.firstName} ${widget.user!.lastName}"?\n\nThis action cannot be undone.',
+            'Are you sure you want to delete "${_currentUser!.firstName} ${_currentUser!.lastName}"?\n\nThis action cannot be undone.',
             style: TextStyle(fontSize: 16),
           ),
           actions: [
@@ -428,10 +459,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'Cancel',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
               ),
             ),
             ElevatedButton(
@@ -446,10 +474,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(
-                'Delete',
-                style: TextStyle(fontSize: 16),
-              ),
+              child: Text('Delete', style: TextStyle(fontSize: 16)),
             ),
           ],
         );
@@ -482,15 +507,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.purple[600]!),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.purple[600]!,
+                    ),
                   ),
                   SizedBox(height: 16),
                   Text(
                     'Deleting user...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -500,7 +524,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       );
 
       // Delete the user
-      await userProvider.delete(widget.user!.id);
+      await userProvider.delete(_currentUser!.id);
 
       // Close loading dialog
       Navigator.of(context).pop();
@@ -509,7 +533,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'User "${widget.user!.firstName} ${widget.user!.lastName}" has been deleted successfully.',
+            'User "${_currentUser!.firstName} ${_currentUser!.lastName}" has been deleted successfully.',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.green[600],
@@ -523,9 +547,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
       // Navigate back to user list
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const UserListScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const UserListScreen()),
       );
     } catch (e) {
       // Close loading dialog
@@ -575,21 +597,21 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             if (formKey.currentState?.validate() ?? false) {
               print(formKey.currentState?.value.toString());
               var request = Map.from(formKey.currentState?.value ?? {});
-              
+
               // Remove confirmPassword from request as it's only for validation
               request.remove('confirmPassword');
-              
+
               // Add picture to request if selected
               if (selectedPictureBase64 != null) {
                 request['picture'] = selectedPictureBase64;
               }
-              
+
               try {
-                if (widget.user == null) {
-                  widget.user = await userProvider.insert(request);
+                if (_currentUser == null) {
+                  _currentUser = await userProvider.insert(request);
                 } else {
-                  widget.user = await userProvider.update(
-                    widget.user!.id,
+                  _currentUser = await userProvider.update(
+                    _currentUser!.id,
                     request,
                   );
                 }
@@ -654,10 +676,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Colors.purple[50]!,
-                  Colors.purple[100]!,
-                ],
+                colors: [Colors.purple[50]!, Colors.purple[100]!],
               ),
             ),
             child: Padding(
@@ -670,7 +689,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.purple[100],
                           borderRadius: BorderRadius.circular(15),
@@ -749,7 +771,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           FormBuilderValidators.required(),
                           FormBuilderValidators.match(
                             RegExp(r'^[a-zA-Z0-9_]+'),
-                            errorText: 'Only letters, numbers, and underscores allowed',
+                            errorText:
+                                'Only letters, numbers, and underscores allowed',
                           ),
                         ]),
                       ),
@@ -763,7 +786,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         obscureText: false, // Make password visible
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
-                          FormBuilderValidators.minLength(6, errorText: 'Password must be at least 6 characters'),
+                          FormBuilderValidators.minLength(
+                            6,
+                            errorText: 'Password must be at least 6 characters',
+                          ),
                         ]),
                       ),
                       SizedBox(height: 16),
@@ -794,7 +820,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                               ),
                               items: [
                                 DropdownMenuItem(value: 1, child: Text("Male")),
-                                DropdownMenuItem(value: 2, child: Text("Female")),
+                                DropdownMenuItem(
+                                  value: 2,
+                                  child: Text("Female"),
+                                ),
                               ],
                               validator: FormBuilderValidators.required(),
                             ),
@@ -807,7 +836,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                 "City",
                                 prefixIcon: Icons.location_city,
                               ),
-                              items: cities.map((city) => DropdownMenuItem(value: city.id, child: Text(city.name))).toList(),
+                              items: cities
+                                  .map(
+                                    (city) => DropdownMenuItem(
+                                      value: city.id,
+                                      child: Text(city.name),
+                                    ),
+                                  )
+                                  .toList(),
                               validator: FormBuilderValidators.required(),
                             ),
                           ),
@@ -836,12 +872,19 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             name: "roleIds",
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
                             ),
-                            options: roles.map((role) => FormBuilderFieldOption(
-                              value: role.id,
-                              child: Text(role.name),
-                            )).toList(),
+                            options: roles
+                                .map(
+                                  (role) => FormBuilderFieldOption(
+                                    value: role.id,
+                                    child: Text(role.name),
+                                  ),
+                                )
+                                .toList(),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                             ]),
