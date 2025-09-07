@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartPhone.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f5d298daccb8652702128ac36fde12ff404bc4a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3534d33ffa1b35264eee653df9a5b8e2f4e9f46")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartPhone.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartPhone.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

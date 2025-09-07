@@ -230,10 +230,30 @@ namespace SmartPhone.Services.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .Include(u => u.Orders)
+                .Include(u => u.Carts)
+                .Include(u => u.CustomerServices)
+                .Include(u => u.TechnicianServices)
+                .FirstOrDefaultAsync(u => u.Id == id);
+                
             if (user == null)
                 return false;
 
+            // Remove all related entities first
+            _context.UserRoles.RemoveRange(user.UserRoles);
+            _context.Orders.RemoveRange(user.Orders);
+            _context.Carts.RemoveRange(user.Carts);
+            _context.Services.RemoveRange(user.CustomerServices);
+            
+            // For technician services, set technician to null instead of deleting
+            foreach (var service in user.TechnicianServices)
+            {
+                service.TechnicianId = null;
+            }
+
+            // Finally remove the user
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;

@@ -51,11 +51,9 @@ class _UserListScreenState extends State<UserListScreen> {
 
   Future<void> _loadRoles() async {
     try {
-      var rolesResult = await roleProvider.get(filter: {
-        "page": 0,
-        "pageSize": 100,
-        "includeTotalCount": true,
-      });
+      var rolesResult = await roleProvider.get(
+        filter: {"page": 0, "pageSize": 100, "includeTotalCount": true},
+      );
       setState(() {
         roles = rolesResult.items ?? [];
       });
@@ -103,7 +101,7 @@ class _UserListScreenState extends State<UserListScreen> {
             DataColumn(
               label: Text(
                 "Picture",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
               ),
             ),
             DataColumn(
@@ -113,9 +111,12 @@ class _UserListScreenState extends State<UserListScreen> {
               ),
             ),
             DataColumn(
-              label: Text(
-                "Email",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              label: SizedBox(
+                width: 100,
+                child: Text(
+                  "Email",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
             ),
             DataColumn(
@@ -169,7 +170,14 @@ class _UserListScreenState extends State<UserListScreen> {
                             ),
                           ),
                           DataCell(
-                            Text(e.email, style: TextStyle(fontSize: 15)),
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                e.email,
+                                style: TextStyle(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
                           DataCell(
                             Text(e.username, style: TextStyle(fontSize: 15)),
@@ -182,6 +190,7 @@ class _UserListScreenState extends State<UserListScreen> {
                             Text(
                               e.createdAt.toString().split(" ")[0],
                               style: TextStyle(fontSize: 15),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           DataCell(
@@ -271,10 +280,12 @@ class _UserListScreenState extends State<UserListScreen> {
                           value: null,
                           child: Text("All Roles"),
                         ),
-                        ...roles.map((role) => DropdownMenuItem<int>(
-                          value: role.id,
-                          child: Text(role.name),
-                        )),
+                        ...roles.map(
+                          (role) => DropdownMenuItem<int>(
+                            value: role.id,
+                            child: Text(role.name),
+                          ),
+                        ),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -290,25 +301,25 @@ class _UserListScreenState extends State<UserListScreen> {
                     child: Text("Search"),
                   ),
                   SizedBox(width: 10),
-                            ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserDetailsScreen()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple,
-              foregroundColor: Colors.white,
-            ),
-            child: Text("Add User"),
-          ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserDetailsScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text("Add User"),
+                  ),
                 ],
               ),
             ),
-            Expanded(
-              child: _buildResultView(),
-            ),
+            Expanded(child: _buildResultView()),
           ],
         ),
       ),

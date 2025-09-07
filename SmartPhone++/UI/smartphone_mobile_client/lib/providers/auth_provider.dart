@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:smartphone_mobile_client/model/user.dart';
 import 'package:smartphone_mobile_client/providers/base_provider.dart';
-import 'dart:convert';
 
 class AuthProvider extends BaseProvider<User> {
   static String? username;
@@ -33,6 +31,9 @@ class AuthProvider extends BaseProvider<User> {
 
   // Check if user is an administrator
   bool get isAdministrator => hasRole('Administrator');
+
+  // Check if user is a regular user
+  bool get isUser => hasRole('User');
 
   // Authenticate user
   Future<bool> authenticate(String username, String password) async {

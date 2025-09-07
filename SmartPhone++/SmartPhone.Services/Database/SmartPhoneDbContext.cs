@@ -132,7 +132,7 @@ namespace SmartPhone.Services.Database
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Order>()
                 .HasIndex(o => o.OrderNumber)
@@ -232,7 +232,7 @@ namespace SmartPhone.Services.Database
                 .HasOne(s => s.User)
                 .WithMany(u => u.CustomerServices)
                 .HasForeignKey(s => s.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Service>()
                 .HasOne(s => s.Technician)

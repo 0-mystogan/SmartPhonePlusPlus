@@ -140,10 +140,11 @@ class LoginPage extends StatelessWidget {
                               onPressed: authProvider.isLoading
                                   ? null
                                   : () async {
-                                      final success = await authProvider.authenticate(
-                                        usernameController.text,
-                                        passwordController.text,
-                                      );
+                                      final success = await authProvider
+                                          .authenticate(
+                                            usernameController.text,
+                                            passwordController.text,
+                                          );
 
                                       if (success) {
                                         // Route based on user role
@@ -151,22 +152,37 @@ class LoginPage extends StatelessWidget {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => DashboardScreenTechnician(),
+                                              builder: (context) =>
+                                                  DashboardScreenTechnician(),
                                             ),
                                           );
-                                        } else if (authProvider.isAdministrator) {
+                                        } else if (authProvider
+                                            .isAdministrator) {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => DashboardScreenAdmin(),
+                                              builder: (context) =>
+                                                  DashboardScreenAdmin(),
                                             ),
                                           );
                                         } else {
-                                          // Default to technician dashboard for now
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => DashboardScreenTechnician(),
+                                          // Show popup for unsupported user role
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title: Text(
+                                                "Unsupported User Role",
+                                              ),
+                                              content: Text(
+                                                "Your user role is not supported in the desktop app. Please log in with admin or technician account.",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  child: Text("OK"),
+                                                ),
+                                              ],
                                             ),
                                           );
                                         }
@@ -176,11 +192,13 @@ class LoginPage extends StatelessWidget {
                                           builder: (context) => AlertDialog(
                                             title: Text("Login failed"),
                                             content: Text(
-                                              authProvider.error ?? "Authentication failed",
+                                              authProvider.error ??
+                                                  "Authentication failed",
                                             ),
                                             actions: [
                                               TextButton(
-                                                onPressed: () => Navigator.pop(context),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
                                                 child: Text("OK"),
                                               ),
                                             ],
@@ -194,7 +212,10 @@ class LoginPage extends StatelessWidget {
                                       height: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
                                       ),
                                     )
                                   : Text("Login"),

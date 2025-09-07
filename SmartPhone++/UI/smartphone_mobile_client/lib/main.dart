@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:provider/provider.dart';
@@ -16,10 +15,7 @@ import 'package:smartphone_mobile_client/providers/recommendation_provider.dart'
 import 'package:smartphone_mobile_client/providers/order_provider.dart';
 import 'package:smartphone_mobile_client/screens/navigation_screen.dart';
 import 'package:smartphone_mobile_client/screens/register_screen.dart';
-import 'package:smartphone_mobile_client/screens/products_screen.dart';
-import 'package:smartphone_mobile_client/screens/cart_screen.dart';
 import 'package:smartphone_mobile_client/utils/text_field_decoration.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,25 +27,34 @@ void main() async {
   stripe.Stripe.urlScheme = 'flutterstripe';
   await stripe.Stripe.instance.applySettings();
 
-
   HttpOverrides.global = MyHttpOverrides();
-        runApp(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-            ChangeNotifierProvider<CityProvider>(create: (_) => CityProvider()),
-            ChangeNotifierProvider<GenderProvider>(create: (_) => GenderProvider()),
-            ChangeNotifierProvider<ProductProvider>(create: (_) => ProductProvider()),
-            ChangeNotifierProvider<CategoryProvider>(create: (_) => CategoryProvider()),
-            ChangeNotifierProvider<ServiceProvider>(create: (_) => ServiceProvider()),
-            ChangeNotifierProvider<CartManagerProvider>(create: (_) => CartManagerProvider()),
-            ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-            ChangeNotifierProvider<RecommendationProvider>(create: (_) => RecommendationProvider()),
-            ChangeNotifierProvider<OrderProvider>(create: (_) => OrderProvider()),
-          ],
-          child: const MyApp(),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<CityProvider>(create: (_) => CityProvider()),
+        ChangeNotifierProvider<GenderProvider>(create: (_) => GenderProvider()),
+        ChangeNotifierProvider<ProductProvider>(
+          create: (_) => ProductProvider(),
         ),
-      );
+        ChangeNotifierProvider<CategoryProvider>(
+          create: (_) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider<ServiceProvider>(
+          create: (_) => ServiceProvider(),
+        ),
+        ChangeNotifierProvider<CartManagerProvider>(
+          create: (_) => CartManagerProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
+        ChangeNotifierProvider<RecommendationProvider>(
+          create: (_) => RecommendationProvider(),
+        ),
+        ChangeNotifierProvider<OrderProvider>(create: (_) => OrderProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -84,7 +89,6 @@ class MyApp extends StatelessWidget {
       ),
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
-
     );
   }
 }
@@ -120,12 +124,33 @@ class _LoginPageState extends State<LoginPage> {
     try {
       // Authenticate user using AuthProvider like in Windows app
       final success = await authProvider.authenticate(username, password);
-      
+
       if (success) {
         if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const NavigationScreen()),
-        );
+
+        // Check if user has the correct role for mobile app access
+        if (authProvider.isUser) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const NavigationScreen()),
+          );
+        } else {
+          // Show popup for unsupported user role
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text("Unsupported User Role"),
+              content: const Text(
+                "Your user role is not supported in the mobile app. Please log in with a regular user account.",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        }
       } else {
         throw Exception(authProvider.error ?? 'Authentication failed');
       }
@@ -203,9 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                               ? null
                               : () => _handleLogin(context),
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16.0,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
                             ),
@@ -250,23 +273,23 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 14,
                             ),
                           ),
-                                                      TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const RegisterScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "Register now",
-                                style: TextStyle(
-                                  color: Colors.purple,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterScreen(),
                                 ),
+                              );
+                            },
+                            child: Text(
+                              "Register now",
+                              style: TextStyle(
+                                color: Colors.purple,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
+                          ),
                         ],
                       ),
                     ],
